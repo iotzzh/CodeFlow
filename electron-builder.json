@@ -1,5 +1,5 @@
 {
-    "appId": "com.electron.app",
+    "appId": "com.iotzzh.codeflow",
     "directories": {
         "output": "dist"
     },
@@ -7,7 +7,7 @@
         "oneClick": false,
         "perMachine": false,
         "allowToChangeInstallationDirectory": true,
-        "shortcutName": "Electron App"
+        "shortcutName": "Code Flow"
     },
     "win": {
         "target": "nsis"
