@@ -10,10 +10,10 @@
     "build:mac": "node scripts/build.js && electron-builder --mac",
     "build:linux": "node scripts/build.js && electron-builder --linux"
   },
-  "repository": "https://github.com/deluze/electron-vue-template",
+  "repository": "https://github.com/iotzzh/codeflow",
   "author": {
-    "name": "Deluze",
-    "url": "https://github.com/Deluze"
+    "name": "zzh",
+    "url": "https://github.com/iotzzh"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
@@ -21,10 +21,17 @@
     "chokidar": "^3.5.3",
     "electron": "^25.2.0",
     "electron-builder": "^24.2.1",
+    "sass": "^1.63.6",
+    "sass-loader": "^13.3.2",
     "typescript": "^4.8.4",
     "vite": "^4.1.1"
   },
   "dependencies": {
-    "vue": "^3.2.47"
+    "@element-plus/icons-vue": "^2.1.0",
+    "dayjs": "^1.11.9",
+    "element-plus": "^2.3.8",
+    "nprogress": "^0.2.0",
+    "vue": "^3.2.47",
+    "vue-router": "^4.2.4"
   }
 }
