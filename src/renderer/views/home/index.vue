@@ -76,6 +76,7 @@ const openDashboard = () => {
     window.electronAPI.createWindow({
         id: 'dashboard',
         route: 'dashboard',
+        fullscreenWithTop: true,
     });
     // window.electronAPI.createWindow(`${location.origin}/dashboard`);
     // ipcRenderer.send('message')

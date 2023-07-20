@@ -1,19 +1,26 @@
-import {app, BrowserWindow, ipcMain, session} from 'electron';
+import {app, BrowserWindow, ipcMain, session, screen } from 'electron';
 import {join} from 'path';
 
 let mainWindow;
 let subWindows = {};
 
+
 function createWindow (config: { [x:string]:any } = {}) {
   const window = new BrowserWindow({
-    width: 800,
-    height: 800,
-    fullscreen: config.fullscreen,
+    width: config.fullscreenWithTop ? screen.getPrimaryDisplay().workAreaSize.width : 1000, 
+    height: config.fullscreenWithTop ? screen.getPrimaryDisplay().workAreaSize.height : 800, 
+    fullscreen: config.fullscreen === undefined ? false : config.fullscreen,
+    minimizable: config.minimizable === undefined ? true : config.minimizable,
+    maximizable: config.maximizable === undefined ? true : config.maximizable,
+    closable: config.closable === undefined ? true : config.closable,
+    fullscreenable: config.fullscreenable === undefined ? true : config.fullscreenable,
     autoHideMenuBar: true, // 隐藏菜单栏
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
-      nodeIntegration: false,
+      nodeIntegration: true,
       contextIsolation: true,
+      // 禁用同源策略，允许跨域
+      webSecurity: false
     }
   });
 
@@ -29,6 +36,10 @@ function createWindow (config: { [x:string]:any } = {}) {
 
   return window;
 }
+
+// app.on('ready', async () => {
+//   mainWindow = createWindow();
+// })
 
 app.whenReady().then(() => {
   mainWindow = createWindow();
