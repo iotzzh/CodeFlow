@@ -73,9 +73,20 @@ const tableData = [
 ]
 
 const openDashboard = () => {
-    ipcRenderer.send('message')
+    window.electronAPI.createWindow({
+        id: 'dashboard',
+        route: 'dashboard',
+    });
+    // window.electronAPI.createWindow(`${location.origin}/dashboard`);
+    // ipcRenderer.send('message')
+    // window.electronAPI.sendMessage('message');
     // window.open(`${location.origin}/dashboard`);
 };
+
+// 监听接收主线程信息
+// window.electronAPI.onUpdateCounter((_event:any, value:any) => {
+//     console.log(value);
+// })
 </script>
 <style lang="scss" scoped>
 .box {
