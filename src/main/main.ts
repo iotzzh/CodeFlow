@@ -5,10 +5,12 @@ let mainWindow;
 let subWindows = {};
 
 
+
 function createWindow (config: { [x:string]:any } = {}) {
   const window = new BrowserWindow({
     // parent: Object.keys(config).length > 0 ? mainWindow : null,
     modal: Object.keys(config).length > 0,
+    frame: Object.keys(config).length === 0,
     width: config.fullscreenWithTop ? screen.getPrimaryDisplay().workAreaSize.width : 1400, 
     height: config.fullscreenWithTop ? screen.getPrimaryDisplay().workAreaSize.height : 800, 
     fullscreen: config.fullscreen === undefined ? false : config.fullscreen,
@@ -78,6 +80,15 @@ ipcMain.on('createWindow', (event, config: { [x:string]:any }) => {
   mainWindow.minimize();
 });
 
+ipcMain.on('min', (event, id) => subWindows[id].minimize());
+ipcMain.on('max', (event, id) => {
+    if (subWindows[id].isMaximized()) {
+      subWindows[id].unmaximize()
+    } else {
+      subWindows[id].maximize()
+    }
+});
+ipcMain.on('close', (event, id) => subWindows[id].close());
 
 // ipcMain.on('window1', (e, args) => {
 //   console.log('e', e);
