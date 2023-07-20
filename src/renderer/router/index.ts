@@ -15,15 +15,16 @@ let router: Router = createRouter({
     }],
     scrollBehavior: () => ({ left: 0, top: 0 }),
 });
-const files = import.meta.glob('./views/**/*.vue'); // 自定义规则
-for (let i in files) {
-  // console.log(123, i, files[i]);
-  const newName = i.replace(/.\/views\//, '').replace(/.vue/, '');
-  // console.log(13, newName, newName.toLocaleLowerCase(), files[i]);
+const files = import.meta.glob('@/renderer/views/**/*.vue'); // 自定义规则
+for (let key in files) {
+  // const path = key.replace('\/views', '').replace('.vue', '');
+  const name = key.split('/')[2];
+  if (name === 'home') continue;
+
   router.addRoute({
-    path: '/' + newName.toLocaleLowerCase(),
-    name: newName,
-    component: files[i],
+    path: `/${name}`,
+    name,
+    component: files[key],
   });
 }
 

@@ -22,53 +22,60 @@
             <el-input class="search-input" placeholder="搜索项目名称" prefix-icon="Search">
             </el-input>
 
-            <el-table :data="tableData" style="width: 100%" :highlight-current-row="true" class="project-list-table" height="100%">
-    <el-table-column prop="projectName" label="项目名称" />
-    <el-table-column prop="currentBranch" label="当前分支" />
-    <el-table-column fixed="right" label="操作" width="300" align="center">
-      <template #default="scope">
-        <el-button link type="primary" size="small" >进入</el-button>
-        <el-button link type="success" size="small" >编辑</el-button>
-        <el-button link type="warning" size="small" >部署</el-button>
-        <el-button link type="danger" size="small" >移除</el-button>
-        <el-button link type="info" size="small" >vscode</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+            <el-table :data="tableData" style="width: 100%" :highlight-current-row="true" class="project-list-table"
+                height="100%">
+                <el-table-column prop="projectName" label="项目名称" />
+                <el-table-column prop="currentBranch" label="当前分支" />
+                <el-table-column fixed="right" label="操作" width="300" align="center">
+                    <template #default="scope">
+                        <el-button link type="primary" size="small" @click="openDashboard">进入</el-button>
+                        <el-button link type="warning" size="small">部署</el-button>
+                        <el-button link type="danger" size="small">移除</el-button>
+                        <el-button link type="success" size="small">vscode</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
 
         </div>
     </div>
 </template>
 <script lang="ts" setup>
+import { ipcRenderer } from "electron";
+
 const tableData = [
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
-  { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main(分支管理功能)', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
+    { projectName: '后台管理系统', currentBranch: 'main', },
 ]
+
+const openDashboard = () => {
+    ipcRenderer.send('message')
+    // window.open(`${location.origin}/dashboard`);
+};
 </script>
 <style lang="scss" scoped>
 .box {
@@ -76,25 +83,30 @@ const tableData = [
     height: 100%;
     overflow: hidden;
     display: flex;
+
     .left {
         height: 100%;
         width: 300px;
         background-color: #F3F3F4;
         padding: 15px;
         text-align: center;
+
         .title {
             font-size: 18px;
             font-weight: bolder;
         }
+
         .version {
             font-size: 12px;
             line-height: 30px;
         }
+
         .button {
             width: 100%;
             justify-content: left;
             margin: 0px;
         }
+
         .btn-create-project {
             margin-top: 10px;
             margin-bottom: 10px;
@@ -110,6 +122,7 @@ const tableData = [
             font-size: 14px;
             padding-left: 5px;
         }
+
         .sub-button {
             margin-bottom: 7px;
             background-color: #E7E7E9;
@@ -118,6 +131,7 @@ const tableData = [
 
         }
     }
+
     .right {
         flex: 1;
         padding: 20px;
@@ -126,11 +140,13 @@ const tableData = [
         overflow: hidden;
         display: flex;
         flex-direction: column;
+
         .welcome {
             font-size: 18px;
             letter-spacing: 0.4em;
             font-style: italic;
         }
+
         .top-tips {
             font-size: 12px;
             margin: 5px 0px 20px 0px;
@@ -138,8 +154,9 @@ const tableData = [
 
         .project-list-table {
             flex: 1;
+           &:deep(.el-table__body tr.current-row>td.el-table__cell) {
+                background-color: #BFE7FC;
+            }
         }
     }
-}
-
-</style>
+}</style>

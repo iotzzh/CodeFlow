@@ -50,3 +50,9 @@ app.on('window-all-closed', function () {
 ipcMain.on('message', (event, message) => {
   console.log(message);
 })
+
+
+// ipcMain.on('window1', (e, args) => {
+//   console.log('e', e);
+//   console.log('args:', args);
+// })

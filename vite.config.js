@@ -14,6 +14,7 @@ export default async ({ mode }) => {
     build: {
       outDir: Path.join(__dirname, "build", "renderer"),
       emptyOutDir: true,
+      sourcemap: true,
     },
     plugins: [vuePlugin()],
     // 配置文件别名，vite1.0是/@/， 2.0改为/@
