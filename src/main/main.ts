@@ -7,7 +7,9 @@ let subWindows = {};
 
 function createWindow (config: { [x:string]:any } = {}) {
   const window = new BrowserWindow({
-    width: config.fullscreenWithTop ? screen.getPrimaryDisplay().workAreaSize.width : 1000, 
+    // parent: Object.keys(config).length > 0 ? mainWindow : null,
+    modal: Object.keys(config).length > 0,
+    width: config.fullscreenWithTop ? screen.getPrimaryDisplay().workAreaSize.width : 1400, 
     height: config.fullscreenWithTop ? screen.getPrimaryDisplay().workAreaSize.height : 800, 
     fullscreen: config.fullscreen === undefined ? false : config.fullscreen,
     minimizable: config.minimizable === undefined ? true : config.minimizable,
