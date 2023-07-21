@@ -1,5 +1,6 @@
 <template>
-    <div class="title">
+    <div class="box">
+        <div class="title">
         <div class="menus">
             <div class="menu">文件</div>
             <div class="menu">编辑</div>
@@ -7,15 +8,34 @@
             <div class="menu">帮助</div>
         </div>
         <div class="window-options">
-            <div class="titlebtn min" @click="min">最小化</div>
-            <div class="titlebtn max" @click="max">最大化</div>
-            <div class="titlebtn close" @click="close">关闭</div>
+            <div class="option min" @click="min"><el-icon><Minus /></el-icon></div>
+            <div class="option max" @click="max"><el-icon><FullScreen /></el-icon></div>
+            <div class="option close" @click="close"><el-icon><Close /></el-icon></div>
         </div>
     </div>
-    控制台
+    <div class="dashboard">
+        <Splitpanes class="default-theme" style="height: calc(100vh - 32px)">
+            <Pane size="20" style="height: 100%; padding: 10px ; " class="left" >
+                <!-- <div class="db">数据管理</div>
+                <div class="server">服务管理</div> -->
+                <!-- <div class="web">前端管理</div> -->
+                <el-scrollbar style="height: 100%;">
+                    <el-tree default-expand-all :data="data" :props="defaultProps" @node-click="handleNodeClick" />
+                </el-scrollbar>
+            </Pane>
+            <Pane size="60" style="height: 100%; overflow-y: hidden; " class="center">2</Pane>
+            <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">3</Pane>
+      </Splitpanes>
+    </div>    
+</div>
+
+    
 </template>
 
 <script lang="ts" setup>
+import { Splitpanes, Pane } from 'splitpanes';
+import 'splitpanes/dist/splitpanes.css'
+
 const id = 'dashboard';
 const min = () => {
     window.electronAPI.minWindow(id);
@@ -29,9 +49,47 @@ const close = () => {
     window.electronAPI.closeWindow(id);
 };
 
+interface Tree {
+  label: string
+  children?: Tree[]
+}
+
+const handleNodeClick = (data: Tree) => {
+  console.log(data)
+}
+
+const data: Tree[] = [
+  {
+    label: 'Web',
+    children: [
+      { label: '配置' },
+      { label: 'API' },
+      { label: '全局方法' },
+      { label: '界面', children: [
+        { label: '登录页' },
+        { label: '首页' },
+      ] },
+    ],
+  },
+ 
+]
+
+const defaultProps = {
+  children: 'children',
+  label: 'label',
+}
+
 </script>
 
 <style lang="scss" scoped>
+.box {
+    height: 100%;
+    widows: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
 .title {
     height: 32px;
     background-color: rgba(0,0,0,0.8);
@@ -54,10 +112,22 @@ const close = () => {
     }
     .window-options {
         justify-content: flex-end;
+        .option {
+            margin-right: 10px;
+        }
     }
 
-    .titlebtn {
+    .option {
         -webkit-app-region: no-drag;
+    }
+}
+
+.dashboard {
+    flex: 1;
+    // padding: 0px 10px;
+    background-color: #F3F3F4;
+    .el-tree {
+        background-color: #F3F3F4;
     }
 }
 </style>

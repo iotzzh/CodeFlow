@@ -19,6 +19,11 @@
         <div class="right">
             <div class="welcome">欢迎使用Code Flow</div>
             <div class="top-tips">请先选择一个项目再开始使用</div>
+            <div class="parts">
+                <div class="part">数据管理</div>
+                <div class="part">服务管理</div>
+                <div class="part">界面管理</div>
+            </div>
             <el-input class="search-input" placeholder="搜索项目名称" prefix-icon="Search">
             </el-input>
 
@@ -26,12 +31,12 @@
                 height="100%">
                 <el-table-column prop="projectName" label="项目名称" />
                 <el-table-column prop="currentBranch" label="当前分支" />
-                <el-table-column fixed="right" label="操作" width="300" align="center">
+                <el-table-column fixed="right" label="操作" width="180" align="center">
                     <template #default="scope">
                         <el-button link type="primary" size="small" @click="openDashboard">进入</el-button>
+                        <el-button link type="success" size="small">编辑</el-button>
                         <el-button link type="warning" size="small">部署</el-button>
                         <el-button link type="danger" size="small">移除</el-button>
-                        <el-button link type="success" size="small">vscode</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -163,6 +168,12 @@ const openDashboard = () => {
             font-size: 12px;
             margin: 5px 0px 20px 0px;
         }
+
+        .parts {
+            display: flex;
+        }
+
+
 
         .project-list-table {
             flex: 1;
