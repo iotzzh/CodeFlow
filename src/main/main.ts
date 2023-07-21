@@ -34,7 +34,7 @@ function createWindow (config: { [x:string]:any } = {}) {
   }
   else {
     window.loadFile(join(app.getAppPath(), 'renderer', 'index.html'), {
-      hash: '/' + `${config.route ? '/' + config.route : ''}`
+      hash: `${config.route || ''}`
     });
   }
 
