@@ -6,7 +6,7 @@ import ElementPlus from 'element-plus';
 import * as Icons from '@element-plus/icons-vue';
 import locale from 'element-plus/dist/locale/zh-cn.mjs';
 
-import router from '@/renderer/router/index';
+import router from '@/router/index';
 
 
 import App from './App.vue'

@@ -52,18 +52,22 @@ import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css'
 import API from './APIManage.vue';
 import { ref } from 'vue';
+import { ipcRenderer } from "electron";
 
 const id = 'dashboard';
 const min = () => {
-    window.electronAPI.minWindow(id);
+    // window.electronAPI.minWindow(id);
+    ipcRenderer.send('min', id);
 }
 
 const max = () => {
-    window.electronAPI.maxWindow(id);
+    ipcRenderer.send('max', id);
+    // window.electronAPI.maxWindow(id);
 };
 
 const close = () => {
-    window.electronAPI.closeWindow(id);
+    ipcRenderer.send('close', id);
+    // window.electronAPI.closeWindow(id);
 };
 
 interface Tree {

@@ -78,11 +78,15 @@ const tableData = [
 ]
 
 const openDashboard = () => {
-    window.electronAPI.createWindow({
+    ipcRenderer.send('createWindow', {
         id: 'dashboard',
         route: 'dashboard',
-        fullscreenWithTop: false,
     });
+    // window.electronAPI.createWindow({
+    //     id: 'dashboard',
+    //     route: 'dashboard',
+    //     fullscreenWithTop: false,
+    // });
     // window.electronAPI.createWindow(`${location.origin}/dashboard`);
     // ipcRenderer.send('message')
     // window.electronAPI.sendMessage('message');

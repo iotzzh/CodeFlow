@@ -1,38 +1,52 @@
 {
   "name": "code-flow",
-  "version": "0.1.0",
+  "version": "0.0.1",
+  "main": "dist-electron/main/index.js",
   "description": "渐进式低代码工作流平台",
-  "main": "build/main/main.js",
+  "author": "zzh<微信号:itrzzh>",
+  "license": "MIT",
+  "private": true,
+  "keywords": [
+    "electron",
+    "rollup",
+    "vite",
+    "vue3",
+    "vue"
+  ],
+  "debug": {
+    "env": {
+      "VITE_DEV_SERVER_URL": "http://127.0.0.1:3344/"
+    }
+  },
   "scripts": {
-    "dev": "node scripts/dev-server.js",
-    "build": "node scripts/build.js && electron-builder",
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build && electron-builder",
     "build:win": "node scripts/build.js && electron-builder --win",
     "build:mac": "node scripts/build.js && electron-builder --mac",
-    "build:linux": "node scripts/build.js && electron-builder --linux"
+    "build:linux": "node scripts/build.js && electron-builder --linux",
+    "preview": "vite preview"
   },
   "repository": "https://github.com/iotzzh/codeflow",
-  "author": {
-    "name": "zzh",
-    "url": "https://github.com/iotzzh"
-  },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.0.0",
-    "chalk": "^4.1.2",
-    "chokidar": "^3.5.3",
-    "electron": "^25.2.0",
-    "electron-builder": "^24.2.1",
-    "sass": "^1.63.6",
-    "sass-loader": "^13.3.2",
-    "typescript": "^4.8.4",
-    "vite": "^4.1.1"
-  },
-  "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
+    "@vitejs/plugin-vue": "^4.1.0",
+    "chalk": "^5.3.0",
+    "chokidar": "^3.5.3",
     "dayjs": "^1.11.9",
+    "electron": "^25.0.1",
+    "electron-builder": "^24.4.0",
     "element-plus": "^2.3.8",
     "nprogress": "^0.2.0",
+    "sass": "^1.64.1",
+    "sass-loader": "^13.3.2",
     "splitpanes": "^3.1.5",
+    "sqlite3": "^5.1.6",
+    "typescript": "^5.0.2",
+    "vite": "^4.1.4",
+    "vite-plugin-electron": "^0.12.0",
+    "vite-plugin-electron-renderer": "^0.14.1",
     "vue": "^3.2.47",
-    "vue-router": "^4.2.4"
+    "vue-router": "^4.2.4",
+    "vue-tsc": "^1.2.0"
   }
 }
