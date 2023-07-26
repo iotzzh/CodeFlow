@@ -43,7 +43,7 @@ const indexHtml = join(process.env.DIST, 'index.html')
 
 async function createWindow() {
   win = new BrowserWindow({
-    title: 'Main window',
+    title: 'Code Flow',
     icon: join(process.env.PUBLIC, 'favicon.ico'),
     autoHideMenuBar: true, // 隐藏菜单栏
     webPreferences: {
