@@ -30,7 +30,7 @@
                             <template #default="{ node, data }">
                                 <span class="custom-tree-node" v-if="node.label.toLowerCase() === 'web'">
                                     <span>{{ node.label }}</span>
-                                    <a style="font-size: 12px; color: blue; padding-left: 7px;">VSCODE</a>
+                                    <a style="font-size: 12px; color: blue; padding-left: 7px;" @click.stop="(e:any) => openVSCode(e)">VSCODE</a>
                                 </span>
                                 <span v-else>{{ node.label }}</span>
                             </template>
@@ -92,6 +92,7 @@ const data: Tree[] = [
                     { label: '首页' },
                 ]
             },
+            { label: '路由配置' },
             { label: '全局方法' },
             {
                 label: '配置', children: [
@@ -115,6 +116,11 @@ const defaultProps = {
     children: 'children',
     label: 'label',
 }
+
+const openVSCode = (e:any) => {
+    e.preventDefault();
+    ipcRenderer.send('open-code-by-ide', 'vscode', '222');
+};
 
 </script>
 

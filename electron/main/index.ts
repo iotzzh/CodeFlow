@@ -189,3 +189,43 @@ ipcMain.on('max', (event, id) => {
     }
 });
 ipcMain.on('close', (event, id) => subWindows[id].close());
+
+// 命令行工具： code E:\practice\zh-skill-tree\code\web\zh-admin-vue
+ipcMain.on('open-code-by-ide', (event, ide, address) => {
+  switch(ide) {
+    case 'vscode': 
+    var exec = require('child_process').exec;
+    exec(`code E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue`);
+    // const shell = require('shelljs');
+    // const res = shell.exec(`code E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue`);
+    // console.log(JSON.stringify(res));
+
+// 同步
+// 执行 git status 命令
+// const { code } = shell.exec('git status');
+
+/*
+* 返回一个对象
+* 可以根据 code 值来判断当前命令是否执行成功
+* code === 0 代表成功
+* */
+
+// 异步回调
+// 执行 git add . 命令
+// shell.exec('git add .', function(code, stdout, stderr) {
+//   console.log('Exit code:', code);
+//   console.log('Program output:', stdout);
+//   console.log('Program stderr:', stderr);
+//   if (code===0) {
+//     console.log('成功')
+//     // do something
+//   }
+// });
+    break;
+  }
+});
+
+ipcMain.on("sendMessage", (event, args) => {
+  console.log("收到渲染进程的消息",  args);
+  subWindows[0] && subWindows[0].webContents.send("receiveMessage", "我是主进程已收到消息" + args); // 响应渲染进程
+});

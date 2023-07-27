@@ -61,12 +61,12 @@ export default defineConfig(({ command }) => {
       // Use Node.js API in the Renderer-process
       renderer(),
     ],
-        // 配置文件别名，vite1.0是/@/， 2.0改为/@
-        resolve: {
-          alias: {
-            '@': path.resolve(__dirname, './src'),
-          }
-      },
+    // 配置文件别名，vite1.0是/@/， 2.0改为/@
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      }
+    },
     server: process.env.VSCODE_DEBUG && (() => {
       const url = new URL(pkg.debug.env.VITE_DEV_SERVER_URL)
       return {
