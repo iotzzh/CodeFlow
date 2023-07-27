@@ -1,0 +1,142 @@
+<template>
+  <div class="light" @click="(e: any) => emit('click')">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>{{ text }}
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { computed, toRefs } from 'vue';
+
+const props = defineProps({
+  color: {
+    type: String,
+    required: true,
+  },
+  text: {
+    type: String,
+    required: true,
+  },
+});
+
+const { color, text } = toRefs(props);
+
+const emit = defineEmits(['click']);
+
+const buttonColor = computed(() => color.value);
+// const buttonColor = ref('red');
+</script>
+
+<style lang="scss" scoped>
+.light {
+  display: inline-block;
+  width: 300px;
+  text-align: center;
+  position: relative;
+  padding: 25px 30px;
+  color: v-bind(buttonColor);
+  font-size: 18px;
+  text-transform: uppercase;
+  transition: 0.5s;
+  letter-spacing: 4px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.light:hover {
+  background-color: v-bind(buttonColor);
+  color: #050801;
+  box-shadow: 0 0 5px v-bind(buttonColor),
+    0 0 25px v-bind(buttonColor),
+    0 0 50px v-bind(buttonColor),
+    0 0 200px v-bind(buttonColor);
+}
+
+.light div {
+  position: absolute;
+}
+
+.light div:nth-child(1) {
+  width: 100%;
+  height: 2px;
+  top: 0;
+  left: -100%;
+  background: linear-gradient(to right, transparent, v-bind(buttonColor));
+  animation: animate1 1s linear infinite;
+}
+
+.light div:nth-child(2) {
+  width: 2px;
+  height: 100%;
+  top: -100%;
+  right: 0;
+  background: linear-gradient(to bottom, transparent, v-bind(buttonColor));
+  animation: animate2 1s linear infinite;
+  animation-delay: 0.25s;
+}
+
+.light div:nth-child(3) {
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  right: -100%;
+  background: linear-gradient(to left, transparent, v-bind(buttonColor));
+  animation: animate3 1s linear infinite;
+  animation-delay: 0.5s;
+}
+
+.light div:nth-child(4) {
+  width: 2px;
+  height: 100%;
+  bottom: -100%;
+  left: 0;
+  background: linear-gradient(to top, transparent, v-bind(buttonColor));
+  animation: animate4 1s linear infinite;
+  animation-delay: 0.75s;
+}
+
+@keyframes animate1 {
+  0% {
+    left: -100%;
+  }
+
+  50%,
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes animate2 {
+  0% {
+    top: -100%;
+  }
+
+  50%,
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes animate3 {
+  0% {
+    right: -100%;
+  }
+
+  50%,
+  100% {
+    right: 100%;
+  }
+}
+
+@keyframes animate4 {
+  0% {
+    bottom: -100%;
+  }
+
+  50%,
+  100% {
+    bottom: 100%;
+  }
+}</style>

@@ -3,11 +3,11 @@
         <div class="left">
             <div class="title">Code Flow</div>
             <div class="version">Version 0.0.1</div>
-            <el-button type="primary" icon="Plus" class="btn-create-project button">创建新项目</el-button>
+            <el-button type="primary" icon="Plus" class="btn-create-project button">创建新系统</el-button>
 
-            <div class="sub-title">打开</div>
+            <!-- <div class="sub-title">打开</div>
             <el-button type="info" icon="Folder" class="button sub-button">打开本地项目</el-button>
-            <el-button type="info" icon="FolderAdd" class="button sub-button">导入项目</el-button>
+            <el-button type="info" icon="FolderAdd" class="button sub-button">导入项目</el-button> -->
 
             <div class="sub-title">Code Flow 版本</div>
             <el-button type="info" icon="Download" class="button sub-button">下载最新版本</el-button>
@@ -18,11 +18,11 @@
         </div>
         <div class="right">
             <div class="welcome">欢迎使用Code Flow</div>
-            <div class="top-tips">请先选择一个项目再开始使用</div>
+            <div class="top-tips">渐进式低代码系统管理平台, 如何开发随便你~</div>
             <div class="parts">
                 <div class="part">数据管理</div>
                 <div class="part">服务管理</div>
-                <div class="part">界面管理</div>
+                <div class="part" @click="openAppListModal">应用管理</div>
             </div>
             <el-input class="search-input" placeholder="搜索项目名称" prefix-icon="Search">
             </el-input>
@@ -40,12 +40,16 @@
                     </template>
                 </el-table-column>
             </el-table>
-
         </div>
+        <ZHModal :modal-config="appModalConfig">
+111
+        </ZHModal>
     </div>
 </template>
 <script lang="ts" setup>
 import { ipcRenderer } from "electron";
+import ZHModal from '@/components/zh-modal/index.vue';
+import { ref } from 'vue';
 
 const tableData = [
     { projectName: '后台管理系统', currentBranch: 'main(分支管理功能)', },
@@ -93,10 +97,16 @@ const openDashboard = () => {
     // window.open(`${location.origin}/dashboard`);
 };
 
-// 监听接收主线程信息
-// window.electronAPI.onUpdateCounter((_event:any, value:any) => {
-//     console.log(value);
-// })
+const appModalConfig = ref({
+    show:false,
+    title: '应用程序管理',
+    width: '100%',
+    fullscreen: true,
+});
+
+const openAppListModal = () => {
+appModalConfig.value.show = true;
+};
 </script>
 <style lang="scss" scoped>
 .box {
@@ -175,13 +185,28 @@ const openDashboard = () => {
 
         .parts {
             display: flex;
+            justify-content: space-around;
+            height: 70px;
+            margin-bottom: 10px;
+
+            .part {
+                flex-basis: 31%;
+                height: 100%;
+                background-color: #BFE7FC;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
         }
 
 
 
         .project-list-table {
             flex: 1;
-           &:deep(.el-table__body tr.current-row>td.el-table__cell) {
+
+            &:deep(.el-table__body tr.current-row>td.el-table__cell) {
                 background-color: #BFE7FC;
             }
         }

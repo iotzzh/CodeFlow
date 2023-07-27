@@ -1,0 +1,98 @@
+.zh-table {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 5px 15px;
+  // background-color: rgb(223, 223, 223);
+  background-color: white;
+  // padding: 7px;
+
+  .zh-table-panel-setting {
+    background-color: white;
+    font-size: 14px;
+    min-height: 30px;
+    width: 100%;
+
+    .table-title {
+      color: #154EC1;
+      font-size: 14px;
+      font-weight: 500;
+      margin-left: 15px;
+      display: flex;
+      align-items: center;
+      .icon {
+        margin-right: 3px;
+      }
+    }
+
+    .setting-panel.right {
+      color: #154EC1;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: right;
+
+      .export-setting,
+      .display-setting {
+        padding: 0px 5px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .zh-form {
+    // margin-bottom: 5px;
+    padding: 7px 0px;
+  }
+
+  .zh-form .el-form-item {
+    margin-right: 15px;
+  }
+
+  .zh-form .el-form-item.zh-table-inline-button {
+    margin-left: 15px;
+    margin-right: 0px;
+  }
+
+  // .zh-form {
+  //   &:deep(.el-form-item.zh-table-inline-button) {
+  //     padding-left: 15px;
+  //   }
+  // }
+
+
+  .zh-table-pagination {
+    margin: 0px 0px 0px 0px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    // padding-right: 15px;
+    justify-content: end;
+    background-color: white;
+  }
+
+  .zh-el-table {
+    // padding: 0px 15px;
+
+    .el-button+.el-button {
+      margin-left: 0px !important;
+    }
+  }
+}
+
+
+@media screen and (max-width: 820px) {
+  .zh-table {
+    padding: 7px;
+    .zh-form {
+      // margin-bottom: 5px;
+      padding: 0px;
+    }
+
+    .zh-el-table {
+      padding: 0px;
+    }
+
+    // .zh-table-pagination {
+    //   padding-right: 15px;
+    // }
+  }
+}
