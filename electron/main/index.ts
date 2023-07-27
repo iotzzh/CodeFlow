@@ -192,10 +192,10 @@ ipcMain.on('close', (event, id) => subWindows[id].close());
 
 // 命令行工具： code E:\practice\zh-skill-tree\code\web\zh-admin-vue
 ipcMain.on('open-code-by-ide', (event, ide, address) => {
-  switch(ide) {
-    case 'vscode': 
-    var exec = require('child_process').exec;
-    exec(`code E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue`);
+  // switch(ide) {
+  //   case 'vscode': 
+  //   var exec = require('child_process').exec;
+  //   exec(`code E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue`);
     // const shell = require('shelljs');
     // const res = shell.exec(`code E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue`);
     // console.log(JSON.stringify(res));
@@ -221,11 +221,11 @@ ipcMain.on('open-code-by-ide', (event, ide, address) => {
 //     // do something
 //   }
 // });
-    break;
-  }
+    // break;
+  // }
 });
 
-ipcMain.on("sendMessage", (event, args) => {
-  console.log("收到渲染进程的消息",  args);
-  subWindows[0] && subWindows[0].webContents.send("receiveMessage", "我是主进程已收到消息" + args); // 响应渲染进程
-});
+// ipcMain.on("sendMessage", (event, args) => {
+//   console.log("收到渲染进程的消息",  args);
+//   subWindows[0] && subWindows[0].webContents.send("receiveMessage", "我是主进程已收到消息" + args); // 响应渲染进程
+// });
