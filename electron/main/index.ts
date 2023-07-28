@@ -48,6 +48,7 @@ async function createWindow() {
     autoHideMenuBar: true, // 隐藏菜单栏
     webPreferences: {
       preload,
+      webSecurity: false,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
       // Consider using contextBridge.exposeInMainWorld
       // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
