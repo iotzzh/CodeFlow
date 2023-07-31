@@ -1,7 +1,9 @@
 import { app, BrowserWindow, shell, ipcMain, screen } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
+import DBHelper from './db'
 
+DBHelper.openDB();
 // The built directory structure
 //
 // ├─┬ dist-electron
