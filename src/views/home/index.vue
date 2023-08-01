@@ -3,7 +3,7 @@
         <div class="left">
             <div class="title">Code Flow</div>
             <div class="version">Version 0.0.1</div>
-            <el-button type="primary" icon="Plus" class="btn-create-project button">创建新系统</el-button>
+            <el-button type="primary" icon="Plus" class="btn-create-project button" @click="btnCreateSys">创建新系统</el-button>
 
             <div class="sub-title">打开</div>
             <el-button type="info" icon="Folder" class="button sub-button">打开本地项目</el-button>
@@ -80,6 +80,10 @@ const tableData = [
     { projectName: '后台管理系统', currentBranch: 'main', },
     { projectName: '后台管理系统', currentBranch: 'main', },
 ]
+
+const btnCreateSys = () => {
+    ipcRenderer.send('window:min', 'da');
+};
 
 const openDashboard = () => {
     ipcRenderer.send('createWindow', {

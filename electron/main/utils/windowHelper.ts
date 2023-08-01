@@ -1,6 +1,8 @@
 import { BrowserWindow, shell } from "electron";
 import { join } from 'node:path';
 
+
+
 export default class WindowHelper {
     static createWindow (cofig: { [x:string] :any } = {}) {
         const preload = join(__dirname, '../preload/index.js')
