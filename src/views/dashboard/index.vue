@@ -57,16 +57,16 @@ import { ipcRenderer } from "electron";
 const id = 'dashboard';
 const min = () => {
     // window.electronAPI.minWindow(id);
-    ipcRenderer.send('min', id);
+    ipcRenderer.send('window:min', id);
 }
 
 const max = () => {
-    ipcRenderer.send('max', id);
+    ipcRenderer.send('window:max', id);
     // window.electronAPI.maxWindow(id);
 };
 
 const close = () => {
-    ipcRenderer.send('close', id);
+    ipcRenderer.send('window:close', id);
     // window.electronAPI.closeWindow(id);
 };
 
