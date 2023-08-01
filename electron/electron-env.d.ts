@@ -9,3 +9,5 @@ declare namespace NodeJS {
     PUBLIC: string
   }
 }
+
+import 'vite/client'

@@ -5,9 +5,9 @@
             <div class="version">Version 0.0.1</div>
             <el-button type="primary" icon="Plus" class="btn-create-project button">创建新系统</el-button>
 
-            <!-- <div class="sub-title">打开</div>
+            <div class="sub-title">打开</div>
             <el-button type="info" icon="Folder" class="button sub-button">打开本地项目</el-button>
-            <el-button type="info" icon="FolderAdd" class="button sub-button">导入项目</el-button> -->
+            <el-button type="info" icon="FolderAdd" class="button sub-button">导入项目</el-button>
 
             <div class="sub-title">Code Flow 版本</div>
             <el-button type="info" icon="Download" class="button sub-button">下载最新版本</el-button>
@@ -20,9 +20,9 @@
             <div class="welcome">欢迎使用Code Flow</div>
             <div class="top-tips">渐进式低代码系统管理平台, 如何开发随便你~</div>
             <div class="parts">
-                <div class="part">数据管理</div>
-                <div class="part">服务管理</div>
-                <div class="part" @click="openAppListModal">应用管理</div>
+                <div class="part">DATA</div>
+                <div class="part">SERVER</div>
+                <div class="part" @click="openAppListModal">APP</div>
             </div>
             <el-input class="search-input" placeholder="搜索项目名称" prefix-icon="Search">
             </el-input>
@@ -47,9 +47,9 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ipcRenderer } from "electron";
+import { ipcRenderer, shell  } from "electron";
 import ZHModal from '@/components/zh-modal/index.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const tableData = [
     { projectName: '后台管理系统', currentBranch: 'main(分支管理功能)', },
@@ -86,15 +86,6 @@ const openDashboard = () => {
         id: 'dashboard',
         route: 'dashboard',
     });
-    // window.electronAPI.createWindow({
-    //     id: 'dashboard',
-    //     route: 'dashboard',
-    //     fullscreenWithTop: false,
-    // });
-    // window.electronAPI.createWindow(`${location.origin}/dashboard`);
-    // ipcRenderer.send('message')
-    // window.electronAPI.sendMessage('message');
-    // window.open(`${location.origin}/dashboard`);
 };
 
 const appModalConfig = ref({
@@ -107,6 +98,10 @@ const appModalConfig = ref({
 const openAppListModal = () => {
 appModalConfig.value.show = true;
 };
+
+onMounted(() => {
+    ipcRenderer.send('openDialog');
+});
 </script>
 <style lang="scss" scoped>
 .box {
