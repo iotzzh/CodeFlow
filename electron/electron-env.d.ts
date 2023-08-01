@@ -10,4 +10,10 @@ declare namespace NodeJS {
   }
 }
 
+import { BrowserWindow } from 'electron'
 import 'vite/client'
+
+declare interface globalThis {
+  mainWindow: BrowserWindow
+  childWindow: BrowserWindow
+}

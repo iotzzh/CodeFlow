@@ -86,8 +86,8 @@ const btnCreateSys = () => {
 };
 
 const openDashboard = () => {
-    ipcRenderer.send('createWindow', {
-        id: 'dashboard',
+    ipcRenderer.send('window:create', {
+        name: 'dashboard',
         route: 'dashboard',
     });
 };
