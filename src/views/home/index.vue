@@ -42,7 +42,7 @@
             </el-table>
         </div>
         <ZHModal :modal-config="appModalConfig">
-111
+            测试
         </ZHModal>
     </div>
 </template>

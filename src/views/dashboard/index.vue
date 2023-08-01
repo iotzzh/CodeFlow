@@ -54,20 +54,17 @@ import API from './APIManage.vue';
 import { ref } from 'vue';
 import { ipcRenderer } from "electron";
 
-const id = 'dashboard';
+const name = 'dashboard';
 const min = () => {
-    // window.electronAPI.minWindow(id);
-    ipcRenderer.send('window:min', id);
+    ipcRenderer.send('window:min', name);
 }
 
 const max = () => {
-    ipcRenderer.send('window:max', id);
-    // window.electronAPI.maxWindow(id);
+    ipcRenderer.send('window:max', name);
 };
 
 const close = () => {
-    ipcRenderer.send('window:close', id);
-    // window.electronAPI.closeWindow(id);
+    ipcRenderer.send('window:close', name);
 };
 
 interface Tree {
