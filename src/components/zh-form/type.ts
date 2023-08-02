@@ -49,6 +49,9 @@ export interface TZHFromField {
   // 输入框 input
   inputType?: string
   showPassword?: boolean
+  suffixIcon?: any
+  appendSuffixIcon?: any
+  focus?: Function | string
 
   // 开关Switch
   activeText?: string

@@ -1,3 +1,5 @@
+import * as dayjs from 'dayjs';
+
 export default class DBCommonHelper {
     db: any;
     tableName: string;
@@ -29,7 +31,7 @@ export default class DBCommonHelper {
         try {
             const kys = Object.keys(value);
             const values = Object.values(value);
-            const res = await this.db.run(`insert into ${this.tableName} (${kys.join(',')}) values (${values.join(',')})`);
+            const res = await this.db.run(`insert into ${this.tableName} (${kys.join(',') + ', create_time'}) values (${values.join(',') + ',' + dayjs().format('YYYY-MM-DD HH:mm:ss')})`);
             return res;
         } catch(err) {
             console.log(err);
@@ -52,6 +54,7 @@ export default class DBCommonHelper {
             keys.forEach((x:string) => {
                 newValue.push(`${x} = ${value[x]}`);
             });
+            newValue.push(`update_time = ${dayjs().format('YYYY-MM-DD HH:mm:ss')}`);
             const res = await this.db.run(`update ${this.tableName} set ${newValue.join(',')} where id = ${value.id})`);
             return res;
         } catch(err) {

@@ -167,6 +167,14 @@ export default class Form {
   //#endregion
 
   //#region 事件
+  inputFocus = (e:any, item:any, model:any, ref:any) => {
+    if (item.focus) item.focus(e, item, model, ref);
+  };
+
+  clickInputAppendSuffixIcon = (e:any, item:any, model:any, ref:any) => {
+    if (item.clickAppendSuffixIcon) item.clickAppendSuffixIcon(e, item, model, ref);
+  };
+
   changeCascader = (itemRefs: any, refName: any, formConfig: any) => {
     // 将级联选择器选中的节点存储起来
     const refValue = itemRefs && refName && itemRefs[refName];

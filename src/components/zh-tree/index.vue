@@ -1,6 +1,6 @@
 <template>
   <div class="zh-tree" v-loading="loadingTree">
-    <div class="top-box">
+    <div class="top-box" v-if="tData && tData.length > 0">
       <el-input class="search-box" v-model="filterText" placeholder="搜索过滤" />
       <el-button class="add-button" v-if="config.treeConfig.hasRootAdd" type="success" @click="openModal(0)">新增</el-button>
     </div>

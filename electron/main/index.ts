@@ -5,6 +5,7 @@ import DBHelper from './db'
 import Init from './utils/init';
 import WindowHelper from './utils/windowHelper'
 import { addMessageListener } from './message/index';
+import { addAPIListener } from './controller/index';
 
 Init.initProcess();
 
@@ -32,6 +33,8 @@ DBHelper.openDB();
 // })
 
 addMessageListener();
+
+addAPIListener();
 
 
 

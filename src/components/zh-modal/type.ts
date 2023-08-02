@@ -6,6 +6,7 @@ export interface TZHModal {
   loadingPage?: boolean // 弹窗是否处于loading状态
   bodyHeight?: string | number // 
   title?: string // 标题
+  mainTitle?: string // 主标题，用于外部扩展使用，例如`新增${mainTitle}`
   data?: any // 暂存数据
   type?: any
   top?: string
@@ -15,7 +16,7 @@ export interface TZHModal {
   closeInModal?: boolean
   showClose?: boolean
 
-  footer?: TZHModalFooter | {}
+  footer?: TZHModalFooter
 
   onBeforeSubmit?: Function | string
   onAfterSubmit?: Function | string

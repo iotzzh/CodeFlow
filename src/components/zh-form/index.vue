@@ -12,11 +12,17 @@
           <el-form-item :key="'form-item' + index" :label="item.label" :prop="item.prop" :label-width="item.labelWidth"
              v-if="item.prop">
             <!-- 输入框 -->
-            <el-input v-if="item.type === 'input'" :style="{ width: item.width ? `${item.width}` : '100%' }"
+            <el-input v-if="item.type === 'input'" :ref="(el: any) => {
+                if (item.refName) itemRefs[item.refName] = el;
+              }" :style="{ width: item.width ? `${item.width}` : '100%' }"
               :show-password="item.showPassword" v-model="modelValue[item.prop]" :placeholder="item.placeholder"
               :disabled="item.disabled === undefined ? false :
                 typeof item.disabled === 'boolean' ? item.disabled : item.disabled(modelValue)" :type="item.inputType"
-              :clearable="item.clearable === undefined ? true : item.clearable"></el-input>
+              :clearable="item.clearable === undefined ? true : item.clearable" :suffix-icon="item.suffixIcon" @focus="(e:any) => formInstance.inputFocus(e, item, modelValue, itemRefs[item.refName || ''])">
+              <template #append v-if="item.appendSuffixIcon">
+                <el-icon style="cursor: pointer;"><component :is="item.appendSuffixIcon"  @click="(e:any) => formInstance.clickInputAppendSuffixIcon(e, item, modelValue, itemRefs[item.refName || ''])"></component></el-icon>
+              </template>
+            </el-input>
 
             <!-- 文本显示 -->
             <span v-if="item.type === 'text'" :style="{ width: item.width ? `${item.width}` : '100%' }">{{

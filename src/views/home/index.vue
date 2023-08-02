@@ -3,7 +3,7 @@
         <div class="left">
             <div class="title">Code Flow</div>
             <div class="version">Version 0.0.1</div>
-            <el-button type="primary" icon="Plus" class="btn-create-project button" @click="btnCreateSys">创建新系统</el-button>
+            <el-button type="primary" icon="Plus" class="btn-create-project button" @click="btnCreateSys">创建工作区</el-button>
 
             <div class="sub-title">打开</div>
             <el-button type="info" icon="Folder" class="button sub-button">打开本地项目</el-button>
@@ -18,7 +18,7 @@
         </div>
         <div class="right">
             <div class="welcome">欢迎使用Code Flow</div>
-            <div class="top-tips">渐进式低代码系统管理平台, 如何开发随便你~</div>
+            <div class="top-tips">渐进式低代码系统管理平台, 如何开发随便你~请先创建工作区</div>
             <!-- <div class="parts">
                 <div class="part">DATA</div>
                 <div class="part">SERVER</div>
@@ -28,12 +28,12 @@
             <!-- </el-input> -->
 
             <el-row class="row workspace">
-                <el-col class="col" :span="8">
+                <el-col class="col" :span="0">
                     <ZHTree :config="workspaceTree">
                     </ZHTree>
                 </el-col>
-                <el-col class="col" :span="16">
-                    <el-table :data="tableData" style="width: 100%" :highlight-current-row="true" class="project-list-table"
+                <el-col class="col" :span="24">
+                    <el-table :data="[]" style="width: 100%" :highlight-current-row="true" class="project-list-table"
                         height="100%">
                         <el-table-column prop="projectName" label="项目名称" />
                         <el-table-column prop="currentBranch" label="当前分支" />
@@ -48,12 +48,18 @@
                     </el-table>
                 </el-col>
             </el-row>
-            <div style="padding: 10px 0px 0px 0px;">
+            <!-- <div style="padding: 10px 0px 0px 0px;">
                 <el-button>新增工作区间</el-button>
                 <el-button>新增项目</el-button>
-            </div>
+            </div> -->
 
         </div>
+        <ZHFormModal
+            v-model="createWorkspaceFormModalModel"
+            :modal-config="createWorkspaceFormModalConfig.modalConfig" 
+            :form-config="createWorkspaceFormModalConfig.formConfig">
+
+        </ZHFormModal>
         <ZHModal :modal-config="appModalConfig">
             <ZHTable :config="appModalTableConfig"></ZHTable>
         </ZHModal>
@@ -63,10 +69,15 @@
 import { ipcRenderer, shell } from "electron";
 import ZHModal from '@/components/zh-modal/index.vue';
 import ZHTable from '@/components/zh-table/index.vue';
+import ZHFormModal from '@/components/zh-form-modal/index.vue';
 import ZHTree from '@/components/zh-tree/index.vue';
 import { onMounted, ref } from 'vue';
 import { TZHTable } from "@/components/zh-table/type";
 
+// 弹窗配置文件
+import createWorkspaceFormModalConfig from './createWorkspaceFormModalConfig';
+
+const createWorkspaceFormModalModel = ref({});
 
 const workspaceTree = ref({
     treeConfig: {
@@ -83,12 +94,12 @@ const workspaceTree = ref({
             label: 'label',
         },
     },
-    // requestConfig: {
-    //     urlGet: api.getOrgList,
-    //     urlAdd: api.addOrg,
-    //     urlEdit: api.updateOrg,
-    //     urlDelete: api.deleteOrg,
-    // },
+    requestConfig: {
+        // urlGet: api.getOrgList,
+        // urlAdd: api.addOrg,
+        // urlEdit: api.updateOrg,
+        // urlDelete: api.deleteOrg,
+    },
     formModalConfig: {
         modalConfig: {
             show: false,
@@ -100,48 +111,51 @@ const workspaceTree = ref({
             },
         },
         formConfig: {
-            fields: [
-                { prop: 'test', label: '测试', type: 'input', span: 12, },
-                { prop: 'test1', label: '测试1', type: 'select', span: 12, convert: 'return 111', defaultOptions: [{ label: '测试1', value: '测试1' }, { label: '测试2', value: '测试2' }] }
-            ]
+        //     fields: [
+        //         { prop: 'test', label: '测试', type: 'input', span: 12, },
+        //         { prop: 'test1', label: '测试1', type: 'select', span: 12, convert: 'return 111', defaultOptions: [{ label: '测试1', value: '测试1' }, { label: '测试2', value: '测试2' }] }
+        //     ]
         },
         model: {},
         convertedModel: {},
     },
 });
 
-const tableData = [
-    { projectName: '后台管理系统', currentBranch: 'main(分支管理功能)', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-    { projectName: '后台管理系统', currentBranch: 'main', },
-]
+// const tableData = [
+    // { projectName: '后台管理系统', currentBranch: 'main(分支管理功能)', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+    // { projectName: '后台管理系统', currentBranch: 'main', },
+// ]
 
-const btnCreateSys = () => {
-    ipcRenderer.send('window:min', 'da');
+const btnCreateSys = async () => {
+    createWorkspaceFormModalConfig.value.modalConfig.show = true;
+    // ipcRenderer.send('window:min', 'da');
+    // const res = ipcRenderer.sendSync('api:workspace:list', 'api');
+    // console.log(res);
 };
 
 const openDashboard = () => {
