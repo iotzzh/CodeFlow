@@ -10,7 +10,9 @@ export default ref({
         footer: {
             hasCancelButton: true,
             hasSubmitButton: true,
-        }
+        },
+        onCancel: (params:any) => { params.refModal.close(); },
+        onSubmit: () => { console.log('222') },
     },
     formConfig: {
         formLabelWidth: '100px',
@@ -21,7 +23,6 @@ export default ref({
                 if (model.address) return;
                 const res = ipcRenderer.sendSync('dialog:chooseFolder');
                 model.address = res && res.filePaths && res.filePaths[0];
-                // ref.blur();
             }
         },
         ],

@@ -42,7 +42,7 @@ const refZHModal = ref();
 const refZHForm = ref();
 const emit = defineEmits(['close', 'submit', 'cancel', 'update:modelValue', 'update:convertedModel', 'opened']);
 
-const zhFormModal = new ZHFormModal({ emit, refZHModal, refZHForm, modelValue, formConfig });
+const zhFormModal = new ZHFormModal({ emit, refZHModal, refZHForm, modelValue, formConfig, modalConfig });
 
 const slotFields = computed(() => {
   return formConfig?.value?.fields?.filter((x: any) => x.type === 'slot');

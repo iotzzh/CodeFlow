@@ -1,18 +1,21 @@
 import { Ref } from 'vue';
 import { TZHformConfig } from '../zh-form/type';
+import { TZHModal } from '../zh-modal/type';
 
 export default class ZHFormModal {
     emit: any;
     refZHModal: any;
     refZHForm: any;
-    formSettings: Ref<TZHformConfig | undefined>;
+    formConfig: Ref<TZHformConfig | undefined>;
     modelValue: any;
+    modalConfig: TZHModal;
     constructor(params: any) {
         this.refZHModal = params.refZHModal;
         this.emit = params.emit;
         this.refZHForm = params.refZHForm;
-        this.formSettings = params.formSettings;
+        this.formConfig = params.formConfig;
         this.modelValue = params.modelValue;
+        this.modalConfig = params.modalConfig;
     }
 
     initForm = () => {
@@ -48,6 +51,9 @@ export default class ZHFormModal {
     };
 
     cancel = () => {
+        if (this.modalConfig.onCancel && typeof this.modalConfig.onCancel === 'function') {
+            this.modalConfig.onCancel({ refModal: this.refZHModal  });
+        }
         this.emit('cancel');
     };
 
