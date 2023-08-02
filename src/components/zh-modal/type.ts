@@ -15,10 +15,10 @@ export interface TZHModal {
   closeInModal?: boolean
   showClose?: boolean
 
-  footer?: TZHModalFooter
+  footer?: TZHModalFooter | {}
 
-  onBeforeSubmit?: Function
-  onAfterSubmit?: Function
+  onBeforeSubmit?: Function | string
+  onAfterSubmit?: Function | string
 
   // 通过字符串创建slot内容
   conmponentName?: string

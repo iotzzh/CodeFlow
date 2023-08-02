@@ -147,7 +147,7 @@ const rules = computed(() => {
   }
   if ((formConfig && formConfig.value && !!formConfig.value.rules)) {
     const keys = Object.keys(formConfig.value.rules);
-    keys.forEach((key: any) => { newRules[key] = formConfig.value.rules && formConfig.value.rules[key]; });
+    keys.forEach((key: any) => { newRules[key] = formConfig.value.rules && formConfig.value.rules[key as keyof typeof formConfig.value.rules]; });
   }
   return newRules;
 });
