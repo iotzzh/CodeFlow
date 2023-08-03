@@ -1,10 +1,12 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
+import humps from 'humps';
+import { Database } from 'sqlite3';
 
 export default class DBCommonHelper {
-    db: any;
+    db: Database;
     tableName: string;
 
-    constructor(db:any, tableName: string) { 
+    constructor(db:Database, tableName: string) { 
         this.db = db;
         this.tableName = tableName; 
     }
@@ -27,11 +29,13 @@ export default class DBCommonHelper {
         }
     };
 
-    add = async (value:{[x:string]:any}) => {
+    add = async (value:string) => {
         try {
-            const kys = Object.keys(value);
-            const values = Object.values(value);
-            const res = await this.db.run(`insert into ${this.tableName} (${kys.join(',') + ', create_time'}) values (${values.join(',') + ',' + dayjs().format('YYYY-MM-DD HH:mm:ss')})`);
+            const params = JSON.parse(value);
+            const kys = Object.keys(params).map((x:any) => humps.decamelize(x));
+            const values = Object.values(params);
+            const sql = `insert into ${this.tableName} (${kys.join(',') + ', create_time'}) values (${values.join(',') + ',' + dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')})`;
+            const res = await this.db.run(sql);
             return res;
         } catch(err) {
             console.log(err);

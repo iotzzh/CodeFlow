@@ -38,6 +38,6 @@ export default class CreateWorkspaceFormModal {
     };
 
     submit = () => { 
-        ipcRenderer.sendSync('api:workspace:add', this.model.value);
+        ipcRenderer.sendSync('api:workspace:add', JSON.stringify(this.model.value));
     };
 }

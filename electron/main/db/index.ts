@@ -1,5 +1,4 @@
 import { Database } from 'sqlite3';
-import DBWorkspaceHelper  from './workspace';
 
 export default class DBHelper {
     static db: Database | null = null;
@@ -17,7 +16,7 @@ export default class DBHelper {
             if (Object.prototype.hasOwnProperty.call(modules, path)) {
                 const module: any = await modules[path]();
                 if (module && module.default && typeof module.default.name === 'string') {
-                    const moduleDefault: DBWorkspaceHelper = module.default;
+                    const moduleDefault = module.default;
                     this[moduleDefault.name] = new module.default(this.db);
                 }
             }

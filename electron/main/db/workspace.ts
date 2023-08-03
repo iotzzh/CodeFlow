@@ -3,7 +3,7 @@ import DBCommonHelper from "./common";
 
 export default class DBWorkspaceHelper extends DBCommonHelper {
     db: Database;
-    name: 'workspace';
+    name: 'DBWorkspaceHelper';
     constructor(db:Database) { 
         super(db, 'workspace');
         this.db = db;

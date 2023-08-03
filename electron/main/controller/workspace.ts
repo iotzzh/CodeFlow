@@ -1,10 +1,10 @@
 import DBHelper from "../db";
 import { TReturn } from "./entity";
 
-export const add = (event, params: { [x:string]:any }) => {
+export const add = async (event, params: { [x:string]:any }) => {
     const ret = new TReturn();
 
-    // DBHelper.
+    const res = await DBHelper['DBWorkspaceHelper'].add(params);
 
     event.returnValue = ret;
 }
