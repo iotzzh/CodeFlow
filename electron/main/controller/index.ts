@@ -1,24 +1,26 @@
 import { ipcMain } from "electron";
 
-const modules = import.meta.glob('./*.ts');
+export default class Controller {
+    static init = async () => {
+        // 获取当前文件夹下的所有文件, 注意：这个是自动引入的方法，但是使用后无法在具体使用时使用TS类型，
+        const modules = import.meta.glob('./*.ts');
+        for (const path in modules) {
+            if (!Object.prototype.hasOwnProperty.call(modules, path)) continue;
 
-export const addAPIListener = async () => {
-    for (const path in modules) {
-        if (Object.prototype.hasOwnProperty.call(modules, path)) {
-            const module: any = await modules[path]();
-            const keys = Object.keys(module);
+            const module:any = await  modules[path]();
+            if (!module || !module.default || typeof module.default !== 'function' || !module.default.prefix) continue;
+            
+            const controller = this[module.default.prefix] = new module.default();
+
+            const keys = Object.keys(controller);
+
             keys.forEach((x: any) => {
-                try {
-                    if (module.default?.prefix && typeof module[x] === 'function') {
-                        ipcMain.on(`${'api:' + module.default.prefix + ':' + x}`, module[x])
-                    } else {
-                        ipcMain.on(x, module[x]);
-                    }
-
-                } catch (err) {
-                    console.log(err);
+                if (module.default.prefix && typeof controller[x] === 'function') {
+                    ipcMain.on(`${'api:' + module.default.prefix + ':' + x}`, controller[x])
+                } else {
+                    ipcMain.on(x, controller[x]);
                 }
             });
         }
-    }
-};
+    };
+}

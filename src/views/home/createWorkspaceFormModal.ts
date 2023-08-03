@@ -2,6 +2,7 @@ import { ref } from 'vue';
 import { TZHFormModal } from "@/components/zh-form-modal/type";
 import { ipcRenderer } from 'electron';
 import { RefSymbol } from '@vue/reactivity';
+import { popErrorMessage } from '@/components/zh-message';
 
 export default class CreateWorkspaceFormModal {
     modalConfig = ref({
@@ -37,7 +38,12 @@ export default class CreateWorkspaceFormModal {
         this.modalConfig.value.show = false;
     };
 
-    submit = () => { 
-        ipcRenderer.sendSync('api:workspace:add', JSON.stringify(this.model.value));
+    submit = async () => {
+        const res = await ipcRenderer.sendSync('api:workspace:add', JSON.stringify(this.model.value));
+        if (res.success) {
+            this.close();
+        } else {
+            popErrorMessage(res.error);
+        }
     };
 }

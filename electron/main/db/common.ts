@@ -34,7 +34,7 @@ export default class DBCommonHelper {
             const params = JSON.parse(value);
             const kys = Object.keys(params).map((x:any) => humps.decamelize(x));
             const values = Object.values(params);
-            const sql = `insert into ${this.tableName} (${kys.join(',') + ', create_time'}) values (${values.join(',') + ',' + dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')})`;
+            const sql = `insert into ${this.tableName} (${kys.join(',') + ', create_time'}) values (${values.map(y => `'${y}'`).join(',') + ',' + '\'' + dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss') + '\''} )`;
             const res = await this.db.run(sql);
             return res;
         } catch(err) {
