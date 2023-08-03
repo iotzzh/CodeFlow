@@ -1,8 +1,10 @@
+import { Database } from "sqlite3";
 import DBCommonHelper from "./common";
 
 export default class DBWorkspaceHelper extends DBCommonHelper {
-    db: any;
-    constructor(db:any) { 
+    db: Database;
+    name: 'workspace';
+    constructor(db:Database) { 
         super(db, 'workspace');
         this.db = db;
 

@@ -55,10 +55,13 @@
 
         </div>
         <ZHFormModal
-            v-model="createWorkspaceFormModalModel"
-            :modal-config="createWorkspaceFormModalConfig.modalConfig" 
-            :form-config="createWorkspaceFormModalConfig.formConfig">
-
+            v-model="createWorkspaceFormModal.model"
+            :modal-config="createWorkspaceFormModal.modalConfig.value" 
+            :form-config="createWorkspaceFormModal.formConfig.value"
+            @cancel="createWorkspaceFormModal.close"
+            @close="createWorkspaceFormModal.close"
+            @submit="createWorkspaceFormModal.submit"
+            >
         </ZHFormModal>
         <ZHModal :modal-config="appModalConfig">
             <ZHTable :config="appModalTableConfig"></ZHTable>
@@ -75,9 +78,9 @@ import { onMounted, ref } from 'vue';
 import { TZHTable } from "@/components/zh-table/type";
 
 // 弹窗配置文件
-import createWorkspaceFormModalConfig from './createWorkspaceFormModalConfig';
+import CreateWorkspaceFormModal from './createWorkspaceFormModal';
 
-const createWorkspaceFormModalModel = ref({});
+const createWorkspaceFormModal = new CreateWorkspaceFormModal();
 
 const workspaceTree = ref({
     treeConfig: {
@@ -152,7 +155,8 @@ const workspaceTree = ref({
 // ]
 
 const btnCreateSys = async () => {
-    createWorkspaceFormModalConfig.value.modalConfig.show = true;
+    createWorkspaceFormModal.modalConfig.value.show = true;
+    // createWorkspaceFormModalConfig.value.modalConfig.show = true;
     // ipcRenderer.send('window:min', 'da');
     // const res = ipcRenderer.sendSync('api:workspace:list', 'api');
     // console.log(res);

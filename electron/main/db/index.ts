@@ -1,5 +1,8 @@
+import { Database } from 'sqlite3';
+import DBWorkspaceHelper  from './workspace';
+
 export default class DBHelper {
-    static db = null;
+    static db: Database | null = null;
     static openDB = async () => {
         const sqlite3 = require('sqlite3').verbose();
         // 打开数据库连接
@@ -8,14 +11,16 @@ export default class DBHelper {
             console.log('Connected to the test database.');
         });
 
-        // 获取当前文件夹下的所有文件
+        // 获取当前文件夹下的所有文件, 注意：这个是自动引入的方法，但是使用后无法在具体使用时使用TS类型，
         const modules = import.meta.glob('./*.ts');
         for (const path in modules) {
             if (Object.prototype.hasOwnProperty.call(modules, path)) {
                 const module: any = await modules[path]();
-                this[module.default.name] = new module.default(this.db);
+                if (module && module.default && typeof module.default.name === 'string') {
+                    const moduleDefault: DBWorkspaceHelper = module.default;
+                    this[moduleDefault.name] = new module.default(this.db);
+                }
             }
         }
     };
-
 }

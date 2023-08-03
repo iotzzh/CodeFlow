@@ -40,7 +40,7 @@ const props = defineProps({
 const { modalConfig, modelValue, formConfig } = toRefs(props);
 const refZHModal = ref();
 const refZHForm = ref();
-const emit = defineEmits(['close', 'submit', 'cancel', 'update:modelValue', 'update:convertedModel', 'opened']);
+const emit = defineEmits(['close', 'closed', 'submit', 'cancel', 'update:modelValue', 'update:convertedModel', 'opened']);
 
 const zhFormModal = new ZHFormModal({ emit, refZHModal, refZHForm, modelValue, formConfig, modalConfig });
 

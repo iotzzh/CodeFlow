@@ -8,7 +8,7 @@ export default class ZHFormModal {
     refZHForm: any;
     formConfig: Ref<TZHformConfig | undefined>;
     modelValue: any;
-    modalConfig: TZHModal;
+    modalConfig: Ref<TZHModal>;
     constructor(params: any) {
         this.refZHModal = params.refZHModal;
         this.emit = params.emit;
@@ -51,9 +51,6 @@ export default class ZHFormModal {
     };
 
     cancel = () => {
-        if (this.modalConfig.onCancel && typeof this.modalConfig.onCancel === 'function') {
-            this.modalConfig.onCancel({ refModal: this.refZHModal  });
-        }
         this.emit('cancel');
     };
 
