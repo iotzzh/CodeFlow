@@ -1,4 +1,4 @@
 export default {
-    useAxios: true,
-    useIpcRender: false,
+    useAxios: false,
+    useIpcRender: true,
 };

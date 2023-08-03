@@ -1,0 +1,9 @@
+{
+    "prefix": "", 
+    "localPrefix": "", 
+    "useMock": false,
+    "useCommmonConfig": false,
+    "api": [
+        { "name": "getWorkspaceList", "url": "api/workspace/list", "prefix": "", "localPrefix": "", "useMock": false }
+    ]
+}

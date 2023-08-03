@@ -20,20 +20,23 @@ export default class DBCommonHelper {
         }
     };
 
-    list = async (size: number, current: number) => {
+    list = async (params:any) => {
         try {
-            const rows = await this.db.all(`select * from ${this.tableName} limit ${size} offset ${(current - 1) * size}`);
-            return rows;
+            if (params) {
+                const rows = await this.db.all(`select * from ${this.tableName} limit ${params.size || 0} offset ${((params.current || 1) - 1) * params.size}`);
+                return rows;
+            } else {
+                return [{ name: 'zzh', age: 19}];
+            }
         } catch(err) {
             console.log(err);
         }
     };
 
-    add = async (value:string) => {
+    add = async (value:{ [x:string]: any }) => {
         try {
-            const params = JSON.parse(value);
-            const kys = Object.keys(params).map((x:any) => humps.decamelize(x));
-            const values = Object.values(params);
+            const kys = Object.keys(value).map((x:any) => humps.decamelize(x));
+            const values = Object.values(value);
             const sql = `insert into ${this.tableName} (${kys.join(',') + ', create_time'}) values (${values.map(y => `'${y}'`).join(',') + ',' + '\'' + dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss') + '\''} )`;
             const res = await this.db.run(sql);
             return res;

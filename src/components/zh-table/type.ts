@@ -11,6 +11,8 @@ export interface TZHTable {
   requestConfig?: TZHTableRequestConfig
 }
 
+
+
 //#region Request
 export interface TZHTableRequestConfig {
   list?: TZHTableRequestConfigDetail

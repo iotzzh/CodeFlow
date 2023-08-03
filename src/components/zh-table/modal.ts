@@ -4,6 +4,7 @@ import { TObject, TZHTableConfig, TZHTableRequestConfig, TZHTableRequestConfigRe
 import ZHRequest from '../zh-request';
 import { TZHRequestParams } from '../zh-request/type';
 import { TZHformConfig } from '../zh-form/type';
+import { TZHModal } from '../zh-modal/type';
 
 
 
@@ -53,7 +54,7 @@ export default class Modal {
     } as TZHformConfig;
   });
 
-  modal = ref({ show: false, title: '新增', loadingSubmit: false, } as TZHFormModal);
+  modal = ref({ show: false, title: '新增', loadingSubmit: false, } as TZHModal);
 
   formModel = ref({} as any);
   convertedModel = ref({} as any);
@@ -81,7 +82,7 @@ export default class Modal {
   openEditModalData = ref({} as any);
   openEditModal = async (row: any) => {
     this.modal.value.type = 'edit';
-    this.modal.value.title = this.tableSettings.modal?.mainTitle ? '编辑' + this.tableSettings?.modal?.mainTitle : '编辑';
+    this.modal.value.title = this.tableSettings.modal?.modalConfig.mainTitle ? '编辑' + this.tableSettings?.modal?.modalConfig.mainTitle : '编辑';
     this.modal.value.show = true;
     await nextTick();
     this.formModel.value = { ...row };
@@ -97,11 +98,11 @@ export default class Modal {
       openAddModalData: this.openAddModalData.value,
       openEditModalData: this.openEditModalData.value
     };
-    if (this.tableSettings.modal?.onOpened) {
-      if (typeof this.tableSettings.modal?.onOpened === 'string') {
-        (new Function('params', this.tableSettings.modal?.onOpened))(result);
+    if (this.tableSettings.modal?.modalConfig.onOpened) {
+      if (typeof this.tableSettings.modal?.modalConfig.onOpened === 'string') {
+        (new Function('params', this.tableSettings.modal?.modalConfig.onOpened))(result);
       } else {
-        this.tableSettings.modal?.onOpened(result); 
+        this.tableSettings.modal?.modalConfig.onOpened(result); 
       }
     } else {
       this.emit('opened', result);
@@ -156,12 +157,12 @@ export default class Modal {
     this.modal.value.loadingSubmit = true;
     const conditions = this.getParams();
 
-    if (this.tableSettings?.modal?.onBeforeSubmit) { 
-      if (typeof this.tableSettings.modal.onBeforeSubmit === 'string') {
+    if (this.tableSettings?.modal?.modalConfig.onBeforeSubmit) { 
+      if (typeof this.tableSettings.modal.modalConfig.onBeforeSubmit === 'string') {
         const AsyncFunction = Object.getPrototypeOf(async function(){ /* */}).constructor;
-        await new AsyncFunction('params', this.tableSettings.modal.onBeforeSubmit)({ modal: this.modal.value, conditions, });
+        await new AsyncFunction('params', this.tableSettings.modal.modalConfig.onBeforeSubmit)({ modal: this.modal.value, conditions, });
       } else {
-        await this.tableSettings.modal.onBeforeSubmit({ modal: this.modal.value, conditions, }); 
+        await this.tableSettings.modal.modalConfig.onBeforeSubmit({ modal: this.modal.value, conditions, }); 
       }
     }
 
@@ -185,11 +186,11 @@ export default class Modal {
     this.modal.value.loadingSubmit = false;
     this.refZHFormModal.value.clearFormData();
 
-    if (this.tableSettings?.modal?.onAfterSubmit) { 
-      if (typeof this.tableSettings.modal.onAfterSubmit === 'string') {
-        (new Function('params', this.tableSettings.modal.onAfterSubmit))({ modal: this.modal.value, conditions, result });
+    if (this.tableSettings?.modal?.modalConfig.onAfterSubmit) { 
+      if (typeof this.tableSettings.modal.modalConfig.onAfterSubmit === 'string') {
+        (new Function('params', this.tableSettings.modal.modalConfig.onAfterSubmit))({ modal: this.modal.value, conditions, result });
       } else {
-        this.tableSettings.modal.onAfterSubmit({ modal: this.modal.value, conditions, result }); }
+        this.tableSettings.modal.modalConfig.onAfterSubmit({ modal: this.modal.value, conditions, result }); }
       }
 
   };

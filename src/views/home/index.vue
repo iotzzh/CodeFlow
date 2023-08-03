@@ -28,11 +28,11 @@
             <!-- </el-input> -->
 
             <el-row class="row workspace">
-                <el-col class="col" :span="0">
-                    <ZHTree :config="workspaceTree">
+                <el-col class="col" :span="8">
+                    <ZHTree :config="workspaceTree.config.value">
                     </ZHTree>
                 </el-col>
-                <el-col class="col" :span="24">
+                <el-col class="col" :span="16">
                     <el-table :data="[]" style="width: 100%" :highlight-current-row="true" class="project-list-table"
                         height="100%">
                         <el-table-column prop="projectName" label="项目名称" />
@@ -77,82 +77,57 @@ import ZHTree from '@/components/zh-tree/index.vue';
 import { onMounted, ref } from 'vue';
 import { TZHTable } from "@/components/zh-table/type";
 
+// 工作区组件
+import WorkspaceTree from './workspaceTree';
 // 弹窗配置文件
 import CreateWorkspaceFormModal from './createWorkspaceFormModal';
 
+const workspaceTree = new WorkspaceTree();
+
 const createWorkspaceFormModal = new CreateWorkspaceFormModal();
 
-const workspaceTree = ref({
-    treeConfig: {
-        hasAdd: false,
-        hasEdit: true,
-        hasDelete: true,
-        hasEmptyAdd: true,
-        hasRootAdd: false,
-        labelDisplayMaxLength: 50,
-        initialData: false,
-        checkStrictly: true,
-        showCheckbox: false,
-        defaultProps: {
-            label: 'label',
-        },
-    },
-    requestConfig: {
-        // urlGet: api.getOrgList,
-        // urlAdd: api.addOrg,
-        // urlEdit: api.updateOrg,
-        // urlDelete: api.deleteOrg,
-    },
-    formModalConfig: {
-        modalConfig: {
-            show: false,
-            width: '300px',
-            closeInModal: true,
-            footer: {
-                hasCancelButton: true,
-                hasSubmitButton: true,
-            },
-        },
-        formConfig: {
-        //     fields: [
-        //         { prop: 'test', label: '测试', type: 'input', span: 12, },
-        //         { prop: 'test1', label: '测试1', type: 'select', span: 12, convert: 'return 111', defaultOptions: [{ label: '测试1', value: '测试1' }, { label: '测试2', value: '测试2' }] }
-        //     ]
-        },
-        model: {},
-        convertedModel: {},
-    },
-});
+// const workspaceTree = ref({
+//     treeConfig: {
+//         hasAdd: false,
+//         hasEdit: true,
+//         hasDelete: true,
+//         hasEmptyAdd: true,
+//         hasRootAdd: false,
+//         labelDisplayMaxLength: 50,
+//         initialData: false,
+//         checkStrictly: true,
+//         showCheckbox: false,
+//         defaultProps: {
+//             label: 'label',
+//         },
+//     },
+//     requestConfig: {
+//         // urlGet: api.getOrgList,
+//         // urlAdd: api.addOrg,
+//         // urlEdit: api.updateOrg,
+//         // urlDelete: api.deleteOrg,
+//     },
+//     formModalConfig: {
+//         modalConfig: {
+//             show: false,
+//             width: '300px',
+//             closeInModal: true,
+//             footer: {
+//                 hasCancelButton: true,
+//                 hasSubmitButton: true,
+//             },
+//         },
+//         formConfig: {
+//         //     fields: [
+//         //         { prop: 'test', label: '测试', type: 'input', span: 12, },
+//         //         { prop: 'test1', label: '测试1', type: 'select', span: 12, convert: 'return 111', defaultOptions: [{ label: '测试1', value: '测试1' }, { label: '测试2', value: '测试2' }] }
+//         //     ]
+//         },
+//         model: {},
+//         convertedModel: {},
+//     },
+// });
 
-// const tableData = [
-    // { projectName: '后台管理系统', currentBranch: 'main(分支管理功能)', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-    // { projectName: '后台管理系统', currentBranch: 'main', },
-// ]
 
 const btnCreateSys = async () => {
     createWorkspaceFormModal.modalConfig.value.show = true;

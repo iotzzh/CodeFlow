@@ -98,10 +98,11 @@ const arrayToTree = (list: Array<any>, parent = 0): any => {
 };
 
 const getTreeData = async () => {
+  if (!config.value.requestConfig?.urlGet) return;
   loadingTree.value = true;
   const params: TZHRequestParams = { url: config.value.requestConfig?.urlGet || '', conditions: config.value.requestConfig?.conditionsGet, };
   const result = await ZHRequest.post(params);
-  const treeRecords = arrayToTree(result.data.records);
+  const treeRecords = result?.data?.records && arrayToTree(result?.data?.records) || [];
   tData.value = treeRecords;
   loadingTree.value = false;
 };

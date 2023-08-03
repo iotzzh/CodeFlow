@@ -14,6 +14,8 @@ import locale from 'element-plus/dist/locale/zh-cn.mjs';
 
 import router from '@/router/index';
 
+import api from '@/api/index';
+
 
 import App from './App.vue'
 
