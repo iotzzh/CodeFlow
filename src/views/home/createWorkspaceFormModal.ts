@@ -4,6 +4,9 @@ import { ipcRenderer } from 'electron';
 import { RefSymbol } from '@vue/reactivity';
 import { popErrorMessage } from '@/components/zh-message';
 import { TZHformConfig } from '@/components/zh-form/type';
+import ZHRequest from '@/components/zh-request';
+import api from '@/api';
+import { TZHRequestParams } from '@/components/zh-request/type';
 
 export default class CreateWorkspaceFormModal {
     modalConfig = ref({
@@ -50,7 +53,8 @@ export default class CreateWorkspaceFormModal {
     };
 
     submit = async () => {
-        const res = await ipcRenderer.sendSync('api/workspace/add', JSON.stringify(this.model.value));
+        const params:TZHRequestParams = { url: api.addWorkspace, conditions: this.model.value };
+        const res = await ZHRequest.post(params);
         if (res.success) {
             this.close();
         } else {

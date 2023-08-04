@@ -18,7 +18,7 @@ export default class Controller {
                 if (module.default.prefix && typeof controller[x] === 'function') {
                     ipcMain.on(`${'/api/' + module.default.prefix + '/' + x}`, controller[x])
                 } else {
-                    ipcMain.on(x, controller[x]);
+                    typeof controller[x] === 'function' && ipcMain.on(x, controller[x]);
                 }
             });
         }

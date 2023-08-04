@@ -44,7 +44,7 @@ export default class {
       try {
         result = ipcRenderer.sendSync(
           params.url,
-          params.conditions ? JSON.parse(JSON.stringify(params.conditions)) : {}
+          params.conditions ? JSON.stringify(params.conditions) : ''
         );
       } catch (error) {
         result = { success: false, error };

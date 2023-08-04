@@ -1,7 +1,7 @@
 import { app, BrowserWindow, shell, ipcMain, screen, dialog } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
-import DBHelper from './db'
+import { DBHelper } from './db'
 import Init from './utils/init';
 import WindowHelper from './utils/windowHelper'
 import { addMessageListener } from './message/index';

@@ -26,7 +26,9 @@ export default class DBCommonHelper {
                 const rows = await this.db.all(`select * from ${this.tableName} limit ${params.size || 0} offset ${((params.current || 1) - 1) * params.size}`);
                 return rows;
             } else {
-                return [{ name: 'zzh', age: 19}];
+                const rows = await this.db.all(`select * from ${this.tableName}`);
+                console.log(rows);
+                return rows;
             }
         } catch(err) {
             console.log(err);
