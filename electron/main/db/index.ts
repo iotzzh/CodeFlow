@@ -12,6 +12,8 @@ export default class DBHelper {
 
     try {
       await sequelize.authenticate();
+      await sequelize.sync({ force: true });
+console.log("所有模型均已成功同步.");
       console.log('Connection has been established successfully.');
     } catch (error) {
       console.error('Unable to connect to the database:', error);

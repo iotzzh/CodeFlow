@@ -47,6 +47,8 @@
     "sass": "^1.64.1",
     "sass-loader": "^13.3.2",
     "sequelize": "^6.32.1",
+    "sequelize-auto": "^0.8.8",
+    "sequelize-cli": "^6.6.1",
     "shelljs": "^0.8.5",
     "splitpanes": "^3.1.5",
     "sqlite3": "^5.1.6",
