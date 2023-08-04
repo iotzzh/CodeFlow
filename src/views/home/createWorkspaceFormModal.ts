@@ -30,7 +30,7 @@ export default class CreateWorkspaceFormModal {
         //     return true;
         // },
         fields: [
-            { prop: 'name', label: '工作区名称', type: 'input', span: 24, required: true, },
+            { prop: 'workspaceName', label: '工作区名称', type: 'input', span: 24, required: true, },
             { prop: 'englishName', label: '英文名称', type: 'input', span: 24, required: true, },
             {
                 prop: 'address', label: '工作区路径', type: 'input', span: 24, 

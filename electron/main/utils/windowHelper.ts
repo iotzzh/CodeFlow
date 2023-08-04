@@ -2,7 +2,7 @@ import { BrowserWindow, shell, screen } from "electron";
 import { join } from 'node:path';
 
 export default class WindowHelper {
-    static createWindow (config: { [x:string] :any } = {}) {
+    static async createWindow (config: { [x:string] :any } = {}) {
         const preload = join(__dirname, '../preload/index.js')
         const url = process.env.VITE_DEV_SERVER_URL
         const indexHtml = join(process.env.DIST, 'index.html')
@@ -30,11 +30,11 @@ export default class WindowHelper {
         });
 
         if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
-            config.route ? win.loadURL(`${url}#${config.route}`) : win.loadURL(url);
+            config.route ? await win.loadURL(`${url}#${config.route}`) :  await win.loadURL(url);
             // Open devTool if the app is not packaged
             win.webContents.openDevTools()
           } else {
-            config.route ? win.loadFile(indexHtml) : win.loadFile(indexHtml, { hash: config.route });
+            config.route ?  await win.loadFile(indexHtml) :  await win.loadFile(indexHtml, { hash: config.route });
           }
         
           // Test actively push message to the Electron-Renderer

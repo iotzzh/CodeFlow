@@ -1,4 +1,4 @@
-import { DBHelper } from "../db/index";
+import  DBHelper  from "../db/index";
 import { TReturn } from "./entity";
 
 export default class baseController {
@@ -11,6 +11,7 @@ export default class baseController {
         const ret = new TReturn();
         try {
             const res = await DBHelper[this.prefix].add(JSON.parse(params));
+            console.log(res);
         } catch(err) {
             ret.success = false;
             ret.error = err;
@@ -21,7 +22,7 @@ export default class baseController {
     list = async (event, params: string | undefined) => {
         const ret = new TReturn();
         try {
-            const res = await DBHelper[this.prefix].list(params && Object.keys(params).length > 0 ? JSON.parse(params) : null);
+            const res = await DBHelper[this.prefix].list();
             ret.data.records = [];
         } catch(err) {
             ret.success = false;

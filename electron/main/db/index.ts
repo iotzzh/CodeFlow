@@ -1,6 +1,6 @@
 import { Database } from 'sqlite3';
 
-export class DBHelper {
+export default class DBHelper {
     static db: Database | null = null;
     static openDB = async () => {
         const sqlite3 = require('sqlite3').verbose();

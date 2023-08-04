@@ -1,8 +1,19 @@
 <script setup lang="ts">
-// window.electronAPI.sendMessage('Hello from App.vue!');
+import { ipcRenderer } from 'electron';
+import { ref } from 'vue';
+
+const unLoaded = ref(true);
+ipcRenderer.on('mainWindowLoaded', () => {
+      // 在主窗口加载完成后执行你的渲染线程操作
+      console.log('Main window loaded in the renderer process');
+      setTimeout(() => {
+        unLoaded.value = false;
+      }, 10000);
+    });
 </script>
 
 <template>
-  <router-view />
+  <div v-if="unLoaded">loading....</div>
+  <router-view v-else />
 </template>
 

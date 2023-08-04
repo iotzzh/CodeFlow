@@ -29,9 +29,11 @@ export default class Init {
     };
 
 
-    static initAPP() {
-        app.whenReady().then(() => {
-            globalThis.mainWindow = WindowHelper.createWindow();
+    static async initAPP() {
+        app.whenReady().then(async () => {
+            globalThis.mainWindow = await WindowHelper.createWindow();
+            globalThis.mainWindow.webContents.send('mainWindowLoaded');
+            console.log('mainWindowLoaded');
           })
           
           app.on('window-all-closed', () => {

@@ -1,17 +1,29 @@
+import DBHelper from './db/index';
+import Init from './utils/init';
+import { addMessageListener } from './message/index';
+import Controller from './controller/index';
+import WindowHelper from './utils/windowHelper';
 import { app, BrowserWindow, shell, ipcMain, screen, dialog } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
-import { DBHelper } from './db'
-import Init from './utils/init';
-import WindowHelper from './utils/windowHelper'
-import { addMessageListener } from './message/index';
-import Controller from './controller/index';
 
-Init.initProcess();
+async function bootstrap () {
+    await DBHelper.openDB();
 
-Init.initAPP();
+    await Controller.init();
+    
+    Init.initProcess();
+    
+    await Init.initAPP();
+  
+    await addMessageListener();
+}
 
-DBHelper.openDB();
+bootstrap();
+
+
+
+
 
 // let subWindows = {};
 
@@ -32,9 +44,8 @@ DBHelper.openDB();
 //   }
 // })
 
-addMessageListener();
 
-Controller.init();
+
 
 
 
