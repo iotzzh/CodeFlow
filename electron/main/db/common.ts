@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import humps from 'humps';
 import { Database } from 'sqlite3';
+import DBHelper from '.';
 
 export default class DBCommonHelper {
     db: Database;
@@ -23,13 +24,13 @@ export default class DBCommonHelper {
     list = async (params:any) => {
         try {
             if (params) {
-                const rows = await this.db.all(`select * from ${this.tableName} limit ${params.size || 0} offset ${((params.current || 1) - 1) * params.size}`);
+                const rows = await DBHelper.all(`select * from ${this.tableName} limit ${params.size || 0} offset ${((params.current || 1) - 1) * params.size}`);
                 return rows;
             } else {
                 const row = await this.db.get(`select * from ${this.tableName}`, function(err, res) {
                     console.log('res', res);
                 });
-                const rows = await this.db.all(`select * from ${this.tableName}`);
+                const rows = await DBHelper.all(`select * from ${this.tableName}`);
                 console.log(rows);
                 return rows;
             }

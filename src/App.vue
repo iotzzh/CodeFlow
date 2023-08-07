@@ -2,7 +2,7 @@
 import { ipcRenderer } from 'electron';
 import { ref } from 'vue';
 
-const unLoaded = ref(true);
+const unLoaded = ref(false);
 ipcRenderer.on('mainWindowLoaded', () => {
       // 在主窗口加载完成后执行你的渲染线程操作
       console.log('Main window loaded in the renderer process');
