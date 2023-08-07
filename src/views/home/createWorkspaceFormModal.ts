@@ -9,6 +9,11 @@ import api from '@/api';
 import { TZHRequestParams } from '@/components/zh-request/type';
 
 export default class CreateWorkspaceFormModal {
+    refWorkspaceTree: any;
+    constructor(refWorkspaceTree:any) {
+        this.refWorkspaceTree = refWorkspaceTree;
+    };
+
     modalConfig = ref({
         show: false,
         width: '500px',
@@ -34,7 +39,6 @@ export default class CreateWorkspaceFormModal {
             { prop: 'englishName', label: '英文名称', type: 'input', span: 24, required: true, },
             {
                 prop: 'address', label: '工作区路径', type: 'input', span: 24, 
-                required: true,
                 refName: 'refInput', appendSuffixIcon: 'folderOpened',
                 clickAppendSuffixIcon: async (e: any, item: any, model: any, ref: any) => {
                     const res = ipcRenderer.sendSync('dialog:chooseFolder');
@@ -57,6 +61,7 @@ export default class CreateWorkspaceFormModal {
         const res = await ZHRequest.post(params);
         if (res.success) {
             this.close();
+            this.refWorkspaceTree.value.getTreeData();
         } else {
             popErrorMessage(res.error);
         }

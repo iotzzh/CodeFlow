@@ -60,13 +60,14 @@ export default class DBCommonHelper {
 
     update = async (value:{id: string, [x:string]:any}) => {
         try {
-            const keys = Object.keys(value);
+            const keys = Object.keys(value).map((x:any) => humps.decamelize(x));
             const newValue = [];
             keys.forEach((x:string) => {
-                newValue.push(`${x} = ${value[x]}`);
+                value[humps.camelize(x)] !== undefined && newValue.push(`${x} = '${value[humps.camelize(x)]}'`);
             });
-            newValue.push(`update_time = ${dayjs().format('YYYY-MM-DD HH:mm:ss')}`);
-            const res = await this.db.run(`update ${this.tableName} set ${newValue.join(',')} where id = ${value.id})`);
+            newValue.push(`update_time = '${dayjs().format('YYYY-MM-DD HH:mm:ss')}'`);
+            const sql = `update ${this.tableName} set ${newValue.join(',')} where id = ${value.id}`;
+            const res = await this.db.run(sql);
             return res;
         } catch(err) {
             console.log(err);

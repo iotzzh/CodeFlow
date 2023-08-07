@@ -29,7 +29,7 @@
 
             <el-row class="row workspace">
                 <el-col class="col" :span="8">
-                    <ZHTree :config="workspaceTree.config.value">
+                    <ZHTree :config="workspaceTree.config.value" ref="refWorkspaceTree">
                     </ZHTree>
                 </el-col>
                 <el-col class="col" :span="16">
@@ -82,9 +82,10 @@ import WorkspaceTree from './workspaceTree';
 // 弹窗配置文件
 import CreateWorkspaceFormModal from './createWorkspaceFormModal';
 
-const workspaceTree = new WorkspaceTree();
+const refWorkspaceTree = ref();
+const workspaceTree = new WorkspaceTree(refWorkspaceTree);
 
-const createWorkspaceFormModal = new CreateWorkspaceFormModal();
+const createWorkspaceFormModal = new CreateWorkspaceFormModal(refWorkspaceTree);
 
 // const workspaceTree = ref({
 //     treeConfig: {

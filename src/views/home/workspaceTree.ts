@@ -3,6 +3,10 @@ import { ipcRenderer } from 'electron';
 import { ref } from 'vue';
 
 export default class WorkspaceTree {
+    refWorkspaceTree: any;
+    constructor(refWorkspaceTree:any) {
+        this.refWorkspaceTree = refWorkspaceTree;
+    }
     config = ref({
         treeConfig: {
             hasAdd: false,

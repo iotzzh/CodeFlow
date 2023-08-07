@@ -106,6 +106,7 @@ const getTreeData = async () => {
   const treeRecords = result?.data?.records || [];
   tData.value = treeRecords;
   loadingTree.value = false;
+  return treeRecords;
 };
 
 const setData = (data:any) => {
@@ -213,6 +214,7 @@ const onNodeClick = (data:any, node:any, item:any, param:any) => {
 //#endregion
 
 defineExpose({
+  getTreeData,
   setData,
 });
 </script>
