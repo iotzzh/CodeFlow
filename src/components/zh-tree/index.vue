@@ -170,7 +170,7 @@ const openModal = (type: number, e?: any, node?: any, data?: any) => {
     modal.value.type = 'add';
   } else if (type === 2) {
     modal.value.type = 'edit';
-    modal.value.title = '编辑';
+    modal.value.title = '编辑' + config.value.formModalConfig?.modalConfig.mainTitle;
     formModel.value = data;
   } else { }
 

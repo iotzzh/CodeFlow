@@ -5,6 +5,8 @@
     "useCommmonConfig": false,
     "api": [
         { "name": "getWorkspaceList", "url": "api/workspace/list", "prefix": "", "localPrefix": "", "useMock": false },
-        { "name": "addWorkspace", "url": "api/workspace/add", "prefix": "", "localPrefix": "", "useMock": false }
+        { "name": "addWorkspace", "url": "api/workspace/add", "prefix": "", "localPrefix": "", "useMock": false },
+        { "name": "updateWorkspace", "url": "api/workspace/update", "prefix": "", "localPrefix": "", "useMock": false },
+        { "name": "deleteWorkspace", "url": "api/workspace/delete", "prefix": "", "localPrefix": "", "useMock": false }
     ]
 }

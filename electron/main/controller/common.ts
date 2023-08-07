@@ -30,5 +30,29 @@ export default class baseController {
         }
         event.returnValue = ret;
     };
+
+    update = async (event, params: string | undefined) => {
+        const ret = new TReturn();
+        try {
+            const res = await DBHelper[this.prefix].update(JSON.parse(params));
+            ret.data.records = res;
+        } catch(err) {
+            ret.success = false;
+            ret.error = err;
+        }
+        event.returnValue = ret;
+    };
+
+    delete = async (event, params: string | undefined) => {
+        const ret = new TReturn();
+        try {
+            const res = await DBHelper[this.prefix].delete(JSON.parse(params));
+            ret.data.records = res;
+        } catch(err) {
+            ret.success = false;
+            ret.error = err;
+        }
+        event.returnValue = ret;
+    };
 }
 

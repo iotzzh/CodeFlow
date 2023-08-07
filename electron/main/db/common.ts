@@ -49,9 +49,9 @@ export default class DBCommonHelper {
         }
     };
 
-    delete = async (id:string) => {
+    delete = async (value:{ [x:string]:any }) => {
         try {
-            const res = await this.db.run(`delete from ${this.tableName} where id = ${id})`);
+            const res = await this.db.run(`delete from ${this.tableName} where id = ${value.id}`);
             return res;
         } catch(err) {
             console.log(err);
