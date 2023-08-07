@@ -15,7 +15,8 @@ export default class DBCommonHelper {
     listAll = async () => {
         try {
             const rows = await this.db.all(`select * from ${this.tableName}`);
-            return rows;
+            const cameizeData = humps.camelizeKeys(rows);
+            return cameizeData;
         } catch(err) {
             console.log(err);
         }
@@ -27,12 +28,9 @@ export default class DBCommonHelper {
                 const rows = await DBHelper.all(`select * from ${this.tableName} limit ${params.size || 0} offset ${((params.current || 1) - 1) * params.size}`);
                 return rows;
             } else {
-                const row = await this.db.get(`select * from ${this.tableName}`, function(err, res) {
-                    console.log('res', res);
-                });
                 const rows = await DBHelper.all(`select * from ${this.tableName}`);
-                console.log(rows);
-                return rows;
+                const cameizeData = humps.camelizeKeys(rows);
+                return cameizeData;
             }
         } catch(err) {
             console.log(err);

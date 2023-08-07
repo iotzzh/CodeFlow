@@ -14,7 +14,7 @@ export default class WorkspaceTree {
             checkStrictly: true,
             showCheckbox: false,
             defaultProps: {
-                label: 'label',
+                label: 'workspaceName',
             },
         },
         requestConfig: {

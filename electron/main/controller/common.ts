@@ -23,7 +23,7 @@ export default class baseController {
         const ret = new TReturn();
         try {
             const res = await DBHelper[this.prefix].list();
-            ret.data.records = [];
+            ret.data.records = res;
         } catch(err) {
             ret.success = false;
             ret.error = err;
