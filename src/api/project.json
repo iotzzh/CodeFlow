@@ -1,0 +1,12 @@
+{
+    "prefix": "", 
+    "localPrefix": "", 
+    "useMock": false,
+    "useCommmonConfig": false,
+    "api": [
+        { "name": "getProjectList", "url": "api/project/list", "prefix": "", "localPrefix": "", "useMock": false },
+        { "name": "addProject", "url": "api/project/add", "prefix": "", "localPrefix": "", "useMock": false },
+        { "name": "updateProject", "url": "api/project/update", "prefix": "", "localPrefix": "", "useMock": false },
+        { "name": "deleteProject", "url": "api/project/delete", "prefix": "", "localPrefix": "", "useMock": false }
+    ]
+}

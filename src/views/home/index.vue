@@ -19,11 +19,11 @@
         <div class="right">
             <div class="welcome">欢迎使用Code Flow</div>
             <div class="top-tips">渐进式低代码系统管理平台, 如何开发随便你~请先创建工作区</div>
-            <!-- <div class="parts">
+            <div class="parts">
                 <div class="part">DATA</div>
                 <div class="part">SERVER</div>
                 <div class="part" @click="openAppListModal">APP</div>
-            </div> -->
+            </div>
             <!-- <el-input class="search-input" placeholder="搜索项目名称" prefix-icon="Search"> -->
             <!-- </el-input> -->
 
@@ -33,7 +33,8 @@
                     </ZHTree>
                 </el-col>
                 <el-col class="col" :span="16">
-                    <el-table :data="[]" style="width: 100%" :highlight-current-row="true" class="project-list-table"
+                    <ZHTable :config="appModalTableConfig"></ZHTable>
+                    <!-- <el-table :data="[]" style="width: 100%" :highlight-current-row="true" class="project-list-table"
                         height="100%">
                         <el-table-column prop="projectName" label="项目名称" />
                         <el-table-column prop="currentBranch" label="当前分支" />
@@ -45,7 +46,7 @@
                                 <el-button link type="danger" size="small">移除</el-button>
                             </template>
                         </el-table-column>
-                    </el-table>
+                    </el-table> -->
                 </el-col>
             </el-row>
             <!-- <div style="padding: 10px 0px 0px 0px;">
@@ -81,6 +82,7 @@ import { TZHTable } from "@/components/zh-table/type";
 import WorkspaceTree from './workspaceTree';
 // 弹窗配置文件
 import CreateWorkspaceFormModal from './createWorkspaceFormModal';
+import api from "@/api";
 
 const refWorkspaceTree = ref();
 const workspaceTree = new WorkspaceTree(refWorkspaceTree);
@@ -150,6 +152,10 @@ const appModalConfig = ref({
     title: '应用程序管理',
     width: '100%',
     fullscreen: true,
+    // footer: {
+    //     hasSubmitButton: true,
+    //     hasCancelButton: true,
+    // },
 });
 
 const appModalTableConfig = ref({
@@ -189,7 +195,7 @@ const appModalTableConfig = ref({
         columns: [
             {
                 label: '项目名称',
-                prop: 'name',
+                prop: 'projectName',
                 allowCellEdit: false,
                 minWidth: '100px',
                 addEditInfo: {
@@ -240,13 +246,12 @@ const appModalTableConfig = ref({
             buttons: [],
         },
     },
-    // requestConfig: {
-    //     list: { url: api.getUserList, successMessage: '查询成功', errorMessage: '查询失败' },
-    //     add: { url: api.addUser, successMessage: '新增成功', errorMessage: '新增失败' },
-    //     update: { url: api.updateUser, successMessage: '更新成功', errorMessage: '更新失败' },
-    //     delete: { url: api.deleteUser, successMessage: '删除成功', errorMessage: '删除失败' },
-    //     batchDelete: { url: api.batchDeleteUser, successMessage: '批量删除成功', errorMessage: '批量删除失败' },
-    // },
+    requestConfig: {
+        list: { url: api.getProjectList, successMessage: '查询成功', errorMessage: '查询失败' },
+        add: { url: api.addProjectr, successMessage: '新增成功', errorMessage: '新增失败' },
+        update: { url: api.updateProject, successMessage: '更新成功', errorMessage: '更新失败' },
+        delete: { url: api.deleteProject, successMessage: '删除成功', errorMessage: '删除失败' },
+    },
     // pageConfig: {},
 } as TZHTable);
 

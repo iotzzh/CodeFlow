@@ -53,7 +53,7 @@ export default class Table {
   };
 
   convertTableData = (data:Array<any>) => {
-    if(!this.tableSettings.convertTableData) return;
+    if(!this.tableSettings.convertTableData) return data;
     if (typeof this.tableSettings.convertTableData === 'string') {
       const convertedData = (new Function('data', this.tableSettings.convertTableData))(data);
       return convertedData;
