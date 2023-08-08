@@ -30,7 +30,9 @@
                             <template #default="{ node, data }">
                                 <span class="custom-tree-node" v-if="node.label.toLowerCase() === 'web'">
                                     <span>{{ node.label }}</span>
-                                    <a style="font-size: 12px; color: blue; padding-left: 7px;" @click.stop="(e:any) => openVSCode(e)">VSCODE</a>
+                                    <a style="font-size: 12px; color: blue; padding-left: 7px; position: absolute; " @click.stop="(e:any) => openVSCode(e)">
+                                        <svg t="1691481967251" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4025" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"><path d="M746.222933 102.239573l-359.799466 330.820267L185.347413 281.4976 102.2464 329.864533l198.20544 182.132054-198.20544 182.132053 83.101013 48.510293 201.076054-151.558826 359.799466 330.676906 175.527254-85.251413V187.4944z m0 217.57952v384.341334l-255.040853-192.177494z" fill="#2196F3" p-id="4026"></path></svg>
+                                    </a>
                                 </span>
                                 <span v-else>{{ node.label }}</span>
                             </template>
@@ -38,9 +40,10 @@
                     </el-scrollbar>
                 </Pane>
                 <Pane size="60" style="height: 100%; overflow-y: hidden; " class="center">
-                    <!-- <API v-if="selectNode && selectNode.toLowerCase() === 'api'"></API> -->
-                    <API></API>
-                    <!-- <div v-else>首页</div> -->
+                    <API v-if="selectNode && selectNode.toLowerCase() === 'api'"></API>
+                    <Setting v-else-if="selectNode && selectNode.toLowerCase() === '项目配置'"></Setting>
+                    <Environment v-else-if="selectNode && selectNode.toLowerCase() === '环境配置'"></Environment>
+                    <div v-else>首页</div>
                 </Pane>
                 <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">3</Pane>
             </Splitpanes>
@@ -49,11 +52,15 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
+import { ipcRenderer } from "electron";
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css'
 import API from './APIManage.vue';
-import { ref } from 'vue';
-import { ipcRenderer } from "electron";
+import Environment from './Environment.vue';
+import Setting from './Setting.vue';
+
+
 
 const name = 'dashboard';
 const min = () => {
@@ -83,25 +90,27 @@ const data: Tree[] = [
     {
         label: 'Web',
         children: [
-            { label: 'API' },
+            { label: 'API', },
             {
                 label: '界面', children: [
                     { label: '登录页' },
                     { label: '首页' },
                 ]
             },
-            { label: '路由配置' },
-            { label: '全局方法' },
+            // 创建页面时，创建路由
+            // { label: '路由配置' },
+            // { label: '全局方法' },
             {
                 label: '配置', children: [
-                    { label: '基础配置' },
+                    { label: '项目配置' },
                     {
-                        label: '环境配置', children: [
-                            { label: '本地环境' },
-                            { label: '开发环境' },
-                            { label: '测试环境' },
-                            { label: '生产环境' },
-                        ]
+                        label: '环境配置', 
+                        // children: [
+                        //     { label: '本地环境' },
+                        //     { label: '开发环境' },
+                        //     { label: '测试环境' },
+                        //     { label: '生产环境' },
+                        // ]
                     }
                 ]
             },
@@ -117,7 +126,7 @@ const defaultProps = {
 
 const openVSCode = (e:any) => {
     e.preventDefault();
-    ipcRenderer.send('open-code-by-ide', 'vscode', '222');
+    ipcRenderer.send('cmd:openCode');
 };
 
 </script>
