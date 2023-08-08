@@ -33,7 +33,7 @@
                     </ZHTree>
                 </el-col>
                 <el-col class="col" :span="16">
-                    <ZHTable :config="project.tableConfig.value"></ZHTable>
+                    <ZHTable :config="dashboardProject.tableConfig.value"></ZHTable>
                     <!-- <el-table :data="[]" style="width: 100%" :highlight-current-row="true" class="project-list-table"
                         height="100%">
                         <el-table-column prop="projectName" label="项目名称" />
@@ -65,7 +65,7 @@
             >
         </ZHFormModal>
         <ZHModal :modal-config="appModalConfig">
-            <ZHTable :config="project.tableConfig.value"></ZHTable>
+            <ZHTable :config="dashboardProject.tableConfig.value"></ZHTable>
         </ZHModal>
     </div>
 </template>
@@ -92,7 +92,8 @@ const workspaceTree = new WorkspaceTree(refWorkspaceTree);
 
 const createWorkspaceFormModal = new CreateWorkspaceFormModal(refWorkspaceTree);
 
-const project  = new Project();
+const dashboardProject  = new Project('dashboard');
+const appProject  = new Project('appManage');
 
 // const workspaceTree = ref({
 //     treeConfig: {

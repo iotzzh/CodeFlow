@@ -9,16 +9,14 @@ import { TZHformConfig } from '../zh-form/type';
 
 export default class Table {
   refTable: any;
-
   pageData: any;
   form: Form;
-
   emit: any;
-  tableSettings: TZHTableConfig;
+  tableConfig: TZHTableConfig;
   request: TZHTableRequestConfig | undefined;
   globalTable: any;
   constructor(
-    tableSettings: TZHTableConfig,
+    tableConfig: TZHTableConfig,
     refTable: any,
     request: TZHTableRequestConfig | undefined,
     form: Form,
@@ -26,7 +24,7 @@ export default class Table {
     emit: any,
     globalTable:any
   ) {
-    this.tableSettings = tableSettings;
+    this.tableConfig = tableConfig;
     this.refTable = refTable;
     this.request = request;
     this.pageData = pageData;
@@ -39,26 +37,26 @@ export default class Table {
   loading = ref(false);
 
   columns = computed(() => {
-    return this.tableSettings.columns?.filter((x: any) => !x.notDisplay);
+    return this.tableConfig.columns?.filter((x: any) => !x.notDisplay);
   });
 
   onBeforeInitData = async () => {
-    if(!this.tableSettings.onBeforeInitData) return;
-    if (typeof this.tableSettings.onBeforeInitData === 'string') {
-      (new Function('params', this.tableSettings.onBeforeInitData))({ });
+    if(!this.tableConfig.onBeforeInitData) return;
+    if (typeof this.tableConfig.onBeforeInitData === 'string') {
+      (new Function('params', this.tableConfig.onBeforeInitData))({ });
     } else {
-      const method: Function = this.tableSettings.onBeforeInitData;
+      const method: Function = this.tableConfig.onBeforeInitData;
       await method();  
     }
   };
 
   convertTableData = (data:Array<any>) => {
-    if(!this.tableSettings.convertTableData) return data;
-    if (typeof this.tableSettings.convertTableData === 'string') {
-      const convertedData = (new Function('data', this.tableSettings.convertTableData))(data);
+    if(!this.tableConfig.convertTableData) return data;
+    if (typeof this.tableConfig.convertTableData === 'string') {
+      const convertedData = (new Function('data', this.tableConfig.convertTableData))(data);
       return convertedData;
     } else {
-      const method: Function = this.tableSettings.convertTableData;
+      const method: Function = this.tableConfig.convertTableData;
       const convertedData = method(data);
       return convertedData;  
     }
@@ -129,7 +127,7 @@ export default class Table {
   loadMap = ref(new Map());
 
   load = (row: any, treeNode: any, resolve: (data: any[]) => void) => {
-    this.tableSettings.load && this.tableSettings.load(row, treeNode, resolve);
+    this.tableConfig.load && this.tableConfig.load(row, treeNode, resolve);
 
     //将获取到的节点数据添加到loadMap变量中
     this.loadMap.value.set(row.id, { row, treeNode, resolve });
@@ -166,7 +164,7 @@ export default class Table {
     };
     const result: TZHTableRequestConfigResult = await ZHRequest.post(params);
     if (result.success) {
-      if (this.tableSettings.load && (this.tableSettings.validateLoad === undefined ? true : this.tableSettings.validateLoad(row))) {
+      if (this.tableConfig.load && (this.tableConfig.validateLoad === undefined ? true : this.tableConfig.validateLoad(row))) {
         this.reloadTableTreeChild(row.parentId);
       } else {
         this.debounceInitData();
@@ -176,11 +174,11 @@ export default class Table {
   };
 
   rowClick = async (row: any, column: any, event: any) => {
-    if (!this.tableSettings.rowClick) return;
+    if (!this.tableConfig.rowClick) return;
 
-    if (typeof this.tableSettings.rowClick === 'string') 
-      (new Function('params', this.tableSettings.rowClick))({ row, column, event, refTable: this.refTable.value });
-    else this.tableSettings.rowClick({ row, column, event });
+    if (typeof this.tableConfig.rowClick === 'string') 
+      (new Function('params', this.tableConfig.rowClick))({ row, column, event, refTable: this.refTable.value });
+    else this.tableConfig.rowClick({ row, column, event });
   };
 
   tableColumnConvert = (convert: string | Function, row: any, index: number) => {
@@ -236,7 +234,7 @@ export default class Table {
   };
 
   clickInlineSave = (scope: any) => {
-    // if (this.tableSettings.modal?.customValidate && !this.tableSettings.modal?.customValidate(scope.row)) return;
+    // if (this.tableConfig.modal?.customValidate && !this.tableConfig.modal?.customValidate(scope.row)) return;
     // 调用接口触发
     popSuccessMessage('修改成功');
     scope.row[scope.column.property] = scope.row[this._convertPropToEditingProp(scope.column.property)];

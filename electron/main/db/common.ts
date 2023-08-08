@@ -52,7 +52,8 @@ export default class DBCommonHelper {
     delete = async (value:{ [x:string]:any }) => {
         try {
             if ('ids' in value && Object.keys(value).length === 1) {
-                const res = await DBHelper.run(`delete from ${this.tableName} where id in ${value.ids.join(',')}`);
+                const sql = `delete from ${this.tableName} where id in (${value.ids.join(',')})`;
+                const res = await DBHelper.run(sql);
                 return res;
             } else {
                 const res = await DBHelper.run(`delete from ${this.tableName} where id = ${value.id}`);
@@ -64,7 +65,7 @@ export default class DBCommonHelper {
         }
     };
 
-    update = async (value:{id: string, [x:string]:any}) => {
+    update = async (value:{[x:string]:any}) => {
         try {
             const keys = Object.keys(value).map((x:any) => humps.decamelize(x));
             const newValue = [];

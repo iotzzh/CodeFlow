@@ -59,6 +59,11 @@ export default class Modal {
   formModel = ref({} as any);
   convertedModel = ref({} as any);
 
+  initModel = (value: { [x:string]:any } = {}) => {
+    this.formModel.value = value;
+    this.convertedModel.value = value;
+  };
+
   openAddModalData = ref({} as any);
   openAddModal = (data: any = undefined) => {
     this.modal.value.show = true;
@@ -75,19 +80,21 @@ export default class Modal {
     this.modal.value.type = 'add';
     this.modal.value = {  ...this.modal.value, ...this.tableSettings.modal };
     this.modal.value.title = modal.title;
-    this.formModel.value = { ...modal };
+    // this.formModel.value = { ...modal };
+    // initModel(modal);
     this.openAddModalData.value = data;
   };
 
   openEditModalData = ref({} as any);
   openEditModal = async (row: any) => {
     this.modal.value.type = 'edit';
-    this.modal.value.title = this.tableSettings.modal?.modalConfig.mainTitle ? '编辑' + this.tableSettings?.modal?.modalConfig.mainTitle : '编辑';
+    this.modal.value.title = this.tableSettings.modal?.modalConfig?.mainTitle ? '编辑' + this.tableSettings.modal?.modalConfig?.mainTitle : '编辑';
     this.modal.value.show = true;
     await nextTick();
-    this.formModel.value = { ...row };
+    // this.formModel.value = { ...row };
+    this.initModel({ ...row });
     this.openEditModalData.value = { ...row };
-    this.modal.value = { ...this.modal.value, ...this.tableSettings.modal };
+    this.modal.value = { ...this.tableSettings.modal?.modalConfig, ...this.modal.value };
   };
 
   // 使用两种方式调用opened方法，一种是向外抛，一种是往里传递执行，可能是函数，可能是字符串
