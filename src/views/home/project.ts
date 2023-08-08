@@ -88,7 +88,7 @@ export default class Project {
                 ],
                 actionColumn: {
                     label: '操作',
-                    width: '120px',
+                    width: isManage ? '180px' : '120px',
                     hasRowDeleteAction: isManage,
                     hasRowEditAction: isManage,
                     buttons: [

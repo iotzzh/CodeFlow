@@ -2,9 +2,9 @@ import WindowHelper from "../utils/windowHelper";
 
 export default { prefix: 'window' };
 
-export const create = (event, config: { [x:string]:any }) => {
+export const create = async (event, config: { [x:string]:any }) => {
     if (!globalThis.childWindow) globalThis.childWindow = {};
-    globalThis.childWindow[config.name] = WindowHelper.createWindow(config);
+    globalThis.childWindow[config.name] = await WindowHelper.createWindow(config);
     globalThis.mainWindow.minimize();
 }
 

@@ -15,9 +15,8 @@
   <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
 
   <template #node-custom="{ data }">
-     <div style="width: 120px; height: 60px; background-color: royalblue; display: flex; align-items: center; justify-content: center; border-radius: 5px;">
+     <div style="width: 120px; height: 40px; font-size: 14px; display: flex; align-items: center; justify-content: center; border-radius: 5px; background: linear-gradient(to right, transparent, lightBlue);">
       API管理
-    
     </div>
 
     <Handle id="a" type="source" :position="Position.Right" :style="sourceHandleStyleA" />

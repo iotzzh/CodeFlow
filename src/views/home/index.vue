@@ -65,7 +65,7 @@
             >
         </ZHFormModal>
         <ZHModal :modal-config="appModalConfig">
-            <ZHTable :config="dashboardProject.tableConfig.value"></ZHTable>
+            <ZHTable :config="appProject.tableConfig.value"></ZHTable>
         </ZHModal>
     </div>
 </template>
@@ -144,13 +144,6 @@ const btnCreateSys = async () => {
     // ipcRenderer.send('window:min', 'da');
     // const res = ipcRenderer.sendSync('api:workspace:list', 'api');
     // console.log(res);
-};
-
-const openDashboard = () => {
-    ipcRenderer.send('window:create', {
-        name: 'dashboard',
-        route: 'dashboard',
-    });
 };
 
 const appModalConfig = ref({
