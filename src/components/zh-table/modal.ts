@@ -63,8 +63,8 @@ export default class Modal {
   openAddModal = (data: any = undefined) => {
     this.modal.value.show = true;
     this.modal.value.type = 'add';
-    this.modal.value.title = this.modal.value.mainTitle ? '新增' + this.modal.value.mainTitle : '新增';
-    this.modal.value = { ...this.modal.value, ...this.tableSettings.modal };
+    this.modal.value.title = this.tableSettings.modal?.modalConfig?.mainTitle ? '新增' + this.tableSettings.modal.modalConfig.mainTitle : '新增';
+    this.modal.value = { ...this.tableSettings.modal?.modalConfig,  ...this.modal.value};
     // 在新增时，有些字段带有默认值
     this.refZHFormModal.value.initForm();
     this.openAddModalData.value = data;
@@ -130,8 +130,6 @@ export default class Modal {
     this.modal.value.show = false;
     this.refZHFormModal.value.clearFormData();
   };
-
-
 
   getParams = () => {
     const convertedModel = this.convertedModel.value

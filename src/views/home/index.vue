@@ -33,7 +33,7 @@
                     </ZHTree>
                 </el-col>
                 <el-col class="col" :span="16">
-                    <ZHTable :config="appModalTableConfig"></ZHTable>
+                    <ZHTable :config="project.tableConfig.value"></ZHTable>
                     <!-- <el-table :data="[]" style="width: 100%" :highlight-current-row="true" class="project-list-table"
                         height="100%">
                         <el-table-column prop="projectName" label="项目名称" />
@@ -65,7 +65,7 @@
             >
         </ZHFormModal>
         <ZHModal :modal-config="appModalConfig">
-            <ZHTable :config="appModalTableConfig"></ZHTable>
+            <ZHTable :config="project.tableConfig.value"></ZHTable>
         </ZHModal>
     </div>
 </template>
@@ -84,10 +84,15 @@ import WorkspaceTree from './workspaceTree';
 import CreateWorkspaceFormModal from './createWorkspaceFormModal';
 import api from "@/api";
 
+// 应用程序管理
+import Project from './project';
+
 const refWorkspaceTree = ref();
 const workspaceTree = new WorkspaceTree(refWorkspaceTree);
 
 const createWorkspaceFormModal = new CreateWorkspaceFormModal(refWorkspaceTree);
+
+const project  = new Project();
 
 // const workspaceTree = ref({
 //     treeConfig: {
@@ -158,102 +163,7 @@ const appModalConfig = ref({
     // },
 });
 
-const appModalTableConfig = ref({
-    formConfig: {
-        hasAddButton: true,
-        hasSearchButton: false,
-        hasDeleteButton: true,
-        hasUploadButton: false,
-        hasExportButton: false,
-        hasResetButton: false,
-        customModel: {},
-        formLabelWidth: '70px',
-        fields: [
-            {
-                label: '项目名称', type: 'input', prop: 'phone', maxWidth: '300px'
-            },
-        ],
 
-    },
-    tableConfig: {
-        hasIndex: true,
-        hasSelection: true,
-        rowKey: 'id',
-        modal: {
-            modalConfig: {
-                title: '',
-                footer: {},
-                onBeforeSubmit: 'console.log("onbeforeSubmit");',
-                onAfterSubmit: 'console.log("onaftersubmit");'
-            },
-            formConfig: {
-                formLabelWidth: '90px',
-            },
-        },
-        // onBeforeInitData: `console.log('onBeforeInitData：在初始化数据前执行');`,
-        // convertTableData: 'return data;',
-        columns: [
-            {
-                label: '项目名称',
-                prop: 'projectName',
-                allowCellEdit: false,
-                minWidth: '100px',
-                addEditInfo: {
-                    type: 'input',
-                    addSort: 1,
-                    defaultValue: '',
-                    placeholder: '请输入',
-                    xs: 24,
-                    sm: 12,
-                    md: 8,
-                    lg: 8,
-                    xl: 8,
-                    required: true,
-                }
-            },
-            {
-                label: '地址', prop: 'sex', convert: 'return row?.sex === 0 ? \'男\' : \'女\'',
-                minWidth: '80px',
-                addEditInfo: {
-                    type: 'select', defaultValue: null, addSort: 2, placeholder: '请选择',
-                    span: 12,
-                    xs: 24,
-                    sm: 12,
-                    md: 8,
-                    lg: 8,
-                    xl: 8,
-                    options: [{ label: '男', value: 1 }, { label: '女', value: 2 }], required: false,
-                }
-            },
-            {
-                label: '账号', prop: 'phone', minWidth: '150px', addEditInfo: {
-                    addSort: 2.5,
-                    label: '手机号', prop: 'phone',
-                    type: 'input', defaultValue: null, placeholder: '请输入', span: 8, xs: 24,
-                    sm: 12,
-                    md: 8,
-                    lg: 8,
-                    xl: 8, required: true,
-                }
-            },
-
-        ],
-        actionColumn: {
-            label: '操作',
-            width: '400px',
-            hasRowDeleteAction: true,
-            hasRowEditAction: true,
-            buttons: [],
-        },
-    },
-    requestConfig: {
-        list: { url: api.getProjectList, successMessage: '查询成功', errorMessage: '查询失败' },
-        add: { url: api.addProjectr, successMessage: '新增成功', errorMessage: '新增失败' },
-        update: { url: api.updateProject, successMessage: '更新成功', errorMessage: '更新失败' },
-        delete: { url: api.deleteProject, successMessage: '删除成功', errorMessage: '删除失败' },
-    },
-    // pageConfig: {},
-} as TZHTable);
 
 const openAppListModal = () => {
     appModalConfig.value.show = true;

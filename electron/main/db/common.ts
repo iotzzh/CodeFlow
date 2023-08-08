@@ -14,7 +14,7 @@ export default class DBCommonHelper {
 
     listAll = async () => {
         try {
-            const rows = await this.db.all(`select * from ${this.tableName}`);
+            const rows = await DBHelper.all(`select * from ${this.tableName}`);
             const cameizeData = humps.camelizeKeys(rows);
             return cameizeData;
         } catch(err) {
@@ -42,7 +42,7 @@ export default class DBCommonHelper {
             const kys = Object.keys(value).map((x:any) => humps.decamelize(x));
             const values = Object.values(value);
             const sql = `insert into ${this.tableName} (${kys.join(',') + ', create_time'}) values (${values.map(y => `'${y}'`).join(',') + ',' + '\'' + dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss') + '\''} )`;
-            const res = await this.db.run(sql);
+            const res = await DBHelper.run(sql);
             return res;
         } catch(err) {
             console.log(err);
@@ -51,8 +51,14 @@ export default class DBCommonHelper {
 
     delete = async (value:{ [x:string]:any }) => {
         try {
-            const res = await this.db.run(`delete from ${this.tableName} where id = ${value.id}`);
-            return res;
+            if ('ids' in value && Object.keys(value).length === 1) {
+                const res = await DBHelper.run(`delete from ${this.tableName} where id in ${value.ids.join(',')}`);
+                return res;
+            } else {
+                const res = await DBHelper.run(`delete from ${this.tableName} where id = ${value.id}`);
+                return res;
+            }
+
         } catch(err) {
             console.log(err);
         }
@@ -67,7 +73,7 @@ export default class DBCommonHelper {
             });
             newValue.push(`update_time = '${dayjs().format('YYYY-MM-DD HH:mm:ss')}'`);
             const sql = `update ${this.tableName} set ${newValue.join(',')} where id = ${value.id}`;
-            const res = await this.db.run(sql);
+            const res = await DBHelper.run(sql);
             return res;
         } catch(err) {
             console.log(err);

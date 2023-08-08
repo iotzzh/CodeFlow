@@ -49,5 +49,15 @@ export default class DBHelper {
       }
      })
     })
-   }
+   };
+
+   static run = (query) => {
+    return new Promise(function(resolve, reject) {
+      this.db.run(query,
+       function(err) {
+        if(err) reject(err.message)
+        else resolve(true)
+      })
+     }) 
+   };
 }
