@@ -38,8 +38,9 @@
                     </el-scrollbar>
                 </Pane>
                 <Pane size="60" style="height: 100%; overflow-y: hidden; " class="center">
-                    <API v-if="selectNode && selectNode.toLowerCase() === 'api'"></API>
-                    <div v-else>首页</div>
+                    <!-- <API v-if="selectNode && selectNode.toLowerCase() === 'api'"></API> -->
+                    <API></API>
+                    <!-- <div v-else>首页</div> -->
                 </Pane>
                 <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">3</Pane>
             </Splitpanes>
