@@ -52,9 +52,16 @@
                     <API v-if="selectNode && selectNode.toLowerCase() === 'api'"></API>
                     <Setting v-else-if="selectNode && selectNode.toLowerCase() === '项目配置'"></Setting>
                     <Environment v-else-if="selectNode && selectNode.toLowerCase() === '环境配置'"></Environment>
-                    <div v-else>首页</div>
+                    <div v-else class="frame-box" style="height: 100%;">
+                        <iframe src="https://www.bing.com" frameborder=”0″ height="100%" width="100%">
+
+                        </iframe>
+                    </div>
                 </Pane>
-                <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">3</Pane>
+                <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">
+                    <PageConfig v-if="selectNode && selectNode.toLowerCase() === '界面'"></PageConfig>
+                    <div v-else>暂未设计</div>
+                </Pane>
             </Splitpanes>
         </div>
     </div>
@@ -68,6 +75,9 @@ import 'splitpanes/dist/splitpanes.css'
 import API from './APIManage.vue';
 import Environment from './Environment.vue';
 import Setting from './Setting.vue';
+
+// 配置项目
+import PageConfig from './config/PageConfig.vue';
 
 
 
@@ -102,8 +112,8 @@ const data: Tree[] = [
             { label: 'API', },
             {
                 label: '界面', children: [
-                    { label: '登录页' },
-                    { label: '首页' },
+                    // { label: '登录页' },
+                    // { label: '首页' },
                 ]
             },
             // 创建页面时，创建路由
