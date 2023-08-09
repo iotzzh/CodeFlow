@@ -30,9 +30,18 @@
                             <template #default="{ node, data }">
                                 <span class="custom-tree-node" v-if="node.label.toLowerCase() === 'web'">
                                     <span>{{ node.label }}</span>
-                                    <a style="font-size: 12px; color: blue; padding-left: 7px; position: absolute; " @click.stop="(e:any) => openVSCode(e)">
+                                    <a style="font-size: 12px; color: blue; padding-left: 7px; " @click.stop="(e:any) => openVSCode(e)">
                                         <svg t="1691481967251" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4025" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"><path d="M746.222933 102.239573l-359.799466 330.820267L185.347413 281.4976 102.2464 329.864533l198.20544 182.132054-198.20544 182.132053 83.101013 48.510293 201.076054-151.558826 359.799466 330.676906 175.527254-85.251413V187.4944z m0 217.57952v384.341334l-255.040853-192.177494z" fill="#2196F3" p-id="4026"></path></svg>
                                     </a>
+
+                                    <a style="font-size: 12px; color: blue; padding-left: 7px; " @click.stop="(e:any) => startServer(e)">
+                                        <svg t="1691543719689" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="803" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"><path d="M243.0464 113.7664l536.576 397.8752-536.576 398.0288V113.7664z m0 0" fill="#00A0E9" p-id="804"></path></svg>   
+                                    </a>
+
+                                    <a style="font-size: 12px; color: blue; padding-left: 7px; " @click.stop="(e:any) => stopServer(e)">
+                                        <svg t="1691543727342" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="962" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"><path d="M640 832V192h128v640h-128zM256 192h128v640H256V192z" fill="#0590DF" p-id="963"></path></svg>
+                                   </a>
+
                                 </span>
                                 <span v-else>{{ node.label }}</span>
                             </template>
@@ -129,6 +138,16 @@ const openVSCode = (e:any) => {
     ipcRenderer.send('cmd:openCode');
 };
 
+const startServer = (e:any) => {
+    e.preventDefault();
+    ipcRenderer.send('cmd:startServer');
+};
+
+const stopServer = (e:any) => {
+    e.preventDefault();
+    ipcRenderer.send('cmd:stopServer');
+};
+
 </script>
 
 <style lang="scss" scoped>
@@ -189,4 +208,10 @@ const openVSCode = (e:any) => {
     .el-tree {
         background-color: #F3F3F4;
     }
-}</style>
+}
+
+.custom-tree-node {
+    display: flex;
+    align-items: center;
+}
+</style>

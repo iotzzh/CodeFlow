@@ -30,7 +30,7 @@
       },
       "runtimeArgs": [
         "--remote-debugging-port=9229",
-        "."
+        ".",
       ],
       "envFile": "${workspaceFolder}/.vscode/.debug.env",
       "console": "integratedTerminal"

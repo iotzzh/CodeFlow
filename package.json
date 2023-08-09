@@ -43,6 +43,7 @@
     "electron-builder": "^24.4.0",
     "element-plus": "^2.3.8",
     "humps": "^2.0.1",
+    "iconv-lite": "^0.6.3",
     "monaco-editor": "^0.41.0",
     "nprogress": "^0.2.0",
     "sass": "^1.64.1",
