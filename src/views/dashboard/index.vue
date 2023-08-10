@@ -43,7 +43,10 @@
                                    </a>
 
                                 </span>
-                                <span v-else>{{ node.label }}</span>
+                                <span v-else>
+                                    {{ node.label }}
+                                    <el-icon v-if="node.label === '界面'" style="cursor: pointer; position: relative; top: 2px;"><component is="Plus"></component></el-icon>
+                                </span>
                             </template>
                         </el-tree>
                     </el-scrollbar>
