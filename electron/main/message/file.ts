@@ -4,6 +4,7 @@ const fs = require('fs');
 
 export default { prefix: 'file' };
 
+//#region API文件操作
 export const getApiList = async (event, address) => {
     try {
         const res = [];
@@ -20,3 +21,10 @@ export const getApiList = async (event, address) => {
         console.log(err);
     }
 }
+
+//#endregion
+
+
+//#region 页面文件操作
+
+//#endregion

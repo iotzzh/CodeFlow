@@ -55,6 +55,7 @@
                     <API v-if="selectNode && selectNode.toLowerCase() === 'api'"></API>
                     <Setting v-else-if="selectNode && selectNode.toLowerCase() === '项目配置'"></Setting>
                     <Environment v-else-if="selectNode && selectNode.toLowerCase() === '环境配置'"></Environment>
+                    <div v-else-if="selectNode && selectNode.toLowerCase() === '界面'">界面配置首页</div>
                     <div v-else class="frame-box" style="height: 100%;">
                         <!-- <iframe src="https://www.bing.com" frameborder=”0″ height="100%" width="100%">
 

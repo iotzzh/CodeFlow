@@ -124,7 +124,7 @@ const doLayout = async () => {
   let y = 0;
   for (let i = 0; i < col2Items.length; i++) {
     if (col2Items[i].data.data.api.length > 0) {
-      col2Items[i].position.y = y + LINE_HEIGHT * col2Items[i].data.data.api.length / 2;
+      col2Items[i].position.y = y + LINE_HEIGHT * col2Items[i].data.data.api.length / 2 - 25;
 
 
       let y3 = y;
@@ -143,7 +143,7 @@ const doLayout = async () => {
   }
 
   const rootNode = elements.value.find((x:any) => x.id === '0');
-  rootNode.position.y = y / 2;
+  rootNode.position.y = y / 2 - 50;
 
   fitView()
 };
