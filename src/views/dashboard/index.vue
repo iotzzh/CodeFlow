@@ -53,9 +53,9 @@
                     <Setting v-else-if="selectNode && selectNode.toLowerCase() === '项目配置'"></Setting>
                     <Environment v-else-if="selectNode && selectNode.toLowerCase() === '环境配置'"></Environment>
                     <div v-else class="frame-box" style="height: 100%;">
-                        <iframe src="https://www.bing.com" frameborder=”0″ height="100%" width="100%">
+                        <!-- <iframe src="https://www.bing.com" frameborder=”0″ height="100%" width="100%">
 
-                        </iframe>
+                        </iframe> -->
                     </div>
                 </Pane>
                 <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">

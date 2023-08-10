@@ -1,12 +1,19 @@
 <template>
   <div class="box">
-    <VueFlow  class="basicflow" :class="{ dark }" v-model="elements" :default-edge-options="{ type: 'smoothstep' }"
+    <VueFlow v-model="elements" class="basicflow" :class="{ dark }" :default-edge-options="{ type: 'smoothstep' }"
       :default-viewport="{ zoom: 1.5 }" :min-zoom="0.2" :max-zoom="4" fit-view-on-init @nodeClick="nodeClickHandler">
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
 
       <template #node-custom="{ data }">
-        <div class="api-root">API管理</div>
-        <Handle id="a" type="source" :position="Position.Right" :style="sourceHandleStyleA" />
+        <div
+          style="width: 120px; height: 40px; font-size: 14px; display: flex; align-items: center; justify-content: center; border-radius: 5px; background: linear-gradient(to right, transparent, lightBlue);">
+          API管理
+        </div>
+
+        <Handle id="0" type="source" :position="Position.Right" :style="sourceHandleStyleA" />
+
+        <!-- <Handle id="b" type="source" :position="Position.Right" :style="sourceHandleStyleB" /> -->
+
       </template>
 
       <MiniMap />
@@ -86,76 +93,76 @@ const { onPaneReady, onNodeDragStop, onConnect, addEdges, setTransform, toObject
 
 
 const originData = ref([] as any);
+const displayData = ref([] as any);
 // 高：60, 间距：100
 const elements = ref([] as any);
 onMounted(async () => {
   originData.value = ipcRenderer.sendSync('file:getApiList', '');
   await nextTick();
 
-  iniData();
+  const yPosition = ((originData.value.length - 1) * 100) / 2;
 
-  doLayout();
+  elements.value.push({ id: '1', type: 'custom', data: { type: 'custom' }, label: 'API管理', position: { x: 0, y: yPosition }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left },);
+  for(let i = 0; i < originData.value.length; i++) {
+    const id = `${originData.value[i].name}`;
+    const label = `${originData.value[i].data.label || originData.value[i].data.name}`;
+    elements.value.push({ id, label, position: { x: 200, y: i * 100 }, data: originData.value[i], class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
+    elements.value.push( { id: 'el' + `${originData.value[i].name}`, source: '1', sourceHandle: '0', target: id, animated: true });
+
+    // for (let j = 0; j < originData.value[i].data.api.length; j++) {
+    //   elements.value.push({
+    //   id: `${originData.value[i].data.api[j].name}`, label: `${originData.value[i].data.api[j].label || originData.value[i].data.api[j].name}`, position: { x: 400, y: j * 100 * (i + 1) }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left 
+    // });
+    // }
+  }
 });
 
-const iniData = () => {
-  elements.value.push({ id: '0', type: 'custom', data: { type: 'custom' }, label: 'API管理', position: { x: 0, y: 0 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
-  for (let i = 0; i < originData.value.length; i++) {
-    const id = originData.value[i].name;
-    const label = originData.value[i].data.label || originData.value[i].data.name;
-    elements.value.push({ id, label, position: { x: 200, y: 0 }, data: originData.value[i], class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
-    elements.value.push({ id: 'edge-' + `${originData.value[i].name}`, sourceHandle: 'a', source: '0', target: id, animated: true });
+/**
+ * useVueFlow provides all event handlers and store properties
+ * You can pass the composable an object that has the same properties as the VueFlow component props
+ */
 
-    for (let j = 0; j < originData.value[i].data.api.length; j++) {
-      const subId = originData.value[i].data.api[j].name;
-      const subLabel = originData.value[i].data.api[j].label || originData.value[i].data.api[j].name;
-      elements.value.push({ id: subId, label: subLabel, position: { x: 400, y: 0 }, class: 'light', type: 'output', targetPosition: Position.Left });
-      elements.value.push({ id: 'edge-' + subId , source: id, target: subId, animated: true, style: { stroke: '#10b981' } });
+/**
+ * Our elements
+ */
+// const elements = ref([
+//   { id: '1', type: 'custom', data: { type: 'custom' }, label: 'API管理', position: { x: 0, y: 100 }, class: 'light', sourcePosition: Position.Right },
+//   { id: '2', label: '用户管理', position: { x: 200, y: 10 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left },
+//   { id: '2.1', label: '获取用户管理列表', type: "output", position: { x: 400, y: 0 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left },
+//   { id: '3', label: '角色管理', position: { x: 200, y: 200 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left },
+//   { id: 'e1-1', source: '1', sourceHandle: 'a', target: '2', animated: true },
+//   { id: 'e1-2', source: '1', sourceHandle: 'b', target: '3', animated: true },
+//   { id: 'e1-3', source: '2', target: '2.1', animated: true },
+//   //   { id: '2', type: 'output', label: 'Node 2', position: { x: 100, y: 100 }, class: 'light' },
+//   //   { id: '3', label: 'Node 3', position: { x: 400, y: 100 }, class: 'light' },
+//   //   { id: '4', label: 'Node 4', position: { x: 150, y: 200 }, class: 'light' },
+//   //   { id: '5', type: 'output', label: 'Node 5', position: { x: 300, y: 300 }, class: 'light' },
+//   //   { id: 'e1-2', source: '1', target: '2', animated: true },
+//   //   { id: 'e1-3', label: 'edge with arrowhead', source: '1', target: '3', markerEnd: MarkerType.ArrowClosed },
+//   //   {
+//   //     id: 'e4-5',
+//   //     type: 'step',
+//   //     label: 'step-edge',
+//   //     source: '4',
+//   //     target: '5',
+//   //     style: { stroke: 'orange' },
+//   //     labelBgStyle: { fill: 'orange' },
+//   //   },
+//   //   { id: 'e3-4', type: 'smoothstep', label: 'smoothstep-edge', source: '3', target: '4' },
+// ])
 
-    }
-  }
-};
-
-
-const doLayout = async () => {
-  await nextTick();
-  const LINE_HEIGHT = 50;
-  const col2Edges = elements.value.filter((x:any) => x.source === '0');
-  const col2Items = elements.value.filter((x:any) => col2Edges.find((y:any) => y.target === x.id));
-  let y = 0;
-  for (let i = 0; i < col2Items.length; i++) {
-    if (col2Items[i].data.data.api.length > 0) {
-      col2Items[i].position.y = y + LINE_HEIGHT * col2Items[i].data.data.api.length / 2;
-
-
-      let y3 = y;
-      const col3Edges = elements.value.filter((x:any) => x.source === col2Items[i].id);
-        const col3Items = elements.value.filter((x:any) => col3Edges.find((y:any) => y.target === x.id));
-        for (let k = 0; k < col3Items.length; k++) {
-          col3Items[k].position.y = y3;
-          y3 += LINE_HEIGHT;
-        }
-
-      y += LINE_HEIGHT * col2Items[i].data.data.api.length;
-    } else {
-      col2Items[i].position.y = y;
-      y += LINE_HEIGHT;
-    }
-  }
-
-  const rootNode = elements.value.find((x:any) => x.id === '0');
-  rootNode.position.y = y / 2;
-
-  fitView()
-};
-
-
+/**
+ * This is a Vue Flow event-hook which can be listened to from anywhere you call the composable, instead of only on the main component
+ *
+ * onPaneReady is called when viewpane & nodes have visible dimensions
+ */
 onPaneReady(({ fitView }) => {
   fitView()
 })
 
 const selectedNode = ref();
 
-const appendChild = (node: any) => {
+const appendChild = (node:any) => {
   const childs = node.data.data.api;
   if (childs.length % 2 === 0) {
 
@@ -170,10 +177,9 @@ const appendChild = (node: any) => {
       } else {
         yPosition = node.computedPosition.y + (i - 1) * 60;
       }
-      elements.value.push({ id, label, position: { x: 400, y: yPosition }, class: 'light', type: 'output', targetPosition: Position.Left });
-      elements.value.push({ id: node.id, source: node.id, target: id });
+      elements.value.push({id, label, position: { x: 400, y: yPosition }, class: 'light', type: 'output', targetPosition: Position.Left  });
+      elements.value.push( { id: node.id, source: node.id, target: id, animated: true });
 
-      //
     }
   } else {
 
@@ -184,7 +190,7 @@ const appendChild = (node: any) => {
 const nodeClickHandler = (props: any) => {
   if (selectedNode?.value?.id === props?.node?.id) return;
   selectedNode.value = props.node;
-  // appendChild(props.node);
+  appendChild(props.node);
   console.log(props.node);
   console.log(props.event);
 };
@@ -204,7 +210,7 @@ const dark = ref(false)
  * Changes should always be reflected on the graph reactively, without the need to overwrite the elements
  */
 function updatePos() {
-  return elements.value.forEach((el: any) => {
+  return elements.value.forEach((el:any) => {
     if (isNode(el)) {
       el.position = {
         x: Math.random() * 400,
@@ -301,9 +307,5 @@ const sourceHandleStyleB = computed(() => ({
 .basicflow .controls button:hover {
   transform: scale(102%);
   transition: .25s all ease
-}
-
-.api-root {
-  width: 120px; height: 40px; font-size: 14px; display: flex; align-items: center; justify-content: center; border-radius: 5px; background: linear-gradient(to right, transparent, lightBlue);
 }
 </style>
