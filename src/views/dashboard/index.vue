@@ -45,7 +45,8 @@
                                 </span>
                                 <span v-else>
                                     {{ node.label }}
-                                    <el-icon v-if="node.label === '界面'" style="cursor: pointer; position: relative; top: 2px;"><component is="Plus"></component></el-icon>
+                                    <el-icon v-if="node.label === '界面' || data.menuType === 1" style="cursor: pointer; position: relative; top: 2px;"
+                                   ><component is="Plus"  @click="(e:any) => clickAddPage(e, node, data)"></component></el-icon>
                                 </span>
                             </template>
                         </el-tree>
@@ -72,7 +73,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { ipcRenderer } from "electron";
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css'
@@ -109,38 +110,76 @@ const handleNodeClick = (data: Tree) => {
 }
 
 const selectNode = ref();
-const data: Tree[] = [
-    {
+const data = ref([] as Tree[]);
+const treeMap = (arr:any) => {
+    // 判断是否是数组
+    if (!arr || !(arr.length > 0)) { return } 
+       // 将值存入map并在值里面循环调用
+        return arr.map((v:any, i:any) => {
+          return {
+            ...v,
+            label: v.routeName,
+            children: v.children ? treeMap(v.children) : []
+          }
+        })
+};
+onMounted(async () => {
+    const res = ipcRenderer.sendSync('file:getRouter');
+    const routes = treeMap(res.data.records);
+    data.value.push({
         label: 'Web',
         children: [
             { label: 'API', },
             {
-                label: '界面', children: [
-                    // { label: '登录页' },
-                    // { label: '首页' },
-                ]
+                label: '界面', children: routes,
+                // label: '界面',
             },
-            // 创建页面时，创建路由
-            // { label: '路由配置' },
-            // { label: '全局方法' },
             {
                 label: '配置', children: [
                     { label: '项目配置' },
                     {
                         label: '环境配置', 
-                        // children: [
-                        //     { label: '本地环境' },
-                        //     { label: '开发环境' },
-                        //     { label: '测试环境' },
-                        //     { label: '生产环境' },
-                        // ]
                     }
                 ]
             },
         ],
-    },
+    });
+});
 
-]
+
+
+// const data: Tree[] = [
+//     {
+//         label: 'Web',
+//         children: [
+//             { label: 'API', },
+//             {
+//                 label: '界面', children: [
+//                     // { label: '登录页' },
+//                     // { label: '首页' },
+//                 ]
+//             },
+//             // 创建页面时，创建路由
+//             // { label: '路由配置' },
+//             // { label: '全局方法' },
+//             {
+//                 label: '配置', children: [
+//                     { label: '项目配置' },
+//                     {
+//                         label: '环境配置', 
+//                         // children: [
+//                         //     { label: '本地环境' },
+//                         //     { label: '开发环境' },
+//                         //     { label: '测试环境' },
+//                         //     { label: '生产环境' },
+//                         // ]
+//                     }
+//                 ]
+//             },
+//         ],
+//     },
+
+// ]
 
 const defaultProps = {
     children: 'children',
@@ -160,6 +199,28 @@ const startServer = (e:any) => {
 const stopServer = (e:any) => {
     e.preventDefault();
     ipcRenderer.send('cmd:stopServer');
+};
+
+const clickAddPage = (e:any, node:any, data:any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    console.log(node);
+    console.log(data);
+
+    const route = {
+        routeName: '测试页',
+        filePath: 'views/dashboard/index',
+        menuType: 2,
+        routeCode: 'test',
+        sortNo: 1,
+        icon: 'icon-shouye-copy-copy',
+        description: '',
+    };
+
+    const res = ipcRenderer.sendSync('file:AddRouter', route, data);
+    console.log('res: ', res);
 };
 
 </script>

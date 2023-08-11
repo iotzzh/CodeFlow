@@ -1,7 +1,8 @@
-import { app, BrowserWindow, shell, ipcMain, screen, dialog } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, screen, dialog, session  } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
 import WindowHelper from './windowHelper'
+
 
 export default class Init {
     static initProcess() {
@@ -25,15 +26,19 @@ export default class Init {
         // Remove electron security warnings
         // This warning only shows in development mode
         // Read more on https://www.electronjs.org/docs/latest/tutorial/security
-        process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
+        process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
     };
 
 
     static async initAPP() {
         app.whenReady().then(async () => {
+          const reactDevToolsPath = 'E:\\practice\\zh-skill-tree\\code\\project\\code-flow\\electron\\main\\extension\\6.5.0_0';
+
+          await session.defaultSession.loadExtension(reactDevToolsPath)
             globalThis.mainWindow = await WindowHelper.createWindow();
             globalThis.mainWindow.webContents.send('mainWindowLoaded');
             console.log('mainWindowLoaded');
+
           })
           
           app.on('window-all-closed', () => {

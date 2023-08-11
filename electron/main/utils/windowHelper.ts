@@ -1,4 +1,4 @@
-import { BrowserWindow, shell, screen } from "electron";
+import { BrowserWindow, shell, screen, session  } from "electron";
 import { join } from 'node:path';
 
 export default class WindowHelper {
@@ -6,7 +6,7 @@ export default class WindowHelper {
         const preload = join(__dirname, '../preload/index.js')
         const url = process.env.VITE_DEV_SERVER_URL
         const indexHtml = join(process.env.DIST, 'index.html')
-
+        
         const win = new BrowserWindow({
             title: 'Code Flow',
             parent: Object.keys(config).length > 0 ? globalThis.mainWidow : null,
