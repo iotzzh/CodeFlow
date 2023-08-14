@@ -1,6 +1,8 @@
 import { TReturn } from "./entity";
 import { createFolder, createFile } from '../utils/file';
 import TreeHelper from "../utils/treeHelper";
+import { prettierCode } from '../utils/cmd';
+
 
 const path = require('path'); //解析需要遍历的文件夹
 const fs = require('fs');
@@ -83,6 +85,7 @@ export const AddRouter = async (event, params) => {
 
         res.data.route = route;
         event.returnValue = res;
+        prettierCode('E:\\tworspace\\zh-admin-vue\\');
     } catch (err) {
         console.log(err);
     }

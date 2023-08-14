@@ -68,3 +68,9 @@ export function getWindows () {
   // return exec('echo hello你好啊' + chineseMark)
   return exec(`powershell.exe  -ExecutionPolicy Bypass "Get-Process QQMusic | Select-Object MainWindowTitle  | Format-Wide | Out-String | &{$input+'${chineseMark}'}"`)
 }
+
+
+export const prettierCode = async (address:string) => {
+  var exec = require('child_process').exec;
+  const res = await exec(`cd E:\\tworspace\\zh-admin-vue\\ && npm run lint:prettier`);
+}; 

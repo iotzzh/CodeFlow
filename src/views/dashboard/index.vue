@@ -177,9 +177,6 @@ onMounted(async () => {
     setTreeData();
 });
 
-
-
-
 const defaultProps = {
     children: 'children',
     label: 'label',

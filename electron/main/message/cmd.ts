@@ -6,8 +6,8 @@ export default { prefix: 'cmd' };
 
 export const openCode = async (event, address) => {
     try {
-    var exec = require('child_process').exec;
-    exec(`code E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue`);
+        var exec = require('child_process').exec;
+        exec(`code E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue`);
     } catch (err) {
         console.log(err);
     }
@@ -15,9 +15,9 @@ export const openCode = async (event, address) => {
 
 export const startServer = async (event, address) => {
     try {
-    var exec = require('child_process').exec;
-    const res = await exec(`cd E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue && npm run start`);
-    console.log('res, ', res);
+        var exec = require('child_process').exec;
+        const res = await exec(`cd E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue && npm run start`);
+        console.log('res, ', res);
     } catch (err) {
         console.log(err);
     }
@@ -47,10 +47,20 @@ export const stopServer = async (event, address) => {
         // var stdout = ex("ping www.jshaman.com", { encoding: 'binary' }).toString();
         // console.log(stdout);
 
-    // var execSync = require('child_process').execSync;
-    // const res = await execSync(`netstat -o -n -a | findstr :8000`);
-    // console.log('res, ', res);
-    // const first = res[0];
+        // var execSync = require('child_process').execSync;
+        // const res = await execSync(`netstat -o -n -a | findstr :8000`);
+        // console.log('res, ', res);
+        // const first = res[0];
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+export const prettierCode = async (event, address) => {
+    try {
+        var exec = require('child_process').exec;
+        const res = await exec(`cd E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue && npm run lint:prettier`);
+        console.log('res, ', res);
     } catch (err) {
         console.log(err);
     }
