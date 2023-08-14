@@ -7,7 +7,7 @@ export default { prefix: 'cmd' };
 export const openCode = async (event, address) => {
     try {
         var exec = require('child_process').exec;
-        exec(`code E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue`);
+        exec(`code E:\\tworspace\\zh-admin-vue`);
     } catch (err) {
         console.log(err);
     }
@@ -16,7 +16,7 @@ export const openCode = async (event, address) => {
 export const startServer = async (event, address) => {
     try {
         var exec = require('child_process').exec;
-        const res = await exec(`cd E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue && npm run start`);
+        const res = await exec(`cd E:\\tworspace\\zh-admin-vue && npm run start`);
         console.log('res, ', res);
     } catch (err) {
         console.log(err);
@@ -59,7 +59,7 @@ export const stopServer = async (event, address) => {
 export const prettierCode = async (event, address) => {
     try {
         var exec = require('child_process').exec;
-        const res = await exec(`cd E:\\practice\\zh-skill-tree\\code\\web\\zh-admin-vue && npm run lint:prettier`);
+        const res = await exec(`cd E:\\tworspace\\zh-admin-vue && npm run lint:prettier`);
         console.log('res, ', res);
     } catch (err) {
         console.log(err);

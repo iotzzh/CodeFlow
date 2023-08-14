@@ -80,7 +80,7 @@ export const AddRouter = async (event, params) => {
         }
 
         if (!isFloder) {
-            createFile(pagePath, route.url + '/index.vue', `<template>Hello World</template>`);
+            createFile(pagePath, route.url + '/index.vue', `<template>${route.routeName}</template>`);
         }
 
         res.data.route = route;
