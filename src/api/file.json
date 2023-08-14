@@ -1,0 +1,13 @@
+{
+    "prefix": "", 
+    "localPrefix": "", 
+    "useMock": false,
+    "useCommmonConfig": false,
+    "api": [
+        { "name": "getApiList", "url": "file:getApiList", "prefix": "", "localPrefix": "", "useMock": false },
+        { "name": "getRouter", "url": "file:getRouter", "prefix": "", "localPrefix": "", "useMock": false },
+        { "name": "AddRouter", "url": "file:AddRouter", "prefix": "", "localPrefix": "", "useMock": false },
+        { "name": "updateRouter", "url": "file:updateRouter", "prefix": "", "localPrefix": "", "useMock": false },
+        { "name": "deleteRouter", "url": "file:deleteRouter", "prefix": "", "localPrefix": "", "useMock": false }
+    ]
+}

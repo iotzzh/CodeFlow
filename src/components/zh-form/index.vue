@@ -7,7 +7,7 @@
         <!-- xs: <768, sm: >=768, md: >= 992, lg: >= 1200, xl: >= 1920 -->
         <el-col v-for="(item, index) in fieldList" :key="index" :span="item.span" :xl="item.xl" :lg="item.lg" :md="item.md" :sm="item.sm" :xs="item.xs" 
         :style="{ maxWidth: item.maxWidth, minWidth: item.minWidth }"
-        v-show="!item.hide"
+        v-show="item.hide === undefined ? true : typeof item.hide === 'function' ? !item.hide(modelValue) : !item.hide "
           >
           <el-form-item :key="'form-item' + index" :label="item.label" :prop="item.prop" :label-width="item.labelWidth"
              v-if="item.prop">

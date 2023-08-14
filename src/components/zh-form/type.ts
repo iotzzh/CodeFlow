@@ -30,7 +30,7 @@ export interface TZHFromField {
   refName?: string // ref name
   defaultValue?: any // 默认值
   labelWidth?: string | number // 标签宽度
-  hide?: boolean // 是否隐藏
+  hide?: boolean | Function// 是否隐藏
   width?: string | number // 宽度
   placeholder?: string // 占位符
   disabled?: boolean | Function // 是否禁用

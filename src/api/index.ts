@@ -20,7 +20,7 @@ for (const path in modules) {
             if (element.name in api || element.name in subApi) console.error(`api 定义异常：${element.name}重复定义，请换个名字`);
 
             const prefix = getPrefix(module.default, element);
-            subApi[element.name as keyof typeof subApi] = '/' + prefix + element.url;
+            subApi[element.name as keyof typeof subApi] = prefix + element.url;
         });
 
         api = { ...api, ...subApi };

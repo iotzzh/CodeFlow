@@ -64,30 +64,34 @@ export const getRouter = async (event, address) => {
 // }
 
 // 添加路由，添加路由时，直接跟随页面的添加，可选择模板，或者是空模板
-export const AddRouter = async (event, routeStr, parentRouteStr) => {
+export const AddRouter = async (event, params) => {
     try {
-        const route = JSON.parse(routeStr);
-        const parentRoute = JSON.parse(parentRouteStr);
+        const route = JSON.parse(params);
         const res = new TReturn();
         const routePath = path.join(`E:\\tworspace\\zh-admin-vue\\`, 'src\\router\\routes');
         const pagePath = path.join(`E:\\tworspace\\zh-admin-vue\\`, 'src\\views');
         const id = uuidv4();
-        // const isFloder = route.menuType === 1; // 1是目录， 2是菜单
-        const parentId = route.parentId;
+        const isFloder = route.menuType === 1; // 1是目录， 2是菜单
         route.id = id;
-        if (!parentId) { // 顶级菜单
+        if (!route.parent) { // 顶级菜单
             createFile(routePath, route.routeCode + '.json', JSON.stringify(route));
         } else { // 子菜单
 
+            const parentRoute = route.parent;
             // 读取该文件
-            const fileName = parentRoute.filePath.split('/')[1];
+            const fileName = parentRoute.url.split('/')[1];
             const fileDataString = await fs.readFileSync(path.join(routePath, fileName + '.json'), { encoding: 'utf8' });
             const fileData = JSON.parse(fileDataString);
             const item = TreeHelper.getItemByIdInTree(parentRoute.id, [fileData]);
             if (!item.children) item.children = [];
+            delete route.parent;
             item.children.push(route);
 
             createFile(routePath, fileName + '.json', JSON.stringify(fileData));
+
+            if(!isFloder) {
+                // TODO: 创建文件
+            }
         }
 
         res.data.route = route;
