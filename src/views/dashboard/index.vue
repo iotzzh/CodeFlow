@@ -114,7 +114,7 @@ import PageAddEditModal from './page/pageAddEditModal';
 
 const setTreeData = async () => {
     const res = ipcRenderer.sendSync('file:getRouter');
-    const routes = treeMap(res.data.records);
+    const routes = res?.data?.records ? treeMap(res.data.records) : [];
     await nextTick();
     const treeData = [];
     treeData.push({

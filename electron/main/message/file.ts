@@ -42,26 +42,13 @@ export const getRouter = async (event, address) => {
             const filedir = path.join(filePath, files[i]);
             if (!files[i].endsWith('.json')) continue;
             const fileData = await fs.readFileSync(filedir, { encoding: 'utf8' });
-            res.data.records.push(JSON.parse(fileData));
+            fileData && res.data.records.push(JSON.parse(fileData));
         }
         event.returnValue = res;
     } catch (err) {
         event.returnValue = { success: false, error: err } as TReturn;
     }
 };
-
-// const  findRootNode(nodes:any, childNode:any) {
-//     if (!childNode.parentID) {
-//         return childNode;
-//     } else {
-//         const parentNode = nodes.find(node => node.id === childNode.parentID);
-//         if (parentNode) {
-//             return findRootNode(parentNode);
-//         } else {
-//             return null; // 没有找到对应的父节点，可能出现数据问题
-//         }
-//     }
-// }
 
 // 添加路由，添加路由时，直接跟随页面的添加，可选择模板，或者是空模板
 export const AddRouter = async (event, params) => {
@@ -88,10 +75,10 @@ export const AddRouter = async (event, params) => {
             item.children.push(route);
 
             createFile(routePath, fileName + '.json', JSON.stringify(fileData));
+        }
 
-            if(!isFloder) {
-                // TODO: 创建文件
-            }
+        if (!isFloder) {
+            createFile(pagePath, route.url + '/index.vue', `<template>Hello World</template>`);
         }
 
         res.data.route = route;

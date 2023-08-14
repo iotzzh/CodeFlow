@@ -10,7 +10,7 @@ import { TZHModal } from '@/components/zh-modal/type';
 
 export default class PageAddEditModal {
     [x: string]: any;
-    constructor(setTreeData:any) {
+    constructor(setTreeData: any) {
         this.setTreeData = setTreeData;
     };
 
@@ -29,12 +29,16 @@ export default class PageAddEditModal {
         fields: [
             { prop: 'routeName', label: '名称', type: 'input', span: 24, required: true, },
             { prop: 'routeCode', label: '英文名称', type: 'input', span: 24, required: true, },
-            { prop: 'menuType', label: '类型', type: 'select', span: 24, required: true,
-            defaultOptions: [ { label: '菜单', value: 2 }, { label: '目录', value: 1 } ] },
-            { prop: 'test', label: '页面模板', type: 'select', span: 24, defaultOptions: [
-                { label: '空模板', value: 'template-null' },
-                { label: '基础模板', value: 'template-basic' }
-            ], hide: (modelValue:any) => modelValue?.menuType !== 2 },
+            {
+                prop: 'menuType', label: '类型', type: 'select', span: 24, required: true,
+                defaultOptions: [{ label: '菜单', value: 2 }, { label: '目录', value: 1 }]
+            },
+            {
+                prop: 'test', label: '页面模板', type: 'select', span: 24, defaultOptions: [
+                    { label: '空模板', value: 'template-null' },
+                    { label: '基础模板', value: 'template-basic' }
+                ], hide: (modelValue: any) => modelValue?.menuType !== 2
+            },
             { prop: 'sortNo', label: '排序', type: 'input', inputType: 'number', span: 24, required: true, },
             { prop: 'icon', label: 'icon', type: 'input', span: 24, required: true, },
             { prop: 'description', label: '备注', type: 'input', inputType: 'textarea', span: 24, required: false, },
@@ -43,7 +47,7 @@ export default class PageAddEditModal {
     } as TZHformConfig);
 
 
-    model = ref({} as { [x:string]:any });
+    model = ref({} as { [x: string]: any });
 
     close = () => {
         this.model.value = {};
@@ -53,15 +57,15 @@ export default class PageAddEditModal {
     submit = async () => {
         const parent = this.modalConfig.value.data;
         const url = parent ? parent.url + '/' + this.model.value.routeCode : '/' + this.model.value.routeCode;
-        const conditions: { [x:string]:any } = {
+        const conditions: { [x: string]: any } = {
             ...this.model.value,
             url,
         };
         if (parent) conditions.parent = parent;
-        if(this.model.value.menuType === 2) {
-            conditions.filePath = 'views/' + url + '/index';
+        if (this.model.value.menuType === 2) {
+            conditions.filePath = 'views' + url + '/index';
         }
-        const params:TZHRequestParams = { url: api.AddRouter, conditions };
+        const params: TZHRequestParams = { url: api.AddRouter, conditions };
         const res = await ZHRequest.post(params);
         if (res.success) {
             this.close();
