@@ -211,7 +211,7 @@ const clickAddPage = (e:any, node:any, data:any) => {
 
     const route = {
         routeName: '测试页',
-        filePath: 'views/dashboard/index',
+        filePath: 'views/test/index',
         menuType: 2,
         routeCode: 'test',
         sortNo: 1,
@@ -219,8 +219,22 @@ const clickAddPage = (e:any, node:any, data:any) => {
         description: '',
     };
 
-    const res = ipcRenderer.sendSync('file:AddRouter', route, data);
+    const res = ipcRenderer.sendSync('file:AddRouter', JSON.stringify(route), JSON.stringify(data));
     console.log('res: ', res);
+
+    const route1 = {
+        routeName: '测试页1',
+        filePath: 'views/test/test1/index',
+        menuType: 2,
+        routeCode: 'test1',
+        sortNo: 1,
+        icon: 'icon-shouye-copy-copy',
+        description: '',
+        parentId: res.data.route.id,
+    };
+
+    const res1 = ipcRenderer.sendSync('file:AddRouter', JSON.stringify(route1) , JSON.stringify(res.data.route));
+    console.log('res: ', res1);
 };
 
 </script>

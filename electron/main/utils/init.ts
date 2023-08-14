@@ -32,9 +32,9 @@ export default class Init {
 
     static async initAPP() {
         app.whenReady().then(async () => {
-          const reactDevToolsPath = 'E:\\practice\\zh-skill-tree\\code\\project\\code-flow\\electron\\main\\extension\\6.5.0_0';
+          // const reactDevToolsPath = 'E:\\practice\\zh-skill-tree\\code\\project\\code-flow\\electron\\main\\extension\\6.5.0_0';
 
-          await session.defaultSession.loadExtension(reactDevToolsPath)
+          // await session.defaultSession.loadExtension(reactDevToolsPath)
             globalThis.mainWindow = await WindowHelper.createWindow();
             globalThis.mainWindow.webContents.send('mainWindowLoaded');
             console.log('mainWindowLoaded');
