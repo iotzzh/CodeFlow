@@ -83,6 +83,7 @@
                 </Pane>
                 <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">
                     <PageConfig v-if="selectNode && selectNode.toLowerCase() === '界面'"></PageConfig>
+                    <APIConfig v-if="selectNode && selectNode.toLowerCase() === 'api'"></APIConfig>
                     <div v-else>暂未设计</div>
                 </Pane>
             </Splitpanes>
@@ -105,6 +106,7 @@ import ZHFormModal from '@/components/zh-form-modal/index.vue';
 import API from './APIManage.vue';
 import Environment from './Environment.vue';
 import Setting from './Setting.vue';
+import APIConfig from './config/APIConfig.vue';
 
 // 配置项目
 import PageConfig from './config/PageConfig.vue';
