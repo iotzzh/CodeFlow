@@ -22,7 +22,8 @@ export default class baseController {
     list = async (event, params: string | undefined) => {
         const ret = new TReturn();
         try {
-            const res = await DBHelper[this.prefix].list();
+
+            const res = await DBHelper[this.prefix].list(params ? JSON.parse(params) : {});
             ret.data.records = res;
         } catch(err) {
             ret.success = false;

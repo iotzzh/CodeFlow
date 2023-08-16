@@ -10,11 +10,13 @@ import { TZHRequestParams } from '@/components/zh-request/type';
 import { TZHTable } from '@/components/zh-table/type';
 
 export default class Project {
+    [x: string]: any;
     position: string; // 目前有两个值：dashboard, appManage
     tableConfig: Ref<TZHTable>;
-    constructor (position:string) {
+    constructor (position:string, refTable:any = {}) {
         this.position = position;
         this.tableConfig = this.setTableConfig(position);
+        this.refTable = refTable;
     }
 
     setTableConfig = (position:string) => {
@@ -64,7 +66,6 @@ export default class Project {
                         addEditInfo: {
                             type: 'input',
                             addSort: 1,
-                            defaultValue: '',
                             placeholder: '请输入',
                             span: 24,
                             required: true,
@@ -85,19 +86,36 @@ export default class Project {
                             required: false,
                         }
                     },
+                    {
+                        label: '所属工程', notDisplay: true,
+                        prop: 'workspaceId',
+                        minWidth: '100px',
+                        addEditInfo: {
+                            type: 'select',
+                            addSort: 3,
+                            api: api.getWorkspaceList,
+                            placeholder: '请选择',
+                            labelField: 'workspaceName',
+                            valueField: 'id',
+                            valueKey: 'id',
+                            convert: (fieldValue:any) => fieldValue?.id,
+                            span: 24,
+                            required: true,
+                        }
+                    },
                 ],
                 actionColumn: {
                     label: '操作',
                     width: isManage ? '180px' : '120px',
                     hasRowDeleteAction: isManage,
                     hasRowEditAction: isManage,
-                    buttons: [
+                    buttons: !isManage ? [
                         { label: '进入', type: 'primary', onClick: () => {    ipcRenderer.send('window:create', {
                             name: 'dashboard',
                             route: 'dashboard',
                         });} },
                         { label: '部署', type: 'success' },
-                    ],
+                    ] : [],
                 },
             },
             requestConfig: {

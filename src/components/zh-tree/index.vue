@@ -172,7 +172,7 @@ const openModal = (type: number, e?: any, node?: any, data?: any) => {
   } else if (type === 2) {
     modal.value.type = 'edit';
     modal.value.title = '编辑' + config.value.formModalConfig?.modalConfig.mainTitle;
-    formModel.value = data;
+    formModel.value = JSON.parse(JSON.stringify(data));
   } else { }
 
   modal.value.show = true;

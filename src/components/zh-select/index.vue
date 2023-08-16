@@ -309,6 +309,9 @@ const setValue = (newValue: any) => {
             if (item) {
                 value.value = item;
                 emit('update:modelValue', item);
+            } else {
+                value.value = newValue;
+                emit('update:modelValue', newValue);
             }
         }
     }
@@ -323,7 +326,7 @@ const change = (newVal: any) => {
 
 watch(() => modelValue!.value, (newVal:any) => {
     if (newVal !== value.value) {
-        value.value = newVal;
+        setValue(newVal);
     }
 },  { deep: true });
 

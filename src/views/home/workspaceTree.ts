@@ -4,8 +4,10 @@ import { ref } from 'vue';
 
 export default class WorkspaceTree {
     refWorkspaceTree: any;
-    constructor(refWorkspaceTree:any) {
+    dashboardProject: any;
+    constructor(refWorkspaceTree:any, dashboardProject:any) {
         this.refWorkspaceTree = refWorkspaceTree;
+        this.dashboardProject = dashboardProject;
     }
     config = ref({
         treeConfig: {
@@ -20,6 +22,11 @@ export default class WorkspaceTree {
             showCheckbox: false,
             defaultProps: {
                 label: 'workspaceName',
+            },
+
+            nodeClick: (params:any) => {
+                this.dashboardProject.tableConfig.value.requestConfig.list.conditions = { workspaceId: params.data.id };
+                this.dashboardProject.refTable.value.initData();
             },
         },
         requestConfig: {

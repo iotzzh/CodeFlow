@@ -24,29 +24,13 @@
                 <div class="part">SERVER</div>
                 <div class="part" @click="openAppListModal">APP</div>
             </div>
-            <!-- <el-input class="search-input" placeholder="搜索项目名称" prefix-icon="Search"> -->
-            <!-- </el-input> -->
-
             <el-row class="row workspace">
                 <el-col class="col" :span="8">
                     <ZHTree :config="workspaceTree.config.value" ref="refWorkspaceTree">
                     </ZHTree>
                 </el-col>
                 <el-col class="col" :span="16">
-                    <ZHTable :config="dashboardProject.tableConfig.value"></ZHTable>
-                    <!-- <el-table :data="[]" style="width: 100%" :highlight-current-row="true" class="project-list-table"
-                        height="100%">
-                        <el-table-column prop="projectName" label="项目名称" />
-                        <el-table-column prop="currentBranch" label="当前分支" />
-                        <el-table-column fixed="right" label="操作" width="180" align="center">
-                            <template #default="scope">
-                                <el-button link type="primary" size="small" @click="openDashboard">进入</el-button>
-                                <el-button link type="success" size="small">编辑</el-button>
-                                <el-button link type="warning" size="small">部署</el-button>
-                                <el-button link type="danger" size="small">移除</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table> -->
+                    <ZHTable ref="refProjectTable" :config="dashboardProject.tableConfig.value"></ZHTable>
                 </el-col>
             </el-row>
             <!-- <div style="padding: 10px 0px 0px 0px;">
@@ -64,7 +48,7 @@
             @submit="createWorkspaceFormModal.submit"
             >
         </ZHFormModal>
-        <ZHModal :modal-config="appModalConfig">
+        <ZHModal :modal-config="appModalConfig" @close="closeAppModal">
             <ZHTable :config="appProject.tableConfig.value"></ZHTable>
         </ZHModal>
     </div>
@@ -88,54 +72,16 @@ import api from "@/api";
 import Project from './project';
 
 const refWorkspaceTree = ref();
-const workspaceTree = new WorkspaceTree(refWorkspaceTree);
+const refProjectTable = ref();
+
+const dashboardProject  = new Project('dashboard', refProjectTable);
+const appProject  = new Project('appManage');
+
+const workspaceTree = new WorkspaceTree(refWorkspaceTree, dashboardProject);
 
 const createWorkspaceFormModal = new CreateWorkspaceFormModal(refWorkspaceTree);
 
-const dashboardProject  = new Project('dashboard');
-const appProject  = new Project('appManage');
 
-// const workspaceTree = ref({
-//     treeConfig: {
-//         hasAdd: false,
-//         hasEdit: true,
-//         hasDelete: true,
-//         hasEmptyAdd: true,
-//         hasRootAdd: false,
-//         labelDisplayMaxLength: 50,
-//         initialData: false,
-//         checkStrictly: true,
-//         showCheckbox: false,
-//         defaultProps: {
-//             label: 'label',
-//         },
-//     },
-//     requestConfig: {
-//         // urlGet: api.getOrgList,
-//         // urlAdd: api.addOrg,
-//         // urlEdit: api.updateOrg,
-//         // urlDelete: api.deleteOrg,
-//     },
-//     formModalConfig: {
-//         modalConfig: {
-//             show: false,
-//             width: '300px',
-//             closeInModal: true,
-//             footer: {
-//                 hasCancelButton: true,
-//                 hasSubmitButton: true,
-//             },
-//         },
-//         formConfig: {
-//         //     fields: [
-//         //         { prop: 'test', label: '测试', type: 'input', span: 12, },
-//         //         { prop: 'test1', label: '测试1', type: 'select', span: 12, convert: 'return 111', defaultOptions: [{ label: '测试1', value: '测试1' }, { label: '测试2', value: '测试2' }] }
-//         //     ]
-//         },
-//         model: {},
-//         convertedModel: {},
-//     },
-// });
 
 
 const btnCreateSys = async () => {
@@ -156,6 +102,10 @@ const appModalConfig = ref({
     //     hasCancelButton: true,
     // },
 });
+
+const closeAppModal = () => {
+    refProjectTable.value.initData();
+};
 
 
 
