@@ -16,7 +16,8 @@ export default { prefix: 'file' };
 export const getApiList = async (event, address) => {
     try {
         const res = [];
-        const filePath = path.join(`E:\\tworspace\\zh-admin-vue\\src\\api`);
+        // const filePath = path.join(`E:\\tworspace\\zh-admin-vue\\src\\api`);
+        const filePath = path.join(address, `src\\api`);
         const files = fs.readdirSync(filePath);
         for (let i = 0; i < files.length; i++) {
             const filedir = path.join(filePath, files[i]);

@@ -75,12 +75,21 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, toRefs } from 'vue';
 import { Panel, VueFlow, isNode, useVueFlow, MarkerType, Position, Handle } from '@vue-flow/core'
 import { Background } from '@vue-flow/background';
 import { Controls } from '@vue-flow/controls';
 import { MiniMap } from '@vue-flow/minimap';
 import { ipcRenderer } from "electron";
+
+const props = defineProps({
+  workspacePath: {
+    type: String,
+    required: true, // 必传
+  },
+});
+
+const { workspacePath } = toRefs(props);
 
 const { onPaneReady, onNodeDragStop, onConnect, addEdges, setTransform, toObject, fitView } = useVueFlow()
 
@@ -89,7 +98,7 @@ const originData = ref([] as any);
 // 高：60, 间距：100
 const elements = ref([] as any);
 onMounted(async () => {
-  originData.value = ipcRenderer.sendSync('file:getApiList', '');
+  originData.value = ipcRenderer.sendSync('file:getApiList', workspacePath.value);
   await nextTick();
 
   iniData();

@@ -71,7 +71,7 @@
                     </el-scrollbar>
                 </Pane>
                 <Pane size="60" style="height: 100%; overflow-y: hidden; " class="center">
-                    <API v-if="selectNode && selectNode.toLowerCase() === 'api'"></API>
+                    <API v-if="selectNode && selectNode.toLowerCase() === 'api'" :workspacePath="workspacePath"></API>
                     <Setting v-else-if="selectNode && selectNode.toLowerCase() === '项目配置'"></Setting>
                     <Environment v-else-if="selectNode && selectNode.toLowerCase() === '环境配置'"></Environment>
                     <div v-else-if="selectNode && selectNode.toLowerCase() === '界面'">界面配置首页</div>
@@ -99,6 +99,7 @@
 
 <script lang="ts" setup>
 import { nextTick, onMounted, ref } from 'vue';
+import {useRouter, useRoute} from 'vue-router'
 import { ipcRenderer } from "electron";
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css'
@@ -113,6 +114,10 @@ import PageConfig from './config/PageConfig.vue';
 
 // 界面管理
 import PageAddEditModal from './page/pageAddEditModal';
+
+const router = useRouter();
+
+const workspacePath = ref((router?.currentRoute?.value?.query?.address || '') as string);
 
 const setTreeData = async () => {
     const res = ipcRenderer.sendSync('file:getRouter');
@@ -213,36 +218,6 @@ const clickAddPage = (e: any, node: any, data: any) => {
     } else {
         pageAddEditModal.modalConfig.value.data = null;
     }
-
-    // console.log(node);
-    // console.log(data);
-
-    // const route = {
-    //     routeName: '测试页',
-    //     filePath: 'views/test/index',
-    //     menuType: 2,
-    //     routeCode: 'test',
-    //     sortNo: 1,
-    //     icon: 'icon-shouye-copy-copy',
-    //     description: '',
-    // };
-
-    // const res = ipcRenderer.sendSync('file:AddRouter', JSON.stringify(route), JSON.stringify(data));
-    // console.log('res: ', res);
-
-    // const route1 = {
-    //     routeName: '测试页1',
-    //     filePath: 'views/test/test1/index',
-    //     menuType: 2,
-    //     routeCode: 'test1',
-    //     sortNo: 1,
-    //     icon: 'icon-shouye-copy-copy',
-    //     description: '',
-    //     parentId: res.data.route.id,
-    // };
-
-    // const res1 = ipcRenderer.sendSync('file:AddRouter', JSON.stringify(route1) , JSON.stringify(res.data.route));
-    // console.log('res: ', res1);
 };
 
 </script>

@@ -110,9 +110,9 @@ export default class Project {
                     hasRowDeleteAction: isManage,
                     hasRowEditAction: isManage,
                     buttons: !isManage ? [
-                        { label: '进入', type: 'primary', onClick: () => {    ipcRenderer.send('window:create', {
+                        { label: '进入', type: 'primary', onClick: (row:any) => {    ipcRenderer.send('window:create', {
                             name: 'dashboard',
-                            route: 'dashboard',
+                            route: 'dashboard?address=' + row.address,
                         });} },
                         { label: '部署', type: 'success' },
                     ] : [],
