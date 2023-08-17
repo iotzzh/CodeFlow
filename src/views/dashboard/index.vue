@@ -83,7 +83,7 @@
                 </Pane>
                 <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">
                     <PageConfig v-if="selectNode && selectNode.toLowerCase() === '界面'"></PageConfig>
-                    <APIConfig v-if="selectNode && selectNode.toLowerCase() === 'api'"></APIConfig>
+                    <APIConfig v-if="selectNode && selectNode.toLowerCase() === 'api'" :workspacePath="workspacePath"></APIConfig>
                     <div v-else>暂未设计</div>
                 </Pane>
             </Splitpanes>

@@ -99,5 +99,43 @@ export const updateRouter = () => { };
 // 删除路由，当删除父层时，子层也被删除
 export const deleteRouter = () => { };
 
+//#endregion
 
+
+//#region vite.config.json文件配置
+export const getProxy = async (event, address) => {
+    try {
+        const res = new TReturn();
+        const filePath = path.join(address, 'vite.config.json');
+        const fileData = await fs.readFileSync(filePath, { encoding: 'utf8' });
+        const proxyObj = JSON.parse(fileData).server.proxy;
+        const keys = Object.keys(proxyObj);
+        const proxyes = [];
+        for (let i = 0; i < keys.length; i++) {
+            proxyes.push({ name: keys[i], value: proxyObj[keys[i]] });
+        }
+        res.data = proxyes;
+        event.returnValue = res;
+    } catch(err) {
+        event.returnValue = { success: false, error: err } as TReturn;
+    }
+};
+
+export const updateProxy = async (event, address, newProxy) => {
+    try {
+        const res = new TReturn();
+        const filePath = path.join(address, 'vite.config.json');
+        const fileData = await fs.readFileSync(filePath, { encoding: 'utf8' });
+        let proxyObj = JSON.parse(fileData).server.proxy;
+
+        const newProxyes = {};
+        for (let i = 0; i < newProxy.length; i++) {
+            newProxyes[newProxy[i].name] = newProxy[i].value;
+        }
+        proxyObj = newProxy;
+        event.returnValue = res;
+    } catch(err) {
+        event.returnValue = { success: false, error: err } as TReturn;
+    }
+};
 //#endregion

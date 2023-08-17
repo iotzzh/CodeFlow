@@ -7,7 +7,7 @@
         <!-- xs: <768, sm: >=768, md: >= 992, lg: >= 1200, xl: >= 1920 -->
         <el-col v-for="(item, index) in fieldList" :key="index" :span="item.span" :xl="item.xl" :lg="item.lg" :md="item.md" :sm="item.sm" :xs="item.xs" 
         :style="{ maxWidth: item.maxWidth, minWidth: item.minWidth }"
-        v-show="item.hide === undefined ? true : typeof item.hide === 'function' ? !item.hide(modelValue) : !item.hide "
+        v-show="item.hide === undefined ? true : typeof item.hide === 'function' ? !item.hide(modelValue) : !item.hide"
           >
           <el-form-item :key="'form-item' + index" :label="item.label" :prop="item.prop" :label-width="item.labelWidth"
              v-if="item.prop">
@@ -28,6 +28,20 @@
             <span v-if="item.type === 'text'" :style="{ width: item.width ? `${item.width}` : '100%' }">{{
               modelValue[item.prop]
             }}</span>
+
+            <!-- 标题显示 -->
+            <span v-if="item.type === 'text-title'" :style="{ width: item.width ? `${item.width}` : '100%', fontWeight: 'bolder', margin: '0 auto', textAlign: 'center', ...item.style }">{{
+              modelValue[item.prop]
+            }}</span>
+
+            <!-- button -->
+            <el-button v-if="item.type === 'button'" 
+            :type="item.buttonType"
+            :icon="item.icon"
+            :style="{ width: item.width ? `${item.width}` : '100%', margin: '0 auto', ...item.style }" 
+            @click="(e:any) => item.clickMethod && item.clickMethod(e, modelValue)">{{
+              modelValue[item.prop]
+            }}</el-button>
 
             <!-- 开关 -->
             <el-switch v-else-if="item.type === 'switch'" :active-text="item.activeText"
