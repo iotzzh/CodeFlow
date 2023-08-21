@@ -31,6 +31,16 @@ export const getApiList = async (event, address) => {
     }
 }
 
+export const updateApi = async (event, address, fileName, content) => {
+    try {
+        const res = [];
+        createFile(address, fileName, content);
+        event.returnValue = res;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 //#endregion
 
 

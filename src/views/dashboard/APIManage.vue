@@ -111,18 +111,23 @@ onMounted(async () => {
 
 const iniData = () => {
   const root = originData.value.find((x:any) => x.name === 'index.json');
-  elements.value.push({ id: '0', type: 'custom', data: { type: 'custom', ...root.data, fileName: 'index.json' }, label: 'API管理', position: { x: 0, y: 0 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
+  elements.value.push({ id: '0', type: 'custom', data: { type: 'file', ...root.data, fileName: 'index.json' }, label: 'API管理', position: { x: 0, y: 0 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
   for (let i = 0; i < originData.value.length; i++) {
     if (originData.value[i].name === 'index.json') continue;
     const id = originData.value[i].name;
     const label = originData.value[i].data.label || originData.value[i].data.name;
-    elements.value.push({ id, label, position: { x: 200, y: 0 }, data: { ...originData.value[i].data, fileName:  originData.value[i].data.name}, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
+    elements.value.push({ id, label, position: { x: 200, y: 0 }, data: { type: 'file', ...originData.value[i].data, fileName:  originData.value[i].data.name}, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
     elements.value.push({ id: 'edge-' + `${originData.value[i].name}`, sourceHandle: 'a', source: '0', target: id, animated: true });
 
     for (let j = 0; j < originData.value[i].data.api.length; j++) {
       const subId = originData.value[i].data.api[j].name;
       const subLabel = originData.value[i].data.api[j].label || originData.value[i].data.api[j].name;
-      elements.value.push({ id: subId, label: subLabel, position: { x: 400, y: 0 }, data: { ...originData.value[i].data.api[j], fileName: originData.value[i].data.api[j].name  }, class: 'light', type: 'output', targetPosition: Position.Left });
+      elements.value.push({ 
+          id: subId, 
+          label: subLabel, 
+          position: { x: 400, y: 0 }, 
+          data: { ...originData.value[i].data.api[j], fileName: originData.value[i].data.api[j].name, type: 'api', fileData: originData.value[i].data },
+          class: 'light', type: 'output', targetPosition: Position.Left });
       elements.value.push({ id: 'edge-' + subId , source: id, target: subId, animated: true, style: { stroke: '#10b981' } });
 
     }

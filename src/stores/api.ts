@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 export default defineStore({
   id: 'api',
   state: () => ({
-    selectedRoute: {},
+    selectedRoute: {} as any,
   }),
 
   persist: true,

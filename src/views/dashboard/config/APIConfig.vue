@@ -22,7 +22,7 @@
                         </div>
                         <div class="action">
                             <el-icon style="color: red;">
-                                <component is="Delete"></component>
+                                <component is="Delete" @click="() => deleteProxy(index)"></component>
                             </el-icon>
                         </div>
                     </div>
@@ -52,15 +52,6 @@ const { workspacePath } = toRefs(props);
 const apiStore = useApiStore();
 
 const model = ref({} as any);
-
-
-watch(() => apiStore.selectedRoute, (newVal:any) => {
-    console.log('newVal: ', newVal);
-    model.value.label = newVal.data.label;
-    model.value.localUseMock = newVal.data.localUseMock;
-    model.value.useMock = newVal.data.useMock;
-});
-
 
 const config = ref({
     fields: [
@@ -109,6 +100,12 @@ const updateProxy = (newVal: any) => {
     console.log(res);
 };
 
+const deleteProxy = (index:any) => {
+    proxyes.value.splice(index, 1);
+    const res = ipcRenderer.sendSync('file:updateProxy', workspacePath.value, proxyes.value);
+    console.log(res);
+};
+
 const thisDebounce = ref();
 
 watch(() => proxyes.value, (newVal: any, oldVal: any) => {
@@ -119,6 +116,39 @@ watch(() => proxyes.value, (newVal: any, oldVal: any) => {
         updatePrefix(newVal);
     }, 2000)
 }, { deep: true });
+
+watch(() => apiStore.selectedRoute, (newVal:any) => {
+    console.log('newVal: ', newVal);
+    model.value = newVal.data;
+    // model.value.label = newVal.data.label;
+    // model.value.localUseMock = newVal.data.localUseMock;
+    // model.value.useMock = newVal.data.useMock;
+});
+
+
+watch(() => model.value, (newVal: any, oldVal: any) => {
+    if (!oldVal ||  Object.keys(oldVal).length === 0) return;
+    const keys = Object.keys(newVal);
+
+    if (apiStore.selectedRoute.data.type === 'file') {
+        const newRoute = JSON.parse(JSON.stringify(apiStore.selectedRoute.data));
+        for (let key in keys) {
+            newRoute[key] = newVal[key];
+        }
+        
+        const res = ipcRenderer.sendSync('file:updateApi', workspacePath.value, apiStore.selectedRoute.data.fileName, JSON.stringify(newRoute));
+        console.log(res);
+    } else {
+        // fileData
+        const fileData = JSON.parse(JSON.stringify(apiStore.selectedRoute.data.fileData));
+        const api = fileData.api.find((x:any) => x.name === model.value.name);
+        for (let key in keys) {
+            api[key] = newVal[key];
+        }
+        const res = ipcRenderer.sendSync('file:updateApi', workspacePath.value, apiStore.selectedRoute.data.fileName, JSON.stringify(fileData));
+        console.log(res);
+    }
+});
 
 
 
