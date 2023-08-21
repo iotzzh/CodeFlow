@@ -29,7 +29,7 @@
         "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
       },
       "runtimeArgs": [
-        "--remote-debugging-port=9229",
+        "--remote-debugging-port=9000",
         ".",
       ],
       "envFile": "${workspaceFolder}/.vscode/.debug.env",
@@ -37,7 +37,7 @@
     },
     {
       "name": "Debug Renderer Process",
-      "port": 9229,
+      "port": 9000,
       "request": "attach",
       "type": "chrome",
       "timeout": 60000,

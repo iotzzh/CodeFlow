@@ -21,7 +21,7 @@ export const getApiList = async (event, address) => {
         const files = fs.readdirSync(filePath);
         for (let i = 0; i < files.length; i++) {
             const filedir = path.join(filePath, files[i]);
-            if (!files[i].endsWith('.json')) continue;
+            if (!files[i].endsWith('.json') || files[i] === 'index.json' ) continue;
             const fileData = await fs.readFileSync(filedir, { encoding: 'utf8' });
             res.push({ name: files[i], data: JSON.parse(fileData) });
         }
@@ -121,21 +121,27 @@ export const getProxy = async (event, address) => {
     }
 };
 
-export const updateProxy = async (event, address, newProxy) => {
+export const updateProxy = async (event, address, newProxyArr) => {
     try {
         const res = new TReturn();
         const filePath = path.join(address, 'vite.config.json');
         const fileData = await fs.readFileSync(filePath, { encoding: 'utf8' });
-        let proxyObj = JSON.parse(fileData).server.proxy;
+        const fileDataObj = JSON.parse(fileData);
+        let proxyObj = fileDataObj.server.proxy;
 
         const newProxyes = {};
+        const newProxy = JSON.parse(newProxyArr);
         for (let i = 0; i < newProxy.length; i++) {
             newProxyes[newProxy[i].name] = newProxy[i].value;
         }
-        proxyObj = newProxy;
+        fileDataObj.server.proxy = newProxyes;
+        console.log('fileDataObj: ', fileDataObj);
+        createFile(address, 'vite.config.json', JSON.stringify(fileDataObj));
         event.returnValue = res;
     } catch(err) {
         event.returnValue = { success: false, error: err } as TReturn;
+    } finally {
+        prettierCode(address);
     }
 };
 //#endregion

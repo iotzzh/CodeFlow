@@ -55,7 +55,9 @@
                 typeof item.disabled === 'boolean' ? item.disabled : item.disabled(modelValue)"
               :clearable="item.clearable" />
               
+            <!-- 选择下拉框 -->
             <ZHSelect v-else-if="item.type === 'select'"
+            :ref="(el: any) => { if (item.refName) itemRefs[item.refName] = el; }"
             :style="{ width: item.width ? `${item.width}` : '100%' }"
             v-model="modelValue[item.prop]" :defaultOptions="item.defaultOptions"
               :api="item.api" :value-key="item.valueKey" :label-field="item.labelField" :value-field="item.valueField">

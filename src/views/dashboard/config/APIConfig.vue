@@ -47,11 +47,49 @@ const props = defineProps({
 });
 
 const { workspacePath } = toRefs(props);
+const model = ref({});
+
+const config = ref({
+    fields: [
+        { label: '', prop: 'titleMain', type: 'text-title', labelWidth: '0px', defaultValue: 'API管理', style: { fontSize: '20px' } },
+        { label: '', prop: 'titleGeneral', type: 'text-title', labelWidth: '0px', defaultValue: '通用配置', style: {} },
+        { label: '标签', prop: 'label', type: 'input', style: {} },
+
+        { label: '', prop: 'title1', type: 'text-title', labelWidth: '0px', defaultValue: '本地配置', style: {} },
+        { label: 'Mock', prop: 'useMock1', type: 'select', defaultOptions: [{ label: '继承', value: null }, { label: '使用', value: true }, { label: '不使用', value: false }] },
+        { label: '前缀', prop: 'localPrefix', type: 'select', valueField: 'name', labelField: 'name', valueKey: 'name', convert: (field:any) => field.name},
+
+        { label: '', prop: 'title2', type: 'text-title', labelWidth: '0px', defaultValue: '部署配置', style: {} },
+        { label: 'Mock', prop: 'useMock3', type: 'select', defaultOptions: [{ label: '继承', value: null }, { label: '使用', value: true }, { label: '不使用', value: false }] },
+        { label: '前缀', prop: 'prefix', type: 'select', valueField: 'name', labelField: 'name', valueKey: 'name', convert: (field:any) => field.name },
+
+        { label: '', prop: 'title3', type: 'text-title', labelWidth: '0px', defaultValue: '本地代理配置', style: {} },
+
+        {
+            label: '', prop: 'button1', type: 'button', buttonType: 'primary', defaultValue: '新增代理', icon: 'Plus', style: {},
+            clickMethod: () => {
+                proxyes.value.unshift({ name: '/api', value: { target: 'https://' }, changeOrigin: true });
+            },
+        },
+    ]
+} as TZHformConfig);
+
+const activeName = ref('1')
+
 const proxyes = ref([] as any);
+
 onMounted(() => {
     const res = ipcRenderer.sendSync('file:getProxy', workspacePath.value);
     proxyes.value = res.data;
+    updatePrefix(res.data);
 });
+
+const updatePrefix = (data:any) => {
+    const fields:any = config.value.fields?.filter((x:any) => x.label === '前缀');
+    fields && fields.forEach((x:any) => {
+        x.defaultOptions = data;
+    });
+};
 
 const updateProxy = (newVal: any) => {
     const res = ipcRenderer.sendSync('file:updateProxy', workspacePath.value, newVal);
@@ -60,44 +98,18 @@ const updateProxy = (newVal: any) => {
 
 const thisDebounce = ref();
 
-watch(() => proxyes.value, (newVal: any) => {
+watch(() => proxyes.value, (newVal: any, oldVal: any) => {
+    if (!oldVal ||  Object.keys(oldVal).length === 0) return;
     if (thisDebounce.value) clearTimeout(thisDebounce.value)
     thisDebounce.value = setTimeout(() => {
-        updateProxy(newVal)
+        updateProxy(newVal ? JSON.stringify(newVal) : '');
+        updatePrefix(newVal);
     }, 2000)
 }, { deep: true });
 
-const model = ref({});
-
-const config = ref({
-    fields: [
-        { label: '', prop: 'title0', type: 'text-title', labelWidth: '0px', defaultValue: 'API管理', style: { fontSize: '20px' } },
-        { label: '', prop: 'title00', type: 'text-title', labelWidth: '0px', defaultValue: '通用配置', style: {} },
-        { label: '标签', prop: 'label', type: 'input', style: {} },
-
-        { label: '', prop: 'title1', type: 'text-title', labelWidth: '0px', defaultValue: '本地配置', style: {} },
-        { label: 'Mock', prop: 'useMock', type: 'select', defaultOptions: [{ label: '继承', value: null }, { label: '使用', value: true }, { label: '不使用', value: false }] },
-        { label: '前缀', prop: 'useMock', type: 'select', defaultOptions: [{ label: '继承', value: null }, { label: '使用', value: true }, { label: '不使用', value: false }] },
-
-        { label: '', prop: 'title2', type: 'text-title', labelWidth: '0px', defaultValue: '部署配置', style: {} },
-        { label: 'Mock', prop: 'useMock', type: 'select', defaultOptions: [{ label: '继承', value: null }, { label: '使用', value: true }, { label: '不使用', value: false }] },
-        { label: '前缀', prop: 'useMock', type: 'select', defaultOptions: [{ label: '继承', value: null }, { label: '使用', value: true }, { label: '不使用', value: false }] },
 
 
-        { label: '', prop: 'button0', type: 'button', buttonType: 'primary', defaultValue: '保存', style: {} },
 
-        { label: '', prop: 'title3', type: 'text-title', labelWidth: '0px', defaultValue: '本地代理配置', style: {} },
-
-        {
-            label: '', prop: 'button1', type: 'button', buttonType: 'primary', defaultValue: '新增代理', icon: 'Plus', style: {},
-            clickMethod: () => {
-                proxyes.value.unshift({ name: '/api', value: { target: 'https://' } });
-            },
-        },
-    ]
-} as TZHformConfig);
-
-const activeName = ref('1')
 </script>
 
 <style lang="scss" scoped>
@@ -136,4 +148,5 @@ const activeName = ref('1')
         width: 40px;
     }
 
-}</style>
+}
+</style>

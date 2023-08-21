@@ -234,7 +234,8 @@ const useLabelField = (item: any) => {
 };
 
 const loading = ref(false);
-const options = ref(defaultOptions && defaultOptions.value);
+// const options = ref(defaultOptions && defaultOptions.value);
+const options = computed(() => defaultOptions && defaultOptions.value );
 
 const getDeepValue = (obj: any, currProp: any, level: number): any => {
     let value = obj[currProp]; // 当前层级的属性值
