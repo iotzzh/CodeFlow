@@ -36,6 +36,7 @@
 import { onMounted, ref, toRefs, watch } from 'vue';
 import ZHForm from '@/components/zh-form/index.vue';
 import { debounce } from 'lodash';
+import { useApiStore } from '@/stores';
 
 import { TZHformConfig } from '@/components/zh-form/type';
 import { ipcRenderer } from 'electron';
@@ -47,20 +48,32 @@ const props = defineProps({
 });
 
 const { workspacePath } = toRefs(props);
-const model = ref({});
+
+const apiStore = useApiStore();
+
+const model = ref({} as any);
+
+
+watch(() => apiStore.selectedRoute, (newVal:any) => {
+    console.log('newVal: ', newVal);
+    model.value.label = newVal.data.label;
+    model.value.localUseMock = newVal.data.localUseMock;
+    model.value.useMock = newVal.data.useMock;
+});
+
 
 const config = ref({
     fields: [
-        { label: '', prop: 'titleMain', type: 'text-title', labelWidth: '0px', defaultValue: 'API管理', style: { fontSize: '20px' } },
+        { label: '', prop: 'label', type: 'text-title', labelWidth: '0px', defaultValue: 'API管理', style: { fontSize: '20px' } },
         { label: '', prop: 'titleGeneral', type: 'text-title', labelWidth: '0px', defaultValue: '通用配置', style: {} },
         { label: '标签', prop: 'label', type: 'input', style: {} },
 
         { label: '', prop: 'title1', type: 'text-title', labelWidth: '0px', defaultValue: '本地配置', style: {} },
-        { label: 'Mock', prop: 'useMock1', type: 'select', defaultOptions: [{ label: '继承', value: null }, { label: '使用', value: true }, { label: '不使用', value: false }] },
+        { label: 'Mock', prop: 'localUseMock', type: 'select', defaultOptions: [{ label: '继承', value: null }, { label: '使用', value: true }, { label: '不使用', value: false }] },
         { label: '前缀', prop: 'localPrefix', type: 'select', valueField: 'name', labelField: 'name', valueKey: 'name', convert: (field:any) => field.name},
 
         { label: '', prop: 'title2', type: 'text-title', labelWidth: '0px', defaultValue: '部署配置', style: {} },
-        { label: 'Mock', prop: 'useMock3', type: 'select', defaultOptions: [{ label: '继承', value: null }, { label: '使用', value: true }, { label: '不使用', value: false }] },
+        { label: 'Mock', prop: 'useMock', type: 'select', defaultOptions: [{ label: '继承', value: null }, { label: '使用', value: true }, { label: '不使用', value: false }] },
         { label: '前缀', prop: 'prefix', type: 'select', valueField: 'name', labelField: 'name', valueKey: 'name', convert: (field:any) => field.name },
 
         { label: '', prop: 'title3', type: 'text-title', labelWidth: '0px', defaultValue: '本地代理配置', style: {} },

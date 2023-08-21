@@ -21,7 +21,7 @@ export const getApiList = async (event, address) => {
         const files = fs.readdirSync(filePath);
         for (let i = 0; i < files.length; i++) {
             const filedir = path.join(filePath, files[i]);
-            if (!files[i].endsWith('.json') || files[i] === 'index.json' ) continue;
+            if (!files[i].endsWith('.json')) continue;
             const fileData = await fs.readFileSync(filedir, { encoding: 'utf8' });
             res.push({ name: files[i], data: JSON.parse(fileData) });
         }

@@ -81,6 +81,7 @@ import { Background } from '@vue-flow/background';
 import { Controls } from '@vue-flow/controls';
 import { MiniMap } from '@vue-flow/minimap';
 import { ipcRenderer } from "electron";
+import { useApiStore } from '@/stores';
 
 const props = defineProps({
   workspacePath: {
@@ -90,6 +91,8 @@ const props = defineProps({
 });
 
 const { workspacePath } = toRefs(props);
+
+const apiStore = useApiStore();
 
 const { onPaneReady, onNodeDragStop, onConnect, addEdges, setTransform, toObject, fitView } = useVueFlow()
 
@@ -107,17 +110,19 @@ onMounted(async () => {
 });
 
 const iniData = () => {
-  elements.value.push({ id: '0', type: 'custom', data: { type: 'custom' }, label: 'API管理', position: { x: 0, y: 0 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
+  const root = originData.value.find((x:any) => x.name === 'index.json');
+  elements.value.push({ id: '0', type: 'custom', data: { type: 'custom', ...root.data, fileName: 'index.json' }, label: 'API管理', position: { x: 0, y: 0 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
   for (let i = 0; i < originData.value.length; i++) {
+    if (originData.value[i].name === 'index.json') continue;
     const id = originData.value[i].name;
     const label = originData.value[i].data.label || originData.value[i].data.name;
-    elements.value.push({ id, label, position: { x: 200, y: 0 }, data: originData.value[i], class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
+    elements.value.push({ id, label, position: { x: 200, y: 0 }, data: { ...originData.value[i].data, fileName:  originData.value[i].data.name}, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
     elements.value.push({ id: 'edge-' + `${originData.value[i].name}`, sourceHandle: 'a', source: '0', target: id, animated: true });
 
     for (let j = 0; j < originData.value[i].data.api.length; j++) {
       const subId = originData.value[i].data.api[j].name;
       const subLabel = originData.value[i].data.api[j].label || originData.value[i].data.api[j].name;
-      elements.value.push({ id: subId, label: subLabel, position: { x: 400, y: 0 }, class: 'light', type: 'output', targetPosition: Position.Left });
+      elements.value.push({ id: subId, label: subLabel, position: { x: 400, y: 0 }, data: { ...originData.value[i].data.api[j], fileName: originData.value[i].data.api[j].name  }, class: 'light', type: 'output', targetPosition: Position.Left });
       elements.value.push({ id: 'edge-' + subId , source: id, target: subId, animated: true, style: { stroke: '#10b981' } });
 
     }
@@ -132,8 +137,8 @@ const doLayout = async () => {
   const col2Items = elements.value.filter((x:any) => col2Edges.find((y:any) => y.target === x.id));
   let y = 0;
   for (let i = 0; i < col2Items.length; i++) {
-    if (col2Items[i].data.data.api.length > 0) {
-      col2Items[i].position.y = y + LINE_HEIGHT * col2Items[i].data.data.api.length / 2 - 25;
+    if (col2Items[i].data.api.length > 0) {
+      col2Items[i].position.y = y + LINE_HEIGHT * col2Items[i].data.api.length / 2 - 25;
 
 
       let y3 = y;
@@ -144,7 +149,7 @@ const doLayout = async () => {
           y3 += LINE_HEIGHT;
         }
 
-      y += LINE_HEIGHT * col2Items[i].data.data.api.length;
+      y += LINE_HEIGHT * col2Items[i].data.api.length;
     } else {
       col2Items[i].position.y = y;
       y += LINE_HEIGHT;
@@ -191,11 +196,13 @@ const appendChild = (node: any) => {
 };
 
 const nodeClickHandler = (props: any) => {
+  console.log('props: ', props);
   if (selectedNode?.value?.id === props?.node?.id) return;
   selectedNode.value = props.node;
   // appendChild(props.node);
   console.log(props.node);
   console.log(props.event);
+  apiStore.setSelectedRoute(props.node);
 };
 
 onNodeDragStop((e) => console.log('drag stop', e))
@@ -242,15 +249,7 @@ function toggleClass() {
 }
 
 
-const sourceHandleStyleA = computed(() => ({ backgroundColor: 'blue', filter: 'invert(100%)', top: '50%' }))
-
-const sourceHandleStyleB = computed(() => ({
-  backgroundColor: 'red',
-  filter: 'invert(100%)',
-  bottom: '10px',
-  top: 'auto',
-}))
-
+const sourceHandleStyleA = computed(() => ({ backgroundColor: 'blue', filter: 'invert(100%)', top: '50%' }));
 </script>
 
 <style>
