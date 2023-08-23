@@ -40,6 +40,7 @@ import { useApiStore } from '@/stores';
 
 import { TZHformConfig } from '@/components/zh-form/type';
 import { ipcRenderer } from 'electron';
+import ZHRequest from '@/components/zh-request';
 const props = defineProps({
     workspacePath: {
         type: String,
@@ -144,7 +145,8 @@ watch(() => model.value, async (newVal: any, oldVal: any) => {
             if (KEYS.find(x => x === key)) newRoute[key] = newVal[key];
         }
         console.log(' apiStore.selectedRoute: ', apiStore.selectedRoute);
-        const res = await ipcRenderer.sendSync('file:updateApi', workspacePath.value, apiStore.selectedRoute.fileName, JSON.stringify(newRoute));
+        // const res = await ipcRenderer.sendSync('file:updateApi', workspacePath.value, apiStore.selectedRoute.fileName, JSON.stringify(newRoute));
+        const res = await ZHRequest.post({ url: 'file:updateApi', conditions: { address: workspacePath.value, fileName: apiStore.selectedRoute.fileName, content: newRoute } });
 
     } else if (apiStore?.selectedRoute?.type === 'api') {
         // fileData
@@ -154,7 +156,8 @@ watch(() => model.value, async (newVal: any, oldVal: any) => {
             if (KEYS.find(x => x === key)) api[key] = newVal[key];
         }
         console.log(' apiStore.selectedRoute: ', apiStore.selectedRoute);
-        const res = await ipcRenderer.sendSync('file:updateApi', workspacePath.value, apiStore.selectedRoute.fileName, JSON.stringify(fileData));
+        // const res = await ipcRenderer.sendSync('file:updateApi', workspacePath.value, apiStore.selectedRoute.fileName, JSON.stringify(fileData));
+        const res = await ZHRequest.post({ url: 'file:updateApi', conditions: { address: workspacePath.value, fileName: apiStore.selectedRoute.fileName, content: fileData } });
     } else {
         console.log('未知类型');
     }

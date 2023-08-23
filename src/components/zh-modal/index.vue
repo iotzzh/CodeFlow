@@ -2,6 +2,7 @@
   <el-dialog v-model="modalConfig.show" v-if="modalConfig.show" :title="modalConfig.title" :closeOnClickModal="false"
     :width="isMobile ? '90%' : modalConfig.width || ''" @close="zhModal.close" :top="modalConfig.top"
     :fullscreen="zhModal.fullscreen.value" :class="classNames" @opened="zhModal.opened" :append-to-body="true"
+    :draggable="modalConfig.draggable"
     @closed="zhModal.closed" :destroy-on-close="modalConfig.destroyOnClose" :show-close="modalConfig.showClose === undefined ? true : modalConfig.showClose">
     <div class="body-box" v-loading="modalConfig.loadingPage">
       <slot></slot>

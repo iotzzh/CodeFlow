@@ -15,7 +15,7 @@ export default { prefix: 'file' };
 //#region API文件操作
 export const getApiList = async (event, address) => {
     try {
-        const res = [];
+        const res = new TReturn();
         // const filePath = path.join(`E:\\tworspace\\zh-admin-vue\\src\\api`);
         const filePath = path.join(address, `src\\api`);
         const files = fs.readdirSync(filePath);
@@ -23,28 +23,31 @@ export const getApiList = async (event, address) => {
             const filedir = path.join(filePath, files[i]);
             if (!files[i].endsWith('.json')) continue;
             const fileData = await fs.readFileSync(filedir, { encoding: 'utf8' });
-            res.push({ name: files[i], data: JSON.parse(fileData) });
+            res.data.records.push({ name: files[i], data: JSON.parse(fileData) });
         }
         event.returnValue = res;
     } catch (err) {
-        console.log(err);
+        event.returnValue = { success: false, error: err } as TReturn;
     }
 }
 
-export const updateApi = async (event, address, fileName, content) => {
-    if(!address || !fileName) return;
+export const updateApi = async (event, params = '{}') => {
+    const { address, fileName, content } = JSON.parse(params);
+
+    const res = new TReturn();
+    if(!address || !fileName) return res;
     try {
         const res = [];
         const filePath = path.join(address, `src\\api`);
         await createFile(filePath, fileName, content);
         event.returnValue = res;
     } catch (err) {
-        console.log(err);
+        event.returnValue = { success: false, error: err } as TReturn;
     } finally {
         prettierCode(address);
     }
+    event.returnValue = res;
 }
-
 //#endregion
 
 

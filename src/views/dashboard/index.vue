@@ -104,10 +104,10 @@ import { ipcRenderer } from "electron";
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css'
 import ZHFormModal from '@/components/zh-form-modal/index.vue';
-import API from './APIManage.vue';
+import API from './api/APIManage.vue';
 import Environment from './Environment.vue';
 import Setting from './Setting.vue';
-import APIConfig from './config/APIConfig.vue';
+import APIConfig from './api/APIConfig.vue';
 
 // 配置项目
 import PageConfig from './config/PageConfig.vue';
