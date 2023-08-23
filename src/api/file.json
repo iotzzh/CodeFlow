@@ -6,6 +6,9 @@
     "api": [
         { "name": "getApiList", "url": "file:getApiList", "prefix": "", "localPrefix": "", "useMock": false },
         { "name": "updateApi", "url": "file:updateApi", "prefix": "", "localPrefix": "", "useMock": false },
+        { "name": "deleteApiFile", "url": "file:deleteApiFile", "prefix": "", "localPrefix": "", "useMock": false },
+
+
         { "name": "getRouter", "url": "file:getRouter", "prefix": "", "localPrefix": "", "useMock": false },
         { "name": "AddRouter", "url": "file:AddRouter", "prefix": "", "localPrefix": "", "useMock": false },
         { "name": "updateRouter", "url": "file:updateRouter", "prefix": "", "localPrefix": "", "useMock": false },

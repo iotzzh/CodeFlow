@@ -1,5 +1,5 @@
 import { TReturn } from "./entity";
-import { createFolder, createFile } from '../utils/file';
+import { createFolder, createFile, delteFile } from '../utils/file';
 import TreeHelper from "../utils/treeHelper";
 import { prettierCode } from '../utils/cmd';
 
@@ -39,6 +39,23 @@ export const updateApi = async (event, params = '{}') => {
     try {
         const filePath = path.join(address, `src\\api`);
         await createFile(filePath, fileName, content);
+        event.returnValue = res;
+    } catch (err) {
+        event.returnValue = { success: false, error: err } as TReturn;
+    } finally {
+        prettierCode(address);
+    }
+    event.returnValue = res;
+}
+
+export const deleteApiFile = async (event, params = '{}') => {
+    const { address, fileName } = JSON.parse(params);
+
+    const res = new TReturn();
+    if(!address || !fileName) return res;
+    try {
+        const filePath = path.join(address, `src\\api`);
+        await delteFile(filePath, fileName);
         event.returnValue = res;
     } catch (err) {
         event.returnValue = { success: false, error: err } as TReturn;

@@ -18,7 +18,7 @@
         <div v-else-if="data.type === 'file'" style="display: flex;" class="api-file">
           <!-- <div class="action" style="display: flex; flex-direction: column; position: absolute; left: 10px; top: 50%; transform: translate(-50%, -50%);"> -->
           <div class="action" style="width: 30px; text-align: center;">
-            <el-icon style="color: red; cursor: pointer;" :size="12">
+            <el-icon style="color: red; cursor: pointer;" :size="12" @click="(e:any) => deleteFile(e, data)">
               <component is="Delete"></component>
             </el-icon>
           </div>
@@ -132,6 +132,10 @@ import { ipcRenderer } from "electron";
 import { useApiStore } from '@/stores';
 import AddAPIModal from './AddAPIModal';
 import ZHFormModal from '@/components/zh-form-modal/index.vue';
+import { TZHRequestParams } from '@/components/zh-request/type';
+import api from '@/api';
+import ZHRequest from '@/components/zh-request';
+import { isMessageConfirm, popErrorMessage } from '@/components/zh-message';
 
 const props = defineProps({
   workspacePath: {
@@ -351,6 +355,30 @@ const openAddFileModal = (e: any) => {
   console.log('天窗');
   addAPIModal.modalConfig.value.show = true;
 };
+
+const deleteFile = async (e:any, data: any) => {
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+
+  const qRes = await isMessageConfirm('删除后，该文件内API也会被删除', '提示');
+  if(!qRes) return;
+  const address = workspacePath.value;
+  const fileName = data.fileName;
+  const conditions: { [x: string]: any } = {
+    address,
+    fileName,
+  };
+
+
+  const params: TZHRequestParams = { url: api.deleteApiFile, conditions };
+  const res = await ZHRequest.post(params);
+  if (res.success) {
+    refresh();
+  } else {
+    popErrorMessage(res.error);
+  }
+};
 </script>
 
 <style>
@@ -437,4 +465,5 @@ const openAddFileModal = (e: any) => {
   justify-content: center;
   border-radius: 5px;
   background: linear-gradient(to right, lightBlue, transparent);
-}</style>
+}
+</style>
