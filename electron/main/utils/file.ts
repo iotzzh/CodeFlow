@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fsPromises = require('fs').promises;
 const path = require('path');
 
 export const createFolder = (currentFolder: string, folderName: string) => {
@@ -11,6 +12,6 @@ export const createFile = async (currentFolder: string, fileName: string, conten
     if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath, { recursive: true });
       }
-    const res = await fs.promises.writeFile(filePath,  content);
-    console.log(res);
+    const res = await fsPromises.writeFile(filePath,  content);
+    // console.log('createFile: ', res);
 };

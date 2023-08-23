@@ -32,12 +32,16 @@ export const getApiList = async (event, address) => {
 }
 
 export const updateApi = async (event, address, fileName, content) => {
+    if(!address || !fileName) return;
     try {
         const res = [];
-        createFile(address, fileName, content);
+        const filePath = path.join(address, `src\\api`);
+        await createFile(filePath, fileName, content);
         event.returnValue = res;
     } catch (err) {
         console.log(err);
+    } finally {
+        prettierCode(address);
     }
 }
 
@@ -74,7 +78,7 @@ export const AddRouter = async (event, params) => {
         const isFloder = route.menuType === 1; // 1是目录， 2是菜单
         route.id = id;
         if (!route.parent) { // 顶级菜单
-            createFile(routePath, route.routeCode + '.json', JSON.stringify(route));
+            await createFile(routePath, route.routeCode + '.json', JSON.stringify(route));
         } else { // 子菜单
 
             const parentRoute = route.parent;
@@ -87,11 +91,11 @@ export const AddRouter = async (event, params) => {
             delete route.parent;
             item.children.push(route);
 
-            createFile(routePath, fileName + '.json', JSON.stringify(fileData));
+            await createFile(routePath, fileName + '.json', JSON.stringify(fileData));
         }
 
         if (!isFloder) {
-            createFile(pagePath, route.url + '/index.vue', `<template>${route.routeName}</template>`);
+            await createFile(pagePath, route.url + '/index.vue', `<template>${route.routeName}</template>`);
         }
 
         res.data.route = route;
@@ -126,7 +130,7 @@ export const getProxy = async (event, address) => {
         }
         res.data = proxyes;
         event.returnValue = res;
-    } catch(err) {
+    } catch (err) {
         event.returnValue = { success: false, error: err } as TReturn;
     }
 };
@@ -148,7 +152,7 @@ export const updateProxy = async (event, address, newProxyArr) => {
         console.log('fileDataObj: ', fileDataObj);
         createFile(address, 'vite.config.json', JSON.stringify(fileDataObj));
         event.returnValue = res;
-    } catch(err) {
+    } catch (err) {
         event.returnValue = { success: false, error: err } as TReturn;
     } finally {
         prettierCode(address);

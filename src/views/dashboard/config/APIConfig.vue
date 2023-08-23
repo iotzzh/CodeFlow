@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, toRefs, watch } from 'vue';
+import { onMounted, onUnmounted, ref, toRefs, watch } from 'vue';
 import ZHForm from '@/components/zh-form/index.vue';
 import { debounce } from 'lodash';
 import { useApiStore } from '@/stores';
@@ -55,17 +55,19 @@ const model = ref({} as any);
 
 const config = ref({
     fields: [
-        { label: '', prop: 'label', type: 'text-title', labelWidth: '0px', defaultValue: 'API管理', style: { fontSize: '20px' } },
+        { label: '', prop: 'label', type: 'text-title', labelWidth: '0px', defaultValue: 'API配置面板', style: { fontSize: '20px' } },
         { label: '', prop: 'titleGeneral', type: 'text-title', labelWidth: '0px', defaultValue: '通用配置', style: {} },
-        { label: '标签', prop: 'label', type: 'input', style: {} },
+        { label: '标签', prop: 'label', type: 'input', style: {},  },
+        { label: '名称', prop: 'name', type: 'input', style: {}, hide: (model:any) => apiStore?.selectedRoute?.type !== 'api' },
+        { label: 'url', prop: 'url', type: 'input', style: {}, hide: (model:any) => apiStore?.selectedRoute?.type !== 'api' },
 
         { label: '', prop: 'title1', type: 'text-title', labelWidth: '0px', defaultValue: '本地配置', style: {} },
-        { label: 'Mock', prop: 'localUseMock', type: 'select', defaultOptions: [{ label: '继承', value: null }, { label: '使用', value: true }, { label: '不使用', value: false }] },
-        { label: '前缀', prop: 'localPrefix', type: 'select', valueField: 'name', labelField: 'name', valueKey: 'name', convert: (field:any) => field.name},
+        { label: 'Mock', prop: 'localUseMock', type: 'select', defaultOptions: [{ label: '继承', value: '' }, { label: '使用', value: true }, { label: '不使用', value: false }] },
+        { label: '前缀', prop: 'localPrefix', type: 'select' },
 
         { label: '', prop: 'title2', type: 'text-title', labelWidth: '0px', defaultValue: '部署配置', style: {} },
-        { label: 'Mock', prop: 'useMock', type: 'select', defaultOptions: [{ label: '继承', value: null }, { label: '使用', value: true }, { label: '不使用', value: false }] },
-        { label: '前缀', prop: 'prefix', type: 'select', valueField: 'name', labelField: 'name', valueKey: 'name', convert: (field:any) => field.name },
+        { label: 'Mock', prop: 'useMock', type: 'select', defaultOptions: [{ label: '继承', value: '' }, { label: '使用', value: true }, { label: '不使用', value: false }] },
+        { label: '前缀', prop: 'prefix', type: 'select' },
 
         { label: '', prop: 'title3', type: 'text-title', labelWidth: '0px', defaultValue: '本地代理配置', style: {} },
 
@@ -88,10 +90,10 @@ onMounted(() => {
     updatePrefix(res.data);
 });
 
-const updatePrefix = (data:any) => {
-    const fields:any = config.value.fields?.filter((x:any) => x.label === '前缀');
-    fields && fields.forEach((x:any) => {
-        x.defaultOptions = data;
+const updatePrefix = (data: any) => {
+    const fields: any = config.value.fields?.filter((x: any) => x.label === '前缀');
+    fields && fields.forEach((x: any) => {
+        x.defaultOptions = data.map((x: any) => { return { label: x.name, value: x.name } });
     });
 };
 
@@ -100,7 +102,7 @@ const updateProxy = (newVal: any) => {
     console.log(res);
 };
 
-const deleteProxy = (index:any) => {
+const deleteProxy = (index: any) => {
     proxyes.value.splice(index, 1);
     const res = ipcRenderer.sendSync('file:updateProxy', workspacePath.value, proxyes.value);
     console.log(res);
@@ -109,7 +111,7 @@ const deleteProxy = (index:any) => {
 const thisDebounce = ref();
 
 watch(() => proxyes.value, (newVal: any, oldVal: any) => {
-    if (!oldVal ||  Object.keys(oldVal).length === 0) return;
+    if (!oldVal || Object.keys(oldVal).length === 0) return;
     if (thisDebounce.value) clearTimeout(thisDebounce.value)
     thisDebounce.value = setTimeout(() => {
         updateProxy(newVal ? JSON.stringify(newVal) : '');
@@ -117,37 +119,50 @@ watch(() => proxyes.value, (newVal: any, oldVal: any) => {
     }, 2000)
 }, { deep: true });
 
-watch(() => apiStore.selectedRoute, (newVal:any) => {
-    console.log('newVal: ', newVal);
-    model.value = newVal.data;
+watch(() => apiStore.selectedRoute, (newVal: any) => {
+    // console.log('newVal: ', newVal);
+    model.value = { ...model.value, ...newVal.route };
+    // model.value = newVal.route;
     // model.value.label = newVal.data.label;
     // model.value.localUseMock = newVal.data.localUseMock;
     // model.value.useMock = newVal.data.useMock;
 });
 
+const KEYS = ['label', 'prefix', 'useMock', 'localPrefix', 'localUseMock', 'name', 'url'];
 
-watch(() => model.value, (newVal: any, oldVal: any) => {
-    if (!oldVal ||  Object.keys(oldVal).length === 0) return;
+watch(() => model.value, async (newVal: any, oldVal: any) => {
+    // console.log('newVal: ', newVal);
+    // console.log('oldVal: ', oldVal);
+    if (!(newVal.label === oldVal.label && newVal.type === oldVal.type)) return;
     const keys = Object.keys(newVal);
+    // apiStore.selectedRoute.route = newVal;
 
-    if (apiStore.selectedRoute.data.type === 'file') {
-        const newRoute = JSON.parse(JSON.stringify(apiStore.selectedRoute.data));
-        for (let key in keys) {
-            newRoute[key] = newVal[key];
+
+    if (apiStore?.selectedRoute?.type === 'file') {
+        const newRoute = JSON.parse(JSON.stringify(apiStore.selectedRoute.route));
+        for (let key of keys) {
+            if (KEYS.find(x => x === key)) newRoute[key] = newVal[key];
         }
-        
-        const res = ipcRenderer.sendSync('file:updateApi', workspacePath.value, apiStore.selectedRoute.data.fileName, JSON.stringify(newRoute));
-        console.log(res);
-    } else {
+        console.log(' apiStore.selectedRoute: ', apiStore.selectedRoute);
+        const res = await ipcRenderer.sendSync('file:updateApi', workspacePath.value, apiStore.selectedRoute.fileName, JSON.stringify(newRoute));
+
+    } else if (apiStore?.selectedRoute?.type === 'api') {
         // fileData
-        const fileData = JSON.parse(JSON.stringify(apiStore.selectedRoute.data.fileData));
-        const api = fileData.api.find((x:any) => x.name === model.value.name);
-        for (let key in keys) {
-            api[key] = newVal[key];
+        const fileData = JSON.parse(JSON.stringify(apiStore.selectedRoute.fileData));
+        const api = fileData.api.find((x: any) => x.name === model.value.name);
+        for (let key of keys) {
+            if (KEYS.find(x => x === key)) api[key] = newVal[key];
         }
-        const res = ipcRenderer.sendSync('file:updateApi', workspacePath.value, apiStore.selectedRoute.data.fileName, JSON.stringify(fileData));
-        console.log(res);
+        console.log(' apiStore.selectedRoute: ', apiStore.selectedRoute);
+        const res = await ipcRenderer.sendSync('file:updateApi', workspacePath.value, apiStore.selectedRoute.fileName, JSON.stringify(fileData));
+    } else {
+        console.log('未知类型');
     }
+    apiStore.setNeedRefresh(true);
+}, { deep: true, });
+
+onUnmounted(() => {
+    apiStore.clearSelectedRoute();
 });
 
 

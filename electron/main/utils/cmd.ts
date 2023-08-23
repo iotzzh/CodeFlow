@@ -72,5 +72,6 @@ export function getWindows () {
 
 export const prettierCode = async (address:string) => {
   var exec = require('child_process').exec;
-  const res = await exec(`cd E:\\tworspace\\zh-admin-vue\\ && npm run lint:prettier`);
+  const res = await exec(`cd ${address} && npm run lint:prettier`);
+  console.log(res);
 }; 

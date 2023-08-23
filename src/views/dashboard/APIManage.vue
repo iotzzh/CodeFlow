@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, ref, toRefs } from 'vue';
+import { computed, nextTick, onMounted, ref, toRefs, watch } from 'vue';
 import { Panel, VueFlow, isNode, useVueFlow, MarkerType, Position, Handle } from '@vue-flow/core'
 import { Background } from '@vue-flow/background';
 import { Controls } from '@vue-flow/controls';
@@ -101,22 +101,37 @@ const originData = ref([] as any);
 // 高：60, 间距：100
 const elements = ref([] as any);
 onMounted(async () => {
-  originData.value = ipcRenderer.sendSync('file:getApiList', workspacePath.value);
-  await nextTick();
-
-  iniData();
-
-  doLayout();
+  refresh();
 });
 
+const refresh = async () => {
+  originData.value = ipcRenderer.sendSync('file:getApiList', workspacePath.value);
+  console.log(originData.value);
+  await nextTick();
+  iniData();
+  doLayout();
+};
+
+watch(() => apiStore.needRefresh, (newVal:any) => {
+  console.log('apiStore.needRefresh: ', newVal);
+  if (newVal) {
+    setTimeout(() => {
+      refresh();
+    apiStore.setNeedRefresh(false);
+  }, 400);
+  }
+}, { deep: true });
+
 const iniData = () => {
+  elements.value = [];
   const root = originData.value.find((x:any) => x.name === 'index.json');
-  elements.value.push({ id: '0', type: 'custom', data: { type: 'file', ...root.data, fileName: 'index.json' }, label: 'API管理', position: { x: 0, y: 0 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
+  elements.value.push({ id: '0', type: 'custom', data: { route: root.data, type: 'file', fileName: 'index.json' }, label: 'API管理', position: { x: 0, y: 0 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
   for (let i = 0; i < originData.value.length; i++) {
     if (originData.value[i].name === 'index.json') continue;
     const id = originData.value[i].name;
     const label = originData.value[i].data.label || originData.value[i].data.name;
-    elements.value.push({ id, label, position: { x: 200, y: 0 }, data: { type: 'file', ...originData.value[i].data, fileName:  originData.value[i].data.name}, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
+    elements.value.push({ id, label, position: { x: 200, y: 0 }, 
+      data: { route: originData.value[i].data, type: 'file', fileName:  originData.value[i].name, fileData: originData.value[i].data }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
     elements.value.push({ id: 'edge-' + `${originData.value[i].name}`, sourceHandle: 'a', source: '0', target: id, animated: true });
 
     for (let j = 0; j < originData.value[i].data.api.length; j++) {
@@ -126,7 +141,7 @@ const iniData = () => {
           id: subId, 
           label: subLabel, 
           position: { x: 400, y: 0 }, 
-          data: { ...originData.value[i].data.api[j], fileName: originData.value[i].data.api[j].name, type: 'api', fileData: originData.value[i].data },
+          data: { route: originData.value[i].data.api[j], fileName: originData.value[i].name, type: 'api', fileData: originData.value[i].data },
           class: 'light', type: 'output', targetPosition: Position.Left });
       elements.value.push({ id: 'edge-' + subId , source: id, target: subId, animated: true, style: { stroke: '#10b981' } });
 
@@ -142,9 +157,8 @@ const doLayout = async () => {
   const col2Items = elements.value.filter((x:any) => col2Edges.find((y:any) => y.target === x.id));
   let y = 0;
   for (let i = 0; i < col2Items.length; i++) {
-    if (col2Items[i].data.api.length > 0) {
-      col2Items[i].position.y = y + LINE_HEIGHT * col2Items[i].data.api.length / 2 - 25;
-
+    if (col2Items[i].data.route.api.length > 0) {
+      col2Items[i].position.y = y + LINE_HEIGHT * col2Items[i].data.route.api.length / 2 - 25;
 
       let y3 = y;
       const col3Edges = elements.value.filter((x:any) => x.source === col2Items[i].id);
@@ -154,7 +168,7 @@ const doLayout = async () => {
           y3 += LINE_HEIGHT;
         }
 
-      y += LINE_HEIGHT * col2Items[i].data.api.length;
+      y += LINE_HEIGHT * col2Items[i].data.route.api.length;
     } else {
       col2Items[i].position.y = y;
       y += LINE_HEIGHT;
@@ -201,13 +215,10 @@ const appendChild = (node: any) => {
 };
 
 const nodeClickHandler = (props: any) => {
-  console.log('props: ', props);
+  // console.log('props: ', props);
   if (selectedNode?.value?.id === props?.node?.id) return;
   selectedNode.value = props.node;
-  // appendChild(props.node);
-  console.log(props.node);
-  console.log(props.event);
-  apiStore.setSelectedRoute(props.node);
+  apiStore.setSelectedRoute(props.node.data);
 };
 
 onNodeDragStop((e) => console.log('drag stop', e))
@@ -318,5 +329,9 @@ const sourceHandleStyleA = computed(() => ({ backgroundColor: 'blue', filter: 'i
 
 .api-root {
   width: 120px; height: 40px; font-size: 14px; display: flex; align-items: center; justify-content: center; border-radius: 5px; background: linear-gradient(to right, transparent, lightBlue);
+}
+
+.vue-flow__node.selected {
+  border: 1px solid #909090;
 }
 </style>

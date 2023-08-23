@@ -4,6 +4,7 @@ export default defineStore({
   id: 'api',
   state: () => ({
     selectedRoute: {} as any,
+    needRefresh: false,
   }),
 
   persist: true,
@@ -19,5 +20,8 @@ export default defineStore({
     clearSelectedRoute() {
         this.selectedRoute = {};
     },
+    setNeedRefresh(value:boolean) {
+      this.needRefresh = value;
+    }
   }
 });
