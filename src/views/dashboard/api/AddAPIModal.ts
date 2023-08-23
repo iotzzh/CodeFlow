@@ -10,9 +10,12 @@ import { TZHModal } from '@/components/zh-modal/type';
 
 export default class AddAPIModal {
     // [x: string]: any;
-    // constructor(setTreeData: any) {
-    //     this.setTreeData = setTreeData;
-    // };
+    workspacePath: any;
+    refresh: any;
+    constructor(workspacePath: any, refresh:any) {
+        this.workspacePath = workspacePath;
+        this.refresh = refresh;
+    };
 
     modalConfig = ref({
         show: false,
@@ -29,7 +32,7 @@ export default class AddAPIModal {
         formLabelWidth: '80px',
         fields: [
             { label: '标签', prop: 'label', type: 'input', required: true },
-            { label: '英文名', prop: 'english', type: 'input', required: true },
+            { label: '英文名', prop: 'englishName', type: 'input', required: true },
             // { label: '名称', prop: 'name', type: 'input', style: {}, hide: (model:any) => apiStore?.selectedRoute?.type !== 'api' },
             // { label: 'url', prop: 'url', type: 'input', style: {}, hide: (model:any) => apiStore?.selectedRoute?.type !== 'api' },
             { label: '批量接口', prop: 'batch', type: 'switch', style: {} },
@@ -46,15 +49,52 @@ export default class AddAPIModal {
 
     submit = async () => {
         const url = api.updateApi;
+        const label = this.model.value.label;
+        const englishName = this.model.value.englishName;
+        const firstUpperName = englishName[0].toUpperCase() + englishName.substr(1);
+
+        const address  = this.workspacePath.value;
+        const fileName = englishName + '.json';
+        const content: { [x:string]:any} = {
+            label,
+        };
+        if (this.model.value.batch) {
+            content.api = [
+                {
+                    label: label + '列表',
+                    name: 'get' + firstUpperName + 'List',
+                    url: '/' + englishName + '/list', 
+                },
+                {
+                    label: '新增' + label,
+                    name: 'add' + firstUpperName,
+                    url: '/' + englishName + '/add', 
+                },
+                {
+                    label: '删除' + label,
+                    name: 'delete' + firstUpperName,
+                    url: '/' + englishName + '/delete', 
+                },
+                {
+                    label: '修改' + label,
+                    name: 'update' + firstUpperName,
+                    url: '/' + englishName + '/update', 
+                },
+            ];
+        }
+
         const conditions: { [x: string]: any } = {
+            address,
+            fileName,
+            content,
         };
 
 
-        const params: TZHRequestParams = { url: api.AddRouter, conditions };
+        const params: TZHRequestParams = { url: api.updateApi, conditions };
         const res = await ZHRequest.post(params);
         if (res.success) {
             this.close();
-            // this.setTreeData();
+            this.refresh();
         } else {
             popErrorMessage(res.error);
         }

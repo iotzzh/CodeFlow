@@ -25,7 +25,7 @@
                     <el-scrollbar style="height: 100%;">
                         <el-tree default-expand-all :data="data" :props="defaultProps" @node-click="handleNodeClick">
                             <template #default="{ node, data }">
-                                <span class="custom-tree-node" v-if="node.label.toLowerCase() === 'web'">
+                                <span class="custom-tree-node" v-if="node?.label?.toLowerCase() === 'web'">
                                     <span>{{ node.label }}</span>
                                     <a style="font-size: 12px; color: blue; padding-left: 7px; "
                                         @click.stop="(e: any) => openVSCode(e)">

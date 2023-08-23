@@ -37,7 +37,6 @@ export const updateApi = async (event, params = '{}') => {
     const res = new TReturn();
     if(!address || !fileName) return res;
     try {
-        const res = [];
         const filePath = path.join(address, `src\\api`);
         await createFile(filePath, fileName, content);
         event.returnValue = res;

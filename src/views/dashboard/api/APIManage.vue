@@ -1,40 +1,48 @@
 <template>
   <div class="box">
-    <VueFlow  class="basicflow" :class="{ dark }" v-model="elements" :default-edge-options="{ type: 'smoothstep' }"
+    <VueFlow class="basicflow" :class="{ dark }" v-model="elements" :default-edge-options="{ type: 'smoothstep' }"
       :default-viewport="{ zoom: 1.5 }" :min-zoom="0.2" :max-zoom="4" fit-view-on-init @nodeClick="nodeClickHandler">
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
 
       <template #node-custom="{ data, id, label }">
         <div v-if="id === '0'" style="display: flex; cursor: auto;" class="api-root">
-          <div >API管理</div>
+          <div>API管理</div>
           <div class="action" style="width: 30px; text-align: right;">
-            <el-icon style="color: blue; cursor: pointer;" :size="12" @click="openAddFileModal" > <component is="Plus"></component> </el-icon>
-        </div>
-           <Handle :id="id + '-r'" type="source" :position="Position.Right" :style="sourceHandleStyleA" />
+            <el-icon style="color: blue; cursor: pointer;" :size="12" @click="openAddFileModal">
+              <component is="Plus"></component>
+            </el-icon>
+          </div>
+          <Handle :id="id + '-r'" type="source" :position="Position.Right" :style="sourceHandleStyleA" />
         </div>
 
         <div v-else-if="data.type === 'file'" style="display: flex;" class="api-file">
-        <!-- <div class="action" style="display: flex; flex-direction: column; position: absolute; left: 10px; top: 50%; transform: translate(-50%, -50%);"> -->
-        <div class="action" style="width: 30px; text-align: center;">
-          <el-icon style="color: red; cursor: pointer;" :size="12"> <component is="Delete"></component> </el-icon>
-        </div>
+          <!-- <div class="action" style="display: flex; flex-direction: column; position: absolute; left: 10px; top: 50%; transform: translate(-50%, -50%);"> -->
+          <div class="action" style="width: 30px; text-align: center;">
+            <el-icon style="color: red; cursor: pointer;" :size="12">
+              <component is="Delete"></component>
+            </el-icon>
+          </div>
 
-        <div  style="flex: 1;">
+          <div style="flex: 1;">
             {{ label }}
           </div>
           <div class="action" style="width: 30px; text-align: center;">
-            <el-icon style="color: blue; cursor: pointer;" :size="12" > <component is="Plus"></component> </el-icon>
-        </div>
+            <el-icon style="color: blue; cursor: pointer;" :size="12">
+              <component is="Plus"></component>
+            </el-icon>
+          </div>
           <Handle :id="id + '-l'" type="source" :position="Position.Left" :style="sourceHandleStyleA" />
           <Handle :id="id + '-r'" type="source" :position="Position.Right" :style="sourceHandleStyleA" />
         </div>
 
         <div v-else style="display: flex;" class="api-file">
           <div class="action" style="width: 30px; text-align: center;">
-          <el-icon style="color: red; cursor: pointer;" :size="12"> <component is="Delete"></component> </el-icon>
-        </div>
+            <el-icon style="color: red; cursor: pointer;" :size="12">
+              <component is="Delete"></component>
+            </el-icon>
+          </div>
 
-        <div  style="flex: 1;">
+          <div style="flex: 1;">
             {{ label }}
           </div>
           <Handle :id="id + '-l'" type="source" :position="Position.Left" :style="sourceHandleStyleA" />
@@ -106,11 +114,11 @@
       </Panel>
     </VueFlow>
 
-            <!-- 界面的新增与修改 -->
-            <ZHFormModal v-model="addAPIModal.model" :modal-config="addAPIModal.modalConfig.value"
-            :form-config="addAPIModal.formConfig.value" @cancel="addAPIModal.close"
-            @close="addAPIModal.close" @submit="addAPIModal.submit">
-        </ZHFormModal>
+    <!-- 界面的新增与修改 -->
+    <ZHFormModal v-model="addAPIModal.model" :modal-config="addAPIModal.modalConfig.value"
+      :form-config="addAPIModal.formConfig.value" @cancel="addAPIModal.close" @close="addAPIModal.close"
+      @submit="addAPIModal.submit">
+    </ZHFormModal>
   </div>
 </template>
 
@@ -136,7 +144,7 @@ const { workspacePath } = toRefs(props);
 
 const apiStore = useApiStore();
 
-const addAPIModal = new AddAPIModal();
+
 
 const { onPaneReady, onNodeDragStop, onConnect, addEdges, setTransform, toObject, fitView } = useVueFlow()
 
@@ -155,47 +163,54 @@ const refresh = async () => {
     console.log('originData', originData.value);
 
     await nextTick();
-  iniData();
-  doLayout();
+    iniData();
+    doLayout();
   }
 
 };
 
-watch(() => apiStore.needRefresh, (newVal:any) => {
+const addAPIModal = new AddAPIModal(workspacePath, refresh);
+
+watch(() => apiStore.needRefresh, (newVal: any) => {
   console.log('apiStore.needRefresh: ', newVal);
   if (newVal) {
     setTimeout(() => {
       refresh();
-    apiStore.setNeedRefresh(false);
-  }, 400);
+      apiStore.setNeedRefresh(false);
+    }, 400);
   }
 }, { deep: true });
 
 const iniData = () => {
   elements.value = [];
-  const root = originData.value.find((x:any) => x.name === 'index.json');
+  const root = originData.value.find((x: any) => x.name === 'index.json');
   elements.value.push({ id: '0', type: 'custom', data: { route: root.data, type: 'file', fileName: 'index.json' }, label: 'API管理', position: { x: 0, y: 0 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
-  
+
   for (let i = 0; i < originData.value.length; i++) {
     if (originData.value[i].name === 'index.json') continue;
     const id = originData.value[i].name;
     const label = originData.value[i].data.label || originData.value[i].data.name;
-    elements.value.push({ id, label, position: { x: 200, y: 0 }, type: 'custom',
-      data: { route: originData.value[i].data, type: 'file', fileName:  originData.value[i].name, fileData: originData.value[i].data }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
-    elements.value.push({ id: 'edge-' + `${originData.value[i].name}`, source: '0', sourceHandle: '0-r',  target: id, targetHandle: id + '-l', animated: true });
+    elements.value.push({
+      id, label, position: { x: 200, y: 0 }, type: 'custom',
+      data: { route: originData.value[i].data, type: 'file', fileName: originData.value[i].name, fileData: originData.value[i].data }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left
+    });
+    elements.value.push({ id: 'edge-' + `${originData.value[i].name}`, source: '0', sourceHandle: '0-r', target: id, targetHandle: id + '-l', animated: true });
 
     for (let j = 0; j < originData.value[i].data.api.length; j++) {
       const subId = originData.value[i].data.api[j].name;
       const subLabel = originData.value[i].data.api[j].label || originData.value[i].data.api[j].name;
-      elements.value.push({ 
-          id: subId, 
-          label: subLabel, 
-          position: { x: 400, y: 0 }, 
-          type: 'custom',
-          data: { route: originData.value[i].data.api[j], fileName: originData.value[i].name, type: 'api', fileData: originData.value[i].data },
-          class: 'light', targetPosition: Position.Left });
-      elements.value.push({ id: 'edge-' + subId, source: id, sourceHandle: id + '-r',  target: subId, targetHandle: subId + '-l',
-      animated: true, style: { stroke: '#10b981' } });
+      elements.value.push({
+        id: subId,
+        label: subLabel,
+        position: { x: 400, y: 0 },
+        type: 'custom',
+        data: { route: originData.value[i].data.api[j], fileName: originData.value[i].name, type: 'api', fileData: originData.value[i].data },
+        class: 'light', targetPosition: Position.Left
+      });
+      elements.value.push({
+        id: 'edge-' + subId, source: id, sourceHandle: id + '-r', target: subId, targetHandle: subId + '-l',
+        animated: true, style: { stroke: '#10b981' }
+      });
 
     }
   }
@@ -205,20 +220,20 @@ const iniData = () => {
 const doLayout = async () => {
   await nextTick();
   const LINE_HEIGHT = 50;
-  const col2Edges = elements.value.filter((x:any) => x.source === '0');
-  const col2Items = elements.value.filter((x:any) => col2Edges.find((y:any) => y.target === x.id));
+  const col2Edges = elements.value.filter((x: any) => x.source === '0');
+  const col2Items = elements.value.filter((x: any) => col2Edges.find((y: any) => y.target === x.id));
   let y = 0;
   for (let i = 0; i < col2Items.length; i++) {
     if (col2Items[i].data.route.api.length > 0) {
       col2Items[i].position.y = y + LINE_HEIGHT * col2Items[i].data.route.api.length / 2 - 25;
 
       let y3 = y;
-      const col3Edges = elements.value.filter((x:any) => x.source === col2Items[i].id);
-        const col3Items = elements.value.filter((x:any) => col3Edges.find((y:any) => y.target === x.id));
-        for (let k = 0; k < col3Items.length; k++) {
-          col3Items[k].position.y = y3;
-          y3 += LINE_HEIGHT;
-        }
+      const col3Edges = elements.value.filter((x: any) => x.source === col2Items[i].id);
+      const col3Items = elements.value.filter((x: any) => col3Edges.find((y: any) => y.target === x.id));
+      for (let k = 0; k < col3Items.length; k++) {
+        col3Items[k].position.y = y3;
+        y3 += LINE_HEIGHT;
+      }
 
       y += LINE_HEIGHT * col2Items[i].data.route.api.length;
     } else {
@@ -227,7 +242,7 @@ const doLayout = async () => {
     }
   }
 
-  const rootNode = elements.value.find((x:any) => x.id === '0');
+  const rootNode = elements.value.find((x: any) => x.id === '0');
   rootNode.position.y = y / 2 - 50;
 
   fitView()
@@ -318,7 +333,7 @@ function toggleClass() {
 
 
 // const sourceHandleStyleA = computed(() => ({ backgroundColor: 'blue', filter: 'invert(100%)', top: '50%' }));
-const sourceHandleStyleA = computed(() => ({ 
+const sourceHandleStyleA = computed(() => ({
   width: 0,
   height: 0,
   // border: 'none',
@@ -327,15 +342,15 @@ const sourceHandleStyleA = computed(() => ({
   // borderLeft: '10px solid transparent',
   // borderRight: '10px solid transparent',
   // backgoundColor: 'transparent'
- }));
+}));
 
- const openAddFileModal = (e:any) => {
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-    console.log('天窗');
-   addAPIModal.modalConfig.value.show = true;
- };
+const openAddFileModal = (e: any) => {
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+  console.log('天窗');
+  addAPIModal.modalConfig.value.show = true;
+};
 </script>
 
 <style>
@@ -398,7 +413,14 @@ const sourceHandleStyleA = computed(() => ({
 }
 
 .api-root {
-  width: 120px; min-height: 40px; font-size: 14px; display: flex; align-items: center; justify-content: center; border-radius: 5px; background: linear-gradient(to right, transparent, lightBlue);
+  width: 120px;
+  min-height: 40px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background: linear-gradient(to right, transparent, lightBlue);
 }
 
 .vue-flow__node.selected {
@@ -407,6 +429,12 @@ const sourceHandleStyleA = computed(() => ({
 
 .api-file {
   cursor: auto;
-  width: 120px; min-height: 40px; font-size: 14px; display: flex; align-items: center; justify-content: center; border-radius: 5px; background: linear-gradient(to right, lightBlue, transparent);
-}
-</style>
+  width: 120px;
+  min-height: 40px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background: linear-gradient(to right, lightBlue, transparent);
+}</style>
