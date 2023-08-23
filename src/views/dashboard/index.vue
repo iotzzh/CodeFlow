@@ -61,10 +61,18 @@
                                 </span>
                                 <span v-else>
                                     {{ node.label }}
-                                    <el-icon v-if="node.label === '界面' || data.menuType === 1"
+                                    <span >
+                                        <el-icon v-if="node.label === '界面' || data.menuType === 1"
                                         style="cursor: pointer; position: relative; top: 2px;">
                                         <component is="Plus" @click="(e: any) => clickAddPage(e, node, data)"></component>
                                     </el-icon>
+                                    <el-icon v-if="node.label === '界面' || data.menuType === 1 || data.menuType === 2"
+                                        style="cursor: pointer; position: relative; top: 2px;">
+                                        <component is="Delete" @click="(e: any) => clickAddPage(e, node, data)"></component>
+                                    </el-icon>
+                                    </span>
+
+                                    
                                 </span>
                             </template>
                         </el-tree>

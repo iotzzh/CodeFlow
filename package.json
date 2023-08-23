@@ -43,7 +43,7 @@
     "echarts": "^5.4.3",
     "electron": "^25.6.0",
     "electron-builder": "^24.4.0",
-    "element-plus": "^2.3.8",
+    "element-plus": "^2.3.9",
     "humps": "^2.0.1",
     "iconv-lite": "^0.6.3",
     "json5": "^2.2.3",
