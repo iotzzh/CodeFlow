@@ -13,15 +13,15 @@ export default class TreeHelper {
         return res
       }
 
-      static getItemParentByIdInTree = (id, tree) => {
+      static getItemParentByIdInTree = (id, tree, pEle = {}) => {
         let res = null
         
         for(let i=0;i<tree.length;i++) {
           let ele = tree[i]
-          ele.id === id ? res = tree : ''
+          ele.id === id ? res = pEle : ''
           if(res) break;
-          if(ele.children.length) {
-            res = this.getItemParentByIdInTree(id,ele.children)
+          if(ele?.children?.length) {
+            res = this.getItemParentByIdInTree(id,ele.children, ele)
           } 
         }
         return res

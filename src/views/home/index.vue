@@ -107,8 +107,6 @@ const closeAppModal = () => {
     refProjectTable.value.initData();
 };
 
-
-
 const openAppListModal = () => {
     appModalConfig.value.show = true;
 };

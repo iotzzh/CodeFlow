@@ -65,9 +65,9 @@ export default class PageAddEditModal {
         };
         if (parent) conditions.parent = parent;
         if (this.model.value.menuType === 2) {
-            conditions.filePath = 'views' + url + '/index';
+            conditions.filePath = url + '/index';
         } else {
-            conditions.filePath = 'views' + url;
+            conditions.filePath = url;
         }
         const params: TZHRequestParams = { url: api.AddRouter, conditions };
         const res = await ZHRequest.post(params);

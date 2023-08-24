@@ -68,11 +68,9 @@
                                     </el-icon>
                                     <el-icon v-if="data.menuType === 1 || data.menuType === 2"
                                         style="cursor: pointer; position: relative; top: 2px;">
-                                        <component is="Delete" @click="(e: any) => clickAddPage(e, node, data)"></component>
+                                        <component is="Delete" @click="(e: any) => clickDeletePage(e, node, data)"></component>
                                     </el-icon>
-                                    </span>
-
-                                    
+                                    </span> 
                                 </span>
                             </template>
                         </el-tree>
@@ -82,7 +80,7 @@
                     <API v-if="selectNode && selectNode.toLowerCase() === 'api'" :workspacePath="workspacePath"></API>
                     <Setting v-else-if="selectNode && selectNode.toLowerCase() === '项目配置'"></Setting>
                     <Environment v-else-if="selectNode && selectNode.toLowerCase() === '环境配置'"></Environment>
-                    <div v-else-if="selectNode && selectNode.toLowerCase() === '界面'">界面配置首页</div>
+                    <!-- <div v-else-if="selectNode && selectNode.toLowerCase() === '界面'">界面配置首页</div> -->
                     <div v-else class="frame-box" style="height: 100%;">
                         <iframe src="http://localhost:8000/dashboard" frameborder=”0″ height="100%" width="100%">
 
@@ -122,6 +120,10 @@ import PageConfig from './config/PageConfig.vue';
 
 // 界面管理
 import PageAddEditModal from './page/pageAddEditModal';
+import { isMessageConfirm } from '@/components/zh-message';
+import ZHRequest from '@/components/zh-request';
+import api from '@/api';
+
 
 const router = useRouter();
 
@@ -226,6 +228,28 @@ const clickAddPage = (e: any, node: any, data: any) => {
     } else {
         pageAddEditModal.modalConfig.value.data = null;
     }
+};
+
+const clickDeletePage = async (e: any, node: any, data: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+
+    const res = await isMessageConfirm('是否确认删除？', '警告');
+    if (!res) return;
+    const result = await ZHRequest.post({ url: api.deleteRouter, conditions: { address: workspacePath.value, route: data } });
+    console.log('resule: ', result);
+    setTreeData();
+    // console.log('node:', node);
+    // console.log('data: ', data);
+
+    // pageAddEditModal.modalConfig.value.show = true;
+    // if (!data.isRoot) {
+    //     pageAddEditModal.modalConfig.value.data = data;
+    // } else {
+    //     pageAddEditModal.modalConfig.value.data = null;
+    // }
 };
 
 </script>

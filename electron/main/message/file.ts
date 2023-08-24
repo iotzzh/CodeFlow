@@ -1,5 +1,5 @@
 import { TReturn } from "./entity";
-import { createFolder, createFile, delteFile } from '../utils/file';
+import { createFolder, createFile, delteFile, deleteFolder } from '../utils/file';
 import TreeHelper from "../utils/treeHelper";
 import { prettierCode } from '../utils/cmd';
 
@@ -115,7 +115,8 @@ export const AddRouter = async (event, params) => {
         }
 
         if (!isFloder) {
-            await createFile(pagePath, route.url + '/index.vue', `<template>${route.routeName}</template>`);
+            const template = await fs.readFileSync(path.join(address, 'src\\template\\basic.vue'), { encoding: 'utf8' });
+            await createFile(pagePath, route.url + '/index.vue', template);
         }
 
         res.data.route = route;
@@ -139,31 +140,26 @@ export const deleteRouter = async (event, params = '{}') => {
         const routePath = path.join(address, 'src\\router\\routes');
         const pagePath = path.join(address, 'src\\views');
         
-        const parentRoute = route.parent;
-        const fileName = parentRoute.url.split('/')[1];
+        const fileName = route.url.split('/')[1];
         
         // 路由操作：
-        // 如果是文件夹，且等于文件名，直接删除
-        if (route.menuType === 1) {
-            if (route.routeCode === fileName) {
-                await delteFile(routePath, route.routeCode + '.json');
-            } else {
-                // 如果是文件，不等于文件名，移出路由数据以及子数据
-                const fileDataString = await fs.readFileSync(path.join(routePath, fileName + '.json'), { encoding: 'utf8' });
-                const fileData = JSON.parse(fileDataString);
-                let items:any = TreeHelper.getItemParentByIdInTree(parentRoute.id, [fileData]);
-                items = items.filter((x:any) => x.id !== route.id);
-                await createFile(routePath, fileName + '.json', JSON.stringify(fileData));
-            }
+        // 如果路由与文件名相同，直接删除
+        if (route.routeCode === fileName) {
+            await delteFile(routePath, route.routeCode + '.json');
+        } else {
+            // 其他情况，移出数据，重新保存
+            const fileDataString = await fs.readFileSync(path.join(routePath, fileName + '.json'), { encoding: 'utf8' });
+            const fileData = JSON.parse(fileDataString);
+            let item:any = TreeHelper.getItemParentByIdInTree(route.id, [fileData]);
+            item.children = item.children.filter((x:any) => x.id !== route.id);
+            await createFile(routePath, fileName + '.json', JSON.stringify(fileData));
         }
 
-
         // 界面文件操作：
-        // 如果是文件夹，嵌套读取到文件夹，删除文件夹及文件
-
-        // 如果是文件，删除文件（夹）
-
-
+        await deleteFolder( path.join(pagePath, route.menuType === 1 ? route.filePath : route.filePath.replace(/\/index$/,"")));
+        
+        prettierCode(address);
+        event.returnValue = res;
     } catch (err) {
         event.returnValue = { success: false, error: err } as TReturn;
     }
@@ -214,4 +210,5 @@ export const updateProxy = async (event, address, newProxyArr) => {
         prettierCode(address);
     }
 };
+
 //#endregion
