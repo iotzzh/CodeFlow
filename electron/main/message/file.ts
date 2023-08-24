@@ -90,9 +90,10 @@ export const getRouter = async (event, address) => {
 export const AddRouter = async (event, params) => {
     try {
         const route = JSON.parse(params);
+        const { address } = route;
         const res = new TReturn();
-        const routePath = path.join(`E:\\tworspace\\zh-admin-vue\\`, 'src\\router\\routes');
-        const pagePath = path.join(`E:\\tworspace\\zh-admin-vue\\`, 'src\\views');
+        const routePath = path.join(address, 'src\\router\\routes');
+        const pagePath = path.join(address, 'src\\views');
         const id = uuidv4();
         const isFloder = route.menuType === 1; // 1是目录， 2是菜单
         route.id = id;
@@ -119,9 +120,10 @@ export const AddRouter = async (event, params) => {
 
         res.data.route = route;
         event.returnValue = res;
-        prettierCode('E:\\tworspace\\zh-admin-vue\\');
+
+        prettierCode(address);
     } catch (err) {
-        console.log(err);
+        event.returnValue = { success: false, error: err } as TReturn;
     }
 
 };
@@ -130,7 +132,42 @@ export const AddRouter = async (event, params) => {
 export const updateRouter = () => { };
 
 // 删除路由，当删除父层时，子层也被删除
-export const deleteRouter = () => { };
+export const deleteRouter = async (event, params = '{}') => {
+    const res = new TReturn();
+    try {
+        const { address, route } = JSON.parse(params);
+        const routePath = path.join(address, 'src\\router\\routes');
+        const pagePath = path.join(address, 'src\\views');
+        
+        const parentRoute = route.parent;
+        const fileName = parentRoute.url.split('/')[1];
+        
+        // 路由操作：
+        // 如果是文件夹，且等于文件名，直接删除
+        if (route.menuType === 1) {
+            if (route.routeCode === fileName) {
+                await delteFile(routePath, route.routeCode + '.json');
+            } else {
+                // 如果是文件，不等于文件名，移出路由数据以及子数据
+                const fileDataString = await fs.readFileSync(path.join(routePath, fileName + '.json'), { encoding: 'utf8' });
+                const fileData = JSON.parse(fileDataString);
+                let items:any = TreeHelper.getItemParentByIdInTree(parentRoute.id, [fileData]);
+                items = items.filter((x:any) => x.id !== route.id);
+                await createFile(routePath, fileName + '.json', JSON.stringify(fileData));
+            }
+        }
+
+
+        // 界面文件操作：
+        // 如果是文件夹，嵌套读取到文件夹，删除文件夹及文件
+
+        // 如果是文件，删除文件（夹）
+
+
+    } catch (err) {
+        event.returnValue = { success: false, error: err } as TReturn;
+    }
+};
 
 //#endregion
 

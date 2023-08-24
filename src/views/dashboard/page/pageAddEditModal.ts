@@ -10,8 +10,9 @@ import { TZHModal } from '@/components/zh-modal/type';
 
 export default class PageAddEditModal {
     [x: string]: any;
-    constructor(setTreeData: any) {
+    constructor(setTreeData: any, workspacePath:any) {
         this.setTreeData = setTreeData;
+        this.workspacePath = workspacePath;
     };
 
     modalConfig = ref({
@@ -60,10 +61,13 @@ export default class PageAddEditModal {
         const conditions: { [x: string]: any } = {
             ...this.model.value,
             url,
+            address: this.workspacePath,
         };
         if (parent) conditions.parent = parent;
         if (this.model.value.menuType === 2) {
             conditions.filePath = 'views' + url + '/index';
+        } else {
+            conditions.filePath = 'views' + url;
         }
         const params: TZHRequestParams = { url: api.AddRouter, conditions };
         const res = await ZHRequest.post(params);

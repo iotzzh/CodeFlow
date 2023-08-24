@@ -66,7 +66,7 @@
                                         style="cursor: pointer; position: relative; top: 2px;">
                                         <component is="Plus" @click="(e: any) => clickAddPage(e, node, data)"></component>
                                     </el-icon>
-                                    <el-icon v-if="node.label === '界面' || data.menuType === 1 || data.menuType === 2"
+                                    <el-icon v-if="data.menuType === 1 || data.menuType === 2"
                                         style="cursor: pointer; position: relative; top: 2px;">
                                         <component is="Delete" @click="(e: any) => clickAddPage(e, node, data)"></component>
                                     </el-icon>
@@ -153,7 +153,7 @@ const setTreeData = async () => {
     data.value = treeData;
 };
 
-const pageAddEditModal = new PageAddEditModal(setTreeData);
+const pageAddEditModal = new PageAddEditModal(setTreeData, workspacePath.value);
 
 const name = 'dashboard';
 const min = () => { ipcRenderer.send('window:min', name); }
