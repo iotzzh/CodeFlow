@@ -18,7 +18,7 @@
         </div>
         <div class="right">
             <div class="welcome">欢迎使用Code Flow</div>
-            <div class="top-tips">渐进式低代码系统管理平台, 如何开发随便你~请先创建工作区</div>
+            <div class="top-tips">Code Flow， 让开发变得更高效！</div>
             <div class="parts">
                 <div class="part">DATA</div>
                 <div class="part">SERVER</div>

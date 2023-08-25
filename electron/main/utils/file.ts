@@ -38,5 +38,4 @@ export const deleteFolder = async (currentFolder: string) => {
     } catch (err) {
         console.log('删除文件夹报错： ', err);
     }
-
 };
