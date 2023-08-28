@@ -23,7 +23,7 @@
             <Splitpanes class="default-theme" style="height: calc(100vh - 32px)">
                 <Pane size="20" style="height: 100%; padding: 10px ; " class="left">
                     <el-scrollbar style="height: 100%;">
-                        <el-tree default-expand-all :data="data" :props="defaultProps" @node-click="handleNodeClick">
+                        <el-tree default-expand-all :data="data" highlight-current :props="defaultProps" @node-click="handleNodeClick" class="setting-module">
                             <template #default="{ node, data }">
                                 <span class="custom-tree-node" v-if="node?.label?.toLowerCase() === 'web'">
                                     <span>{{ node.label }}</span>
@@ -314,4 +314,13 @@ const clickDeletePage = async (e: any, node: any, data: any) => {
 .custom-tree-node {
     display: flex;
     align-items: center;
-}</style>
+}
+
+.el-tree.setting-module.el-tree--highlight-current {
+     &:deep(.el-tree-node.is-expanded.is-current.is-focusable>.el-tree-node__content) {
+        background-color: #00A0E9 !important;
+            color: white;
+    }
+
+}
+</style>
