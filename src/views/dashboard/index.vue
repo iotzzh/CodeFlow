@@ -80,12 +80,7 @@
                     <API v-if="selectNode && selectNode.toLowerCase() === 'api'" :workspacePath="workspacePath"></API>
                     <Setting v-else-if="selectNode && selectNode.toLowerCase() === '项目配置'"></Setting>
                     <Environment v-else-if="selectNode && selectNode.toLowerCase() === '环境配置'"></Environment>
-                    <!-- <div v-else-if="selectNode && selectNode.toLowerCase() === '界面'">界面配置首页</div> -->
-                    <div v-else class="frame-box" style="height: 100%;">
-                        <iframe src="http://localhost:8000" frameborder="0" height="100%" width="100%">
-
-                        </iframe>
-                    </div>
+                    <Preview v-else></Preview>
                 </Pane>
                 <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">
                     <PageConfig v-if="selectNode && selectNode.toLowerCase() === '界面'"></PageConfig>
@@ -120,6 +115,8 @@ import PageConfig from './config/PageConfig.vue';
 
 // 界面管理
 import PageAddEditModal from './page/pageAddEditModal';
+import Preview from './page/Preview.vue';
+
 import { isMessageConfirm } from '@/components/zh-message';
 import ZHRequest from '@/components/zh-request';
 import api from '@/api';

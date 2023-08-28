@@ -8,26 +8,20 @@ import Home from '@/views/home/index.vue';
 
 let router: Router = createRouter({
     history: createWebHashHistory(),
-    routes: [{
+    routes: [
+      {
         path: '/',
         name: 'home',
         component: Home,
-    }],
+      },
+      {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: () => import('../views/dashboard/index.vue'),
+      }
+  ],
     scrollBehavior: () => ({ left: 0, top: 0 }),
 });
-const files = import.meta.glob('@/views/**/*.vue'); // 自定义规则
-for (let key in files) {
-  // const path = key.replace('\/views', '').replace('.vue', '');
-  const name = key.split('/')[3];
-  if (name === 'home') continue;
-
-  router.addRoute({
-    path: `/${name}`,
-    name,
-    component: files[key],
-  });
-}
-
 
 router.beforeEach(async (to) => {
     // return true;
