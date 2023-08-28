@@ -4,9 +4,8 @@ const fs = require('fs');
 const fsPromises = require('fs').promises;
 const path = require('path');
 
-
-
 export const createFolder = (currentFolder: string, folderName: string) => {
+    if (fs.existsSync(path.join(currentFolder, folderName))) return;
     const res = fs.mkdirSync(path.join(currentFolder, folderName));
 };
 
@@ -27,13 +26,20 @@ export const delteFile = async (currentFolder: string, fileName: string) => {
         fs.mkdirSync(dirPath, { recursive: true });
     }
     const res = await fs.unlinkSync(filePath);
-    // console.log('unlinkSync: ', res);
+};
+
+export const copyFile = async (sourcePath: string, targetPath) => {
+    try {
+        const res = await fsPromises.copyFile(sourcePath, targetPath)
+        return res;
+    } catch (err) {
+        console.log('复制文件报错： ', err);
+    }
 };
 
 export const deleteFolder = async (currentFolder: string) => {
     try {
         const res = await rimraf.sync(currentFolder)
-        // console.log('unlinkSync: ', res);
         return res;
     } catch (err) {
         console.log('删除文件夹报错： ', err);

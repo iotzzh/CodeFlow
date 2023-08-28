@@ -1,5 +1,5 @@
 import { TReturn } from "./entity";
-import { createFolder, createFile, delteFile, deleteFolder } from '../utils/file';
+import { createFolder, createFile, delteFile, deleteFolder, copyFile } from '../utils/file';
 import TreeHelper from "../utils/treeHelper";
 import { prettierCode } from '../utils/cmd';
 
@@ -115,8 +115,13 @@ export const AddRouter = async (event, params) => {
         }
 
         if (!isFloder) {
-            const template = await fs.readFileSync(path.join(address, 'src\\template\\basic.vue'), { encoding: 'utf8' });
-            await createFile(pagePath, route.url + '/index.vue', template);
+            await createFolder(pagePath, route.url);
+            const target = path.join(pagePath, route.url);
+            const sourceVue = path.join(address, 'src\\templatePage\\basic\\index.vue');
+            const sourceJSON = path.join(address, 'src\\templatePage\\basic\\index.json');
+
+            copyFile(sourceVue, path.join(target, '/index.vue'));
+            copyFile(sourceJSON, path.join(target, '/index.json'));
         }
 
         res.data.route = route;
