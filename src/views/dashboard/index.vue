@@ -23,7 +23,8 @@
             <Splitpanes class="default-theme" style="height: calc(100vh - 32px)">
                 <Pane size="20" style="height: 100%; padding: 10px ; " class="left">
                     <el-scrollbar style="height: 100%;">
-                        <el-tree default-expand-all :data="data" highlight-current :props="defaultProps" @node-click="handleNodeClick" class="setting-module">
+                        <el-tree default-expand-all :data="data" highlight-current :props="defaultProps"
+                            @node-click="handleNodeClick" class="setting-module">
                             <template #default="{ node, data }">
                                 <span class="custom-tree-node" v-if="node?.label?.toLowerCase() === 'web'">
                                     <span>{{ node.label }}</span>
@@ -61,30 +62,50 @@
                                 </span>
                                 <span v-else>
                                     {{ node.label }}
-                                    <span >
+                                    <span>
                                         <el-icon v-if="node.label === '界面' || data.menuType === 1"
-                                        style="cursor: pointer; position: relative; top: 2px;">
-                                        <component is="Plus" @click="(e: any) => clickAddPage(e, node, data)"></component>
-                                    </el-icon>
-                                    <el-icon v-if="data.menuType === 1 || data.menuType === 2"
-                                        style="cursor: pointer; position: relative; top: 2px;">
-                                        <component is="Delete" @click="(e: any) => clickDeletePage(e, node, data)"></component>
-                                    </el-icon>
-                                    </span> 
+                                            style="cursor: pointer; position: relative; top: 2px;">
+                                            <component is="Plus" @click="(e: any) => clickAddPage(e, node, data)">
+                                            </component>
+                                        </el-icon>
+                                        <el-icon v-if="data.menuType === 1 || data.menuType === 2"
+                                            style="cursor: pointer; position: relative; top: 2px;">
+                                            <component is="Delete" @click="(e: any) => clickDeletePage(e, node, data)">
+                                            </component>
+                                        </el-icon>
+                                    </span>
                                 </span>
                             </template>
                         </el-tree>
                     </el-scrollbar>
                 </Pane>
                 <Pane size="60" style="height: 100%; overflow-y: hidden; " class="center">
-                    <API v-if="selectNode && selectNode.toLowerCase() === 'api'" :workspacePath="workspacePath"></API>
-                    <Setting v-else-if="selectNode && selectNode.toLowerCase() === '项目配置'"></Setting>
-                    <Environment v-else-if="selectNode && selectNode.toLowerCase() === '环境配置'"></Environment>
+                    <API v-if="selectNode && selectNode.label?.toLowerCase() === 'api'" :workspacePath="workspacePath">
+                    </API>
+                    <Setting v-else-if="selectNode && selectNode.label?.toLowerCase() === '项目配置'"></Setting>
+                    <Environment v-else-if="selectNode && selectNode.label?.toLowerCase() === '环境配置'"></Environment>
                     <Preview v-else :src="src"></Preview>
                 </Pane>
+
                 <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">
-                    <PageConfig v-if="selectNode && selectNode.toLowerCase() === '界面'"></PageConfig>
-                    <APIConfig v-if="selectNode && selectNode.toLowerCase() === 'api'" :workspacePath="workspacePath"></APIConfig>
+                    <PageConfig v-if="selectNode && selectNode.label?.toLowerCase() === '界面'"></PageConfig>
+                    <APIConfig v-else-if="selectNode && selectNode.label?.toLowerCase() === 'api'"
+                        :workspacePath="workspacePath"></APIConfig>
+                    <div v-else-if="selectNode?.menuType && selectNode.menuType === 2">
+                        <div class="demo-collapse">
+                            <el-collapse v-model="activeName" accordion>
+                                <el-collapse-item title="表单配置" name="1">
+                                    <div>搜索表单配置</div>
+                                </el-collapse-item>
+                                <el-collapse-item title="表格配置" name="2">
+                                    <div>表格配置</div>
+                                </el-collapse-item>
+                                <el-collapse-item title="分页配置" name="3">
+                                    <div>分页配置</div>
+                                </el-collapse-item>
+                            </el-collapse>
+                        </div>
+                    </div>
                     <div v-else>暂未设计</div>
                 </Pane>
             </Splitpanes>
@@ -100,7 +121,7 @@
 
 <script lang="ts" setup>
 import { nextTick, onMounted, ref } from 'vue';
-import {useRouter, useRoute} from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ipcRenderer } from "electron";
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css'
@@ -155,6 +176,7 @@ const setTreeData = async () => {
 const pageAddEditModal = new PageAddEditModal(setTreeData, workspacePath.value);
 
 const name = 'dashboard';
+const activeName = ref('1')
 const min = () => { ipcRenderer.send('window:min', name); }
 
 const max = () => { ipcRenderer.send('window:max', name); };
@@ -171,15 +193,14 @@ interface Tree {
 
 const handleNodeClick = (data: Tree) => {
     console.log(data)
-    selectNode.value = data.label;
+    selectNode.value = data;
     if (data.menuType === 2) {
         src.value = 'http://localhost:8000' + data.url;
-
     }
 }
 
 const selectNode = ref();
-const data = ref([] as Tree[]);
+const data = ref([] as any);
 const treeMap = (arr: any) => {
     // 判断是否是数组
     if (!arr || !(arr.length > 0)) { return }
@@ -326,10 +347,9 @@ const src = ref('http://localhost:8000');
 }
 
 .el-tree.setting-module.el-tree--highlight-current {
-     &:deep(.el-tree-node.is-expanded.is-current.is-focusable>.el-tree-node__content) {
+    &:deep(.el-tree-node.is-expanded.is-current.is-focusable>.el-tree-node__content) {
         background-color: #00A0E9 !important;
-            color: white;
+        color: white;
     }
 
-}
-</style>
+}</style>
