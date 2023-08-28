@@ -80,7 +80,7 @@
                     <API v-if="selectNode && selectNode.toLowerCase() === 'api'" :workspacePath="workspacePath"></API>
                     <Setting v-else-if="selectNode && selectNode.toLowerCase() === '项目配置'"></Setting>
                     <Environment v-else-if="selectNode && selectNode.toLowerCase() === '环境配置'"></Environment>
-                    <Preview v-else></Preview>
+                    <Preview v-else :src="src"></Preview>
                 </Pane>
                 <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">
                     <PageConfig v-if="selectNode && selectNode.toLowerCase() === '界面'"></PageConfig>
@@ -164,12 +164,18 @@ const close = () => { ipcRenderer.send('window:close', name); };
 interface Tree {
     label: string
     isRoot?: boolean
+    menuType?: number
+    url: string
     children?: Tree[]
 }
 
 const handleNodeClick = (data: Tree) => {
     console.log(data)
     selectNode.value = data.label;
+    if (data.menuType === 2) {
+        src.value = 'http://localhost:8000' + data.url;
+
+    }
 }
 
 const selectNode = ref();
@@ -248,6 +254,9 @@ const clickDeletePage = async (e: any, node: any, data: any) => {
     //     pageAddEditModal.modalConfig.value.data = null;
     // }
 };
+
+
+const src = ref('http://localhost:8000');
 
 </script>
 
