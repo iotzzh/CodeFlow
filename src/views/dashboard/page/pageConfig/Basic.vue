@@ -71,7 +71,7 @@ onMounted(async () => {
     const params = {
         url: api.getPageSetting,
         conditions: {
-            address: fileStore.workspace,
+            address: workspaceStore.address,
             folder: routeNode.value.url,
         },
     };

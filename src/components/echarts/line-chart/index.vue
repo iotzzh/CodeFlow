@@ -4,7 +4,6 @@
 </template>
 
 <script lang="ts" setup>
-import { number } from '@intlify/core-base';
 import * as echarts from 'echarts';
 import { ref, onMounted, PropType, toRefs } from 'vue';
 import { getUUID } from '../utils';

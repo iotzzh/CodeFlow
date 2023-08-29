@@ -6,6 +6,7 @@ import renderer from 'vite-plugin-electron-renderer'
 import pkg from './package.json'
 // const path = require("path");
 import path from 'path';
+import topLevelAwait from 'vite-plugin-top-level-await';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
@@ -17,6 +18,12 @@ export default defineConfig(({ command }) => {
 
   return {
     plugins: [
+      topLevelAwait({
+        // The export name of top-level await promise for each chunk module
+        promiseExportName: '__tla',
+        // The function to generate import names of top-level await promise in each chunk module
+        promiseImportName: i => `__tla_${i}`
+      }),
       vue(),
       electron([
         {
@@ -32,6 +39,7 @@ export default defineConfig(({ command }) => {
           vite: {
             build: {
               sourcemap,
+              target: 'esnext',
               minify: isBuild,
               outDir: 'dist-electron/main',
               rollupOptions: {
@@ -49,6 +57,7 @@ export default defineConfig(({ command }) => {
           },
           vite: {
             build: {
+              target: 'esnext',
               sourcemap: sourcemap ? 'inline' : undefined, // #332
               minify: isBuild,
               outDir: 'dist-electron/preload',
