@@ -15,7 +15,7 @@ export default class DBProjectHelper extends DBCommonHelper {
             console.error(err);
             return;
           }
-          console.log(files);
+          // console.log(files);
         });
 
     }

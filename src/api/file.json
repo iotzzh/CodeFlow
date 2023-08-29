@@ -12,6 +12,9 @@
         { "name": "getRouter", "url": "file:getRouter", "prefix": "", "localPrefix": "", "useMock": false },
         { "name": "AddRouter", "url": "file:AddRouter", "prefix": "", "localPrefix": "", "useMock": false },
         { "name": "updateRouter", "url": "file:updateRouter", "prefix": "", "localPrefix": "", "useMock": false },
-        { "name": "deleteRouter", "url": "file:deleteRouter", "prefix": "", "localPrefix": "", "useMock": false }
+        { "name": "deleteRouter", "url": "file:deleteRouter", "prefix": "", "localPrefix": "", "useMock": false },
+
+        { "name": "getPageSetting", "url": "file:getPageSetting", "prefix": "", "localPrefix": "", "useMock": false },
+        { "name": "updatePageSetting", "url": "file:updatePageSetting", "prefix": "", "localPrefix": "", "useMock": false }
     ]
 }

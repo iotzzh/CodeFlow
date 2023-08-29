@@ -12,6 +12,36 @@ const { v4: uuidv4 } = require('uuid');
 
 export default { prefix: 'file' };
 
+//#region 通用文件操作
+export const getPageSetting = async (event, params) => {
+    const {address, folder} = JSON.parse(params);
+    try {
+        const res = new TReturn();
+        const filePath = path.join(address, '/src/views', folder, '/index.json');
+        const fileData = await fs.readFileSync(filePath, { encoding: 'utf8' });
+        res.data = fileData;
+        event.returnValue = res;
+    } catch(err) {
+        event.returnValue = { success: false, error: err } as TReturn;
+    }
+};
+
+export const updatePageSetting = async (event, params) => {
+    const { address, folder, content } = JSON.parse(params);
+    try {
+        const res = new TReturn();
+        const folderPath = path.join(address, '/src/views', folder);
+        await createFile(folderPath, '/index.json', content);
+        event.returnValue = res;
+    } catch(err) {
+        event.returnValue = { success: false, error: err } as TReturn;
+    }finally {
+        prettierCode(address);
+    }
+};
+
+//#endregion
+
 //#region API文件操作
 export const getApiList = async (event, address) => {
     try {

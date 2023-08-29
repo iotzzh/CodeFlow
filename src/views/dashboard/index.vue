@@ -88,24 +88,10 @@
                 </Pane>
 
                 <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">
-                    <PageConfig v-if="selectNode && selectNode.label?.toLowerCase() === '界面'"></PageConfig>
-                    <APIConfig v-else-if="selectNode && selectNode.label?.toLowerCase() === 'api'"
+                    <APIConfig v-if="selectNode && selectNode.label?.toLowerCase() === 'api'"
                         :workspacePath="workspacePath"></APIConfig>
-                    <div v-else-if="selectNode?.menuType && selectNode.menuType === 2">
-                        <div class="demo-collapse">
-                            <el-collapse v-model="activeName" accordion>
-                                <el-collapse-item title="表单配置" name="1">
-                                    <div>搜索表单配置</div>
-                                </el-collapse-item>
-                                <el-collapse-item title="表格配置" name="2">
-                                    <div>表格配置</div>
-                                </el-collapse-item>
-                                <el-collapse-item title="分页配置" name="3">
-                                    <div>分页配置</div>
-                                </el-collapse-item>
-                            </el-collapse>
-                        </div>
-                    </div>
+                    
+                    <PageConfig v-else-if="selectNode?.menuType && selectNode.menuType === 2" :routeNode="selectNode"></PageConfig>
                     <div v-else>暂未设计</div>
                 </Pane>
             </Splitpanes>
@@ -131,21 +117,22 @@ import Environment from './Environment.vue';
 import Setting from './Setting.vue';
 import APIConfig from './api/APIConfig.vue';
 
-// 配置项目
-import PageConfig from './config/PageConfig.vue';
-
 // 界面管理
 import PageAddEditModal from './page/pageAddEditModal';
 import Preview from './page/Preview.vue';
+import PageConfig from './page/pageConfig/index.vue';
 
 import { isMessageConfirm } from '@/components/zh-message';
 import ZHRequest from '@/components/zh-request';
 import api from '@/api';
 
+import { useFileStore } from '@/stores/index';
+
 
 const router = useRouter();
-
+const fileStore = useFileStore();
 const workspacePath = ref((router?.currentRoute?.value?.query?.address || '') as string);
+fileStore.setWorkspace(router?.currentRoute?.value?.query?.address as string || '');
 
 const setTreeData = async () => {
     const res = ipcRenderer.sendSync('file:getRouter');
@@ -176,7 +163,7 @@ const setTreeData = async () => {
 const pageAddEditModal = new PageAddEditModal(setTreeData, workspacePath.value);
 
 const name = 'dashboard';
-const activeName = ref('1')
+
 const min = () => { ipcRenderer.send('window:min', name); }
 
 const max = () => { ipcRenderer.send('window:max', name); };
