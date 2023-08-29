@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 
 export default defineStore({
-  id: 'file',
+  id: 'workspace',
   state: () => ({
-    workspace: '',
+    address: '',
+    port: 0,
   }),
 
   persist: true,
@@ -13,11 +14,14 @@ export default defineStore({
   },
   
   actions: {
-    setWorkspace(workspace: string):void {
-        this.workspace = workspace;
+    setAddress(address: string):void {
+        this.address = address;
     },
     clearWorkspace() {
-        this.workspace = '';
-    }
+        this.address = '';
+    },
+    setPort(port: number):void {
+      this.port = port;
+  },
   }
 });

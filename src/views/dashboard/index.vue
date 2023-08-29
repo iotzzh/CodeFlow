@@ -126,13 +126,12 @@ import { isMessageConfirm } from '@/components/zh-message';
 import ZHRequest from '@/components/zh-request';
 import api from '@/api';
 
-import { useFileStore } from '@/stores/index';
-
+import { useWorkspaceStore } from '@/stores/index';
 
 const router = useRouter();
-const fileStore = useFileStore();
+const workspaceStore = useWorkspaceStore();
 const workspacePath = ref((router?.currentRoute?.value?.query?.address || '') as string);
-fileStore.setWorkspace(router?.currentRoute?.value?.query?.address as string || '');
+workspaceStore.setAddress(router?.currentRoute?.value?.query?.address as string || '');
 
 const setTreeData = async () => {
     const res = ipcRenderer.sendSync('file:getRouter');

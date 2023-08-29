@@ -2,7 +2,7 @@ import type { App } from 'vue';
 import { createPinia } from 'pinia';
 import { createPersistedState } from 'pinia-plugin-persistedstate';
 import useApiStore from './api';
-import useFileStore from './file';
+import useWorkspaceStore from './workspace';
 
 const store = createPinia();
 
@@ -11,4 +11,4 @@ export function setupStore(app: App<Element>) {
     app.use(store);
 }
 
-export { store, useApiStore, useFileStore };
+export { store, useApiStore, useWorkspaceStore };

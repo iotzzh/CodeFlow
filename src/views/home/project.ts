@@ -103,6 +103,18 @@ export default class Project {
                             required: true,
                         }
                     },
+                    {
+                        label: '调试端口',
+                        prop: 'port',
+                        minWidth: '100px',
+                        addEditInfo: {
+                            type: 'input',
+                            inputType: 'number',
+                            defaultValue: null, addSort: 2, placeholder: '请选择',
+                            span: 24,
+                            required: false,
+                        }
+                    },
                 ],
                 actionColumn: {
                     label: '操作',

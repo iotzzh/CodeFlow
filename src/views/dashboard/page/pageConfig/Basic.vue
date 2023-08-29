@@ -24,7 +24,7 @@ import ZHMonacoEditor from '@/components/zh-monaco-editor/index.vue';
 import ZHRequest from '@/components/zh-request';
 import api from '@/api';
 
-import { useFileStore } from '@/stores/index';
+import { useWorkspaceStore } from '@/stores/index';
 import { popErrorMessage } from '@/components/zh-message';
 
 const props = defineProps({
@@ -37,7 +37,7 @@ const props = defineProps({
 const { routeNode } = toRefs(props);
 
 
-const fileStore = useFileStore();
+const workspaceStore = useWorkspaceStore();
 
 const content = ref('{}')
 const language = ref('json')
@@ -49,7 +49,7 @@ const updateContent = async (value:string) => {
     const params = {
         url: api.updatePageSetting,
         conditions: {
-            address: fileStore.workspace,
+            address: workspaceStore.address,
             folder: routeNode.value.url,
             content: value
         },
