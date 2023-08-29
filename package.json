@@ -1,6 +1,6 @@
 {
   "name": "code-flow",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist-electron/main/index.js",
   "description": "渐进式低代码工作流平台",
   "author": "zzh<微信号:itrzzh>",
@@ -21,9 +21,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build && electron-builder",
-    "build:win": "node scripts/build.js && electron-builder --win",
-    "build:mac": "node scripts/build.js && electron-builder --mac",
-    "build:linux": "node scripts/build.js && electron-builder --linux",
     "preview": "vite preview"
   },
   "repository": "https://github.com/iotzzh/codeflow",
@@ -43,6 +40,7 @@
     "echarts": "^5.4.3",
     "electron": "^25.6.0",
     "electron-builder": "^24.4.0",
+    "electron-rebuild": "^3.2.9",
     "element-plus": "^2.3.9",
     "humps": "^2.0.1",
     "iconv-lite": "^0.6.3",
@@ -60,7 +58,6 @@
     "sequelize-cli": "^6.6.1",
     "shelljs": "^0.8.5",
     "splitpanes": "^3.1.5",
-    "sqlite3": "^5.1.6",
     "typed.js": "^2.0.16",
     "typescript": "^5.0.2",
     "uuid": "^9.0.0",
@@ -71,5 +68,8 @@
     "vue": "^3.2.47",
     "vue-router": "^4.2.4",
     "vue-tsc": "^1.2.0"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.6"
   }
 }
