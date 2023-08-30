@@ -7,6 +7,13 @@ import { app, BrowserWindow, shell, ipcMain, screen, dialog } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
 
+import { homedir } from "os";
+import path from 'path';
+import pkg from "../../package.json";
+
+// export const appDirectory = path.join(homedir(), pkg.name);
+
+
 async function bootstrap () {
     await DBHelper.openDB();
 

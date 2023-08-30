@@ -11,7 +11,7 @@ export default class baseController {
         const ret = new TReturn();
         try {
             const res = await DBHelper[this.prefix].add(JSON.parse(params));
-            console.log(res);
+            // console.log(res);
         } catch(err) {
             ret.success = false;
             ret.error = err;

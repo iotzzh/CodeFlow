@@ -15,7 +15,7 @@ export default class DBWorkspaceHelper extends DBCommonHelper {
             console.error(err);
             return;
           }
-          console.log(files);
+          // console.log(files);
         });
 
     }
