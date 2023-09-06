@@ -134,7 +134,7 @@ const workspacePath = ref((router?.currentRoute?.value?.query?.address || '') as
 workspaceStore.setAddress(router?.currentRoute?.value?.query?.address as string || '');
 
 const setTreeData = async () => {
-    const res = ipcRenderer.sendSync('file:getRouter');
+    const res = ipcRenderer.sendSync('file:getRouter', router?.currentRoute?.value?.query?.address || '');
     const routes = res?.data?.records ? treeMap(res.data.records) : [];
     await nextTick();
     const treeData = [];
@@ -216,7 +216,7 @@ const openVSCode = (e: any) => {
 
 const startServer = (e: any) => {
     e.preventDefault();
-    ipcRenderer.send('cmd:startServer');
+    ipcRenderer.send('cmd:startServer', workspacePath.value);
 };
 
 const stopServer = (e: any) => {

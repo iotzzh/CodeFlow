@@ -102,7 +102,8 @@ export const deleteApiFile = async (event, params = '{}') => {
 export const getRouter = async (event, address) => {
     try {
         const res = new TReturn();
-        const filePath = path.join(`E:\\tworspace\\zh-admin-vue\\src\\router\\routes`);
+        // const filePath = path.join(`E:\\tworspace\\zh-admin-vue\\src\\router\\routes`);
+        const filePath = path.join(address, 'src\\router\\routes');
         const files = fs.readdirSync(filePath);
         for (let i = 0; i < files.length; i++) {
             const filedir = path.join(filePath, files[i]);
@@ -110,6 +111,11 @@ export const getRouter = async (event, address) => {
             const fileData = await fs.readFileSync(filedir, { encoding: 'utf8' });
             fileData && res.data.records.push(JSON.parse(fileData));
         }
+        // 排序
+        res.data.records.sort((x,y) => {
+            if (x.sortNo - y.sortNo >= 0) return 1;
+            else return -1;
+        });
         event.returnValue = res;
     } catch (err) {
         event.returnValue = { success: false, error: err } as TReturn;

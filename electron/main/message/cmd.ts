@@ -16,7 +16,7 @@ export const openCode = async (event, address) => {
 export const startServer = async (event, address) => {
     try {
         var exec = require('child_process').exec;
-        const res = await exec(`cd E:\\tworspace\\zh-admin-vue && npm run start`);
+        const res = await exec(`cd ${address} && npm run start`);
         console.log('res, ', res);
     } catch (err) {
         console.log(err);
