@@ -158,6 +158,8 @@ export const AddRouter = async (event, params) => {
 
             copyFile(sourceVue, path.join(target, '/index.vue'));
             copyFile(sourceJSON, path.join(target, '/index.json'));
+        } else {
+            await createFolder(pagePath, route.url);
         }
 
         res.data.route = route;

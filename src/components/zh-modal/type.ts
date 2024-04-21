@@ -15,7 +15,6 @@ export interface TZHModal {
   destroyOnClose?: boolean
   closeInModal?: boolean
   showClose?: boolean
-  draggable?: boolean
 
   footer?: TZHModalFooter
 

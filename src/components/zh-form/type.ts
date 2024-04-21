@@ -30,17 +30,12 @@ export interface TZHFromField {
   refName?: string // ref name
   defaultValue?: any // 默认值
   labelWidth?: string | number // 标签宽度
-  hide?: boolean | Function// 是否隐藏
+  hide?: boolean // 是否隐藏
   width?: string | number // 宽度
   placeholder?: string // 占位符
   disabled?: boolean | Function // 是否禁用
   clearable?: boolean // 是否可清除
   required?: boolean // 是否必填
-
-  buttonType?: string // 按钮类型
-  icon?: string // 按钮图标
-
-  style?: {[x:string]:any} // 自定义项的样式
 
   size?: EpPropMergeType<StringConstructor, '' | 'default' | 'small' | 'large', never> | undefined
 
@@ -85,7 +80,6 @@ export interface TZHFromField {
   checkboxText?: string
 
   //#region 方法
-  clickMethod?: Function // 点击事件
   // 转换方法, 一对一转换
   convert?: Function
 

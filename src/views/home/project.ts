@@ -92,13 +92,19 @@ export default class Project {
                         minWidth: '100px',
                         addEditInfo: {
                             type: 'select',
+                            prop: 'workspaceId',
                             addSort: 3,
                             api: api.getWorkspaceList,
                             placeholder: '请选择',
                             labelField: 'workspaceName',
                             valueField: 'id',
                             valueKey: 'id',
-                            convert: (fieldValue:any) => fieldValue?.id,
+                            convert: (fieldValue:any, value: any) => {
+                                console.log('fieldValue: ' + fieldValue);
+                                console.log('value: ' + JSON.stringify(value));
+                                console.log('fieldValue?.id: ' + fieldValue?.id);
+                                return fieldValue?.id
+                            },
                             span: 24,
                             required: true,
                         }

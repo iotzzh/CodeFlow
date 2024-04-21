@@ -19,7 +19,7 @@ export default class Modal {
     refZHFormModal: Ref<any>,
     tableSettings: TZHTableConfig,
     emit: any,
-    globalTable:any,
+    globalTable: any,
   ) {
     this.request = request;
     this.refZHFormModal = refZHFormModal;
@@ -31,9 +31,9 @@ export default class Modal {
   columnFunctionFields = ['convert'];
   _getObjctWithoutFunction = (obj: TObject) => {
     const keys = Object.keys(obj);
-    const newObj:{ [x:string]:any } = {};
+    const newObj: { [x: string]: any } = {};
     keys.forEach((x: string) => {
-      if (typeof obj[x] !== 'function' && !this.columnFunctionFields.find((y:string) => y === x)) {
+      if (typeof obj[x] !== 'function' && !this.columnFunctionFields.find((y: string) => y === x)) {
         newObj[x] = obj[x];
       }
     });
@@ -54,34 +54,28 @@ export default class Modal {
     } as TZHformConfig;
   });
 
-  modal = ref({ show: false, title: '新增', loadingSubmit: false, } as TZHModal);
+  modal = ref({ show: false, title: '新增', loadingSubmit: false, footer: {} } as TZHModal);
 
   formModel = ref({} as any);
   convertedModel = ref({} as any);
-
-  initModel = (value: { [x:string]:any } = {}) => {
-    this.formModel.value = value;
-    this.convertedModel.value = value;
-  };
 
   openAddModalData = ref({} as any);
   openAddModal = (data: any = undefined) => {
     this.modal.value.show = true;
     this.modal.value.type = 'add';
     this.modal.value.title = this.tableSettings.modal?.modalConfig?.mainTitle ? '新增' + this.tableSettings.modal.modalConfig.mainTitle : '新增';
-    this.modal.value = { ...this.tableSettings.modal?.modalConfig,  ...this.modal.value};
+    this.modal.value = { ...this.tableSettings.modal?.modalConfig, ...this.modal.value };
     // 在新增时，有些字段带有默认值
     this.refZHFormModal.value.initForm();
     this.openAddModalData.value = data;
   };
 
-  executeOpenAddModal = (modal:any, data:any) => {
+  executeOpenAddModal = (modal: any, data: any) => {
     this.modal.value.show = true;
     this.modal.value.type = 'add';
-    this.modal.value = {  ...this.modal.value, ...this.tableSettings.modal };
+    this.modal.value = { ...this.modal.value, ...this.tableSettings.modal };
     this.modal.value.title = modal.title;
-    // this.formModel.value = { ...modal };
-    // initModel(modal);
+    this.formModel.value = { ...modal };
     this.openAddModalData.value = data;
   };
 
@@ -91,8 +85,7 @@ export default class Modal {
     this.modal.value.title = this.tableSettings.modal?.modalConfig?.mainTitle ? '编辑' + this.tableSettings.modal?.modalConfig?.mainTitle : '编辑';
     this.modal.value.show = true;
     await nextTick();
-    // this.formModel.value = { ...row };
-    this.initModel({ ...row });
+    this.formModel.value = { ...row };
     this.openEditModalData.value = { ...row };
     this.modal.value = { ...this.tableSettings.modal?.modalConfig, ...this.modal.value };
   };
@@ -109,7 +102,7 @@ export default class Modal {
       if (typeof this.tableSettings.modal?.modalConfig.onOpened === 'string') {
         (new Function('params', this.tableSettings.modal?.modalConfig.onOpened))(result);
       } else {
-        this.tableSettings.modal?.modalConfig.onOpened(result); 
+        this.tableSettings.modal?.modalConfig.onOpened(result);
       }
     } else {
       this.emit('opened', result);
@@ -143,11 +136,14 @@ export default class Modal {
       ? JSON.parse(JSON.stringify(this.convertedModel.value))
       : {};
 
+    const originConditions = (this.modal.value.type === 'add' ? this.request?.add?.conditions : this.request?.update?.conditions) || {};
+
     const customModel = this.tableSettings.modal?.formConfig?.customModel && JSON.parse(JSON.stringify(this.tableSettings.modal?.formConfig?.customModel));
 
     const params = {
       ...convertedModel,
       ...customModel,
+      ...originConditions
     };
 
     // if (this.formSettings?.value?.convertParams) {
@@ -162,12 +158,12 @@ export default class Modal {
     this.modal.value.loadingSubmit = true;
     const conditions = this.getParams();
 
-    if (this.tableSettings?.modal?.modalConfig.onBeforeSubmit) { 
+    if (this.tableSettings?.modal?.modalConfig.onBeforeSubmit) {
       if (typeof this.tableSettings.modal.modalConfig.onBeforeSubmit === 'string') {
-        const AsyncFunction = Object.getPrototypeOf(async function(){ /* */}).constructor;
+        const AsyncFunction = Object.getPrototypeOf(async function () { /* */ }).constructor;
         await new AsyncFunction('params', this.tableSettings.modal.modalConfig.onBeforeSubmit)({ modal: this.modal.value, conditions, });
       } else {
-        await this.tableSettings.modal.modalConfig.onBeforeSubmit({ modal: this.modal.value, conditions, }); 
+        await this.tableSettings.modal.modalConfig.onBeforeSubmit({ modal: this.modal.value, conditions, });
       }
     }
 
@@ -191,12 +187,13 @@ export default class Modal {
     this.modal.value.loadingSubmit = false;
     this.refZHFormModal.value.clearFormData();
 
-    if (this.tableSettings?.modal?.modalConfig.onAfterSubmit) { 
+    if (this.tableSettings?.modal?.modalConfig.onAfterSubmit) {
       if (typeof this.tableSettings.modal.modalConfig.onAfterSubmit === 'string') {
         (new Function('params', this.tableSettings.modal.modalConfig.onAfterSubmit))({ modal: this.modal.value, conditions, result });
       } else {
-        this.tableSettings.modal.modalConfig.onAfterSubmit({ modal: this.modal.value, conditions, result }); }
+        this.tableSettings.modal.modalConfig.onAfterSubmit({ modal: this.modal.value, conditions, result });
       }
+    }
 
   };
 }

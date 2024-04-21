@@ -6,6 +6,7 @@ import { TreeNode } from 'element-plus';
 
 export interface TZHTable {
   formConfig?: TZHTableFormConfig
+  tablePanelConfig?: TZHTablePanelSetting
   tableConfig: TZHTableConfig
   pageConfig?: TZHTablePageConfig
   requestConfig?: TZHTableRequestConfig
@@ -24,7 +25,7 @@ export interface TZHTableRequestConfig {
   initialData?: boolean // 是否需要初始化数据，默认为true
 }
 
-export interface  TZHTableRequestConfigDetail {
+export interface TZHTableRequestConfigDetail {
   url?: string
   conditions?: TObject
   successMessage?: string
@@ -98,7 +99,7 @@ export interface TZHTableConfig {
   hasIndex?: boolean // 是否存在Index列
   columns?: Array<TZHTableColumn> // 列配置，内包含新增和编辑的列配置
   actionColumn?: TZHTableActionColumn // 操作列配置
-  treeProps?: { [x:string]: any } // 树形展示配置
+  treeProps?: { [x: string]: any } // 树形展示配置
   defaultExpandAll?: boolean
   border?: boolean
   lazy?: boolean
@@ -117,7 +118,7 @@ export interface TZHTableConfig {
 }
 
 export interface TZHTableModal extends TZHFormModal {
-  customModel?: {[x:string]: any}
+  customModel?: { [x: string]: any }
 }
 
 export interface TZHTableColumn {

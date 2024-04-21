@@ -1,0 +1,42 @@
+.zh-form {
+  transition-duration: 2s;
+  transition: height 10s;
+  background-color: white;
+  padding: 7px;
+  position: relative;
+
+  .el-form-item {
+    width: 100%;
+  }
+
+  &:deep(.el-col.el-col-0) {
+    display: block;
+    max-width: none !important;
+  }
+
+  .el-divider--horizontal {
+    margin-bottom: 10px;
+  }
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.folder-box {
+  padding-top: 7px;
+}
+
+.folder,
+.unfolder {
+  font-size: 14px;
+  padding: 7px;
+  color: var(--el-color-primary);
+}

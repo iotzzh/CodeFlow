@@ -97,6 +97,7 @@ const appModalConfig = ref({
     title: '应用程序管理',
     width: '100%',
     fullscreen: true,
+    showClose: true,
     // footer: {
     //     hasSubmitButton: true,
     //     hasCancelButton: true,
