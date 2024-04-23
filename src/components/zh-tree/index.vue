@@ -130,9 +130,14 @@
     return config.value.treeConfig.labelDisplayMaxLength || 30;
   });
   const arrayToTree = (list: Array<any>, parent = 0): any => {
-    return list
+    if (list && list[0].hasOwnProperty('parent')) {
+      return list
       .filter((item) => item.parent === parent)
       .map((item) => ({ ...item, children: arrayToTree(list, item.id) }));
+    } else {
+      return list;
+    }
+
   };
 
   const getTreeData = async () => {
@@ -164,7 +169,7 @@
 
   const filterNode = (value: string, data: any) => {
     if (!value) return true;
-    return data.label.includes(value);
+    return data[config.value.treeConfig.defaultProps.label].includes(value);
   };
 
   const getTooltipHTMLContent = (content: string) => {
@@ -217,7 +222,7 @@
     } else if (type === 2) {
       modal.value.type = 'edit';
       modal.value.title = '编辑';
-      formModel.value = data;
+      formModel.value = JSON.parse(JSON.stringify(data));
     } else {
     }
 

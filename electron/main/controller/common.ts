@@ -20,6 +20,7 @@ export default class baseController {
     };
 
     list = async (event, params: string | undefined) => {
+        console.log('get data list：' + this.prefix);
         const ret = new TReturn();
         try {
 

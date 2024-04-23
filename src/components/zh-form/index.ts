@@ -39,7 +39,7 @@ export default class Form {
       return;
     for (const field of this.formConfig.value.fields) {
       // if (typeof field === 'object' && Object.prototype.hasOwnProperty.call(field, 'defaultValue')) {
-      if (typeof field === 'object' && field.prop) {
+      if (typeof field === 'object' && field.prop && this.modelValue.value[field.prop] === undefined) {
         this.modelValue.value[field.prop] = field.defaultValue;
       }
     }
