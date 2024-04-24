@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, PropType, toRefs } from 'vue';
+import { ref, onMounted, PropType, toRefs, watch } from 'vue';
 import * as monaco from 'monaco-editor'
 import ZHMonacoEditor from '@/components/zh-monaco-editor/index.vue';
 import ZHRequest from '@/components/zh-request';
@@ -77,11 +77,28 @@ onMounted(async () => {
     };
     const res:any = await ZHRequest.post(params);
     if (!res.success) {
-        popErrorMessage('获取配置文件失败，请检查或刷新后重试');
+        popErrorMessage('获取配置文件失败，请检查或刷新后重试：' + res.error);
         return;
     }
     content.value = res.data;
 });
+
+watch(() => props.routeNode, async (newval, oldval) => {
+    const params = {
+        url: api.getPageSetting,
+        conditions: {
+            address: workspaceStore.address,
+            folder: newval.url,
+        },
+    };
+    const res:any = await ZHRequest.post(params);
+    if (!res.success) {
+        popErrorMessage('获取配置文件失败，请检查或刷新后重试：' + res.error);
+        content.value = '';
+        return;
+    }
+    content.value = res.data;
+})
 
 const activeName = ref('1');
 </script>

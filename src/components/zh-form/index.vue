@@ -257,7 +257,7 @@
         const requireMsg = element.type === 'input' ? '请输入' : '请选择';
         const requireEvent = element.type === 'input' ? 'blur' : 'change';
         // eslint-disable-next-line no-prototype-builtins
-        if (element.hasOwnProperty(element.prop)) {
+        if (element.hasOwnProperty(element.prop) && newRules[element.prop]) {
           newRules[element.prop].push({
             required: true,
             message: requireMsg + element.label,

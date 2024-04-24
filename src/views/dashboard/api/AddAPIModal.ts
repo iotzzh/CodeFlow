@@ -33,8 +33,8 @@ export default class AddAPIModal {
         fields: [
             { label: '标签', prop: 'label', type: 'input', required: true },
             { label: '英文名', prop: 'englishName', type: 'input', required: true },
-            // { label: '名称', prop: 'name', type: 'input', style: {}, hide: (model:any) => apiStore?.selectedRoute?.type !== 'api' },
-            // { label: 'url', prop: 'url', type: 'input', style: {}, hide: (model:any) => apiStore?.selectedRoute?.type !== 'api' },
+            { label: '名称', prop: 'name', type: 'input', style: {}, hide: (model:any) => apiStore?.selectedRoute?.type !== 'api' },
+            { label: 'url', prop: 'url', type: 'input', style: {}, hide: (model:any) => apiStore?.selectedRoute?.type !== 'api' },
             { label: '批量接口', prop: 'batch', type: 'switch', style: {} },
         ],
     } as TZHformConfig);

@@ -27,7 +27,7 @@
             {{ label }}
           </div>
           <div class="action" style="width: 30px; text-align: center;">
-            <el-icon style="color: blue; cursor: pointer;" :size="12">
+            <el-icon style="color: blue; cursor: pointer;" :size="12" @click="openAddFileModal">
               <component is="Plus"></component>
             </el-icon>
           </div>
@@ -37,7 +37,7 @@
 
         <div v-else style="display: flex;" class="api-file">
           <div class="action" style="width: 30px; text-align: center;">
-            <el-icon style="color: red; cursor: pointer;" :size="12">
+            <el-icon style="color: red; cursor: pointer;" :size="12" @click="(e:any) => deleteAPI(e, data)">
               <component is="Delete"></component>
             </el-icon>
           </div>
@@ -354,7 +354,17 @@ const openAddFileModal = (e: any) => {
   e.stopImmediatePropagation();
   console.log('天窗');
   addAPIModal.modalConfig.value.show = true;
-};
+}; 
+
+const deleteAPI = async (e:any, data: any) => {
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+  const qRes = await isMessageConfirm('请确认是否删除该接口？', '提示');
+  if(!qRes) return;
+
+  // TODO：删除API
+}
 
 const deleteFile = async (e:any, data: any) => {
   e.preventDefault();

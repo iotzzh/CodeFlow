@@ -18,6 +18,9 @@ export const getPageSetting = async (event, params) => {
     try {
         const res = new TReturn();
         const filePath = path.join(address, '/src/views', folder, '/index.json');
+        if (!fs.existsSync(filePath)) {
+            event.returnValue = { success: false, error: '该文件不存在' } as TReturn;
+        }
         const fileData = await fs.readFileSync(filePath, { encoding: 'utf8' });
         res.data = fileData;
         event.returnValue = res;
