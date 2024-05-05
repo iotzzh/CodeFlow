@@ -25,7 +25,8 @@
           :sm="item.sm"
           :xs="item.xs"
           :style="{ maxWidth: item.maxWidth, minWidth: item.minWidth }"
-          v-show="!item.hide"
+          v-show="item.hasOwnProperty('hide') ? typeof item.hide === 'function' ?
+          !item.hide(modelValue) : !item.hide : true"
         >
           <el-form-item
             :key="'form-item' + index"

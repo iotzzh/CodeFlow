@@ -7,19 +7,25 @@ import ZHRequest from '@/components/zh-request';
 import api from '@/api';
 import { TZHRequestParams } from '@/components/zh-request/type';
 import { TZHModal } from '@/components/zh-modal/type';
+import { useApiStore } from '@/stores';
+
 
 export default class AddAPIModal {
     // [x: string]: any;
     workspacePath: any;
     refresh: any;
+    apiStore: any;
     constructor(workspacePath: any, refresh:any) {
         this.workspacePath = workspacePath;
         this.refresh = refresh;
+        this.apiStore = useApiStore();
+
     };
+
 
     modalConfig = ref({
         show: false,
-        width: '500px',
+        width: '600px',
         title: '新建API',
         draggable: true,
         footer: {
@@ -29,13 +35,14 @@ export default class AddAPIModal {
     } as TZHModal);
 
     formConfig = ref({
-        formLabelWidth: '80px',
+        formLabelWidth: '110px',
         fields: [
-            { label: '标签', prop: 'label', type: 'input', required: true },
-            { label: '英文名', prop: 'englishName', type: 'input', required: true },
-            { label: '名称', prop: 'name', type: 'input', style: {}, hide: (model:any) => apiStore?.selectedRoute?.type !== 'api' },
-            { label: 'url', prop: 'url', type: 'input', style: {}, hide: (model:any) => apiStore?.selectedRoute?.type !== 'api' },
-            { label: '批量接口', prop: 'batch', type: 'switch', style: {} },
+            { label: '文件名称', prop: 'label', type: 'input', required: true, disabled: (model: any) =>  this.apiStore?.selectedRoute?.type == 'file' && !this.apiStore?.selectedRoute?.isRoot},
+            { label: '文件名称(en)', prop: 'englishName', type: 'input', required: true, disabled: (model: any) =>  this.apiStore?.selectedRoute?.type == 'file' && !this.apiStore?.selectedRoute?.isRoot },
+            { label: '接口名称', prop: 'apiName', type: 'input', style: {}, hide: (model:any) => this.apiStore?.selectedRoute?.type == 'file' && this.apiStore?.selectedRoute?.isRoot },
+            { label: '接口名称(en)', prop: 'englishApiName', type: 'input', style: {}, hide: (model:any) => this.apiStore?.selectedRoute?.type == 'file' && this.apiStore?.selectedRoute?.isRoot },
+            { label: 'url', prop: 'url', type: 'input', style: {}, hide: (model:any) => this.apiStore?.selectedRoute?.type == 'file' && this.apiStore?.selectedRoute?.isRoot },
+            { label: '批量接口', prop: 'batch', type: 'switch', style: {}, hide: (model:any) => this.apiStore?.selectedRoute?.type == 'file' && !this.apiStore?.selectedRoute?.isRoot },
         ],
     } as TZHformConfig);
 
@@ -48,7 +55,6 @@ export default class AddAPIModal {
     };
 
     submit = async () => {
-        const url = api.updateApi;
         const label = this.model.value.label;
         const englishName = this.model.value.englishName;
         const firstUpperName = englishName[0].toUpperCase() + englishName.substr(1);
@@ -58,6 +64,7 @@ export default class AddAPIModal {
         const content: { [x:string]:any} = {
             label,
         };
+
         if (this.model.value.batch) {
             content.api = [
                 {
@@ -81,6 +88,30 @@ export default class AddAPIModal {
                     url: '/' + englishName + '/update', 
                 },
             ];
+        } else {
+            // 添加单个接口
+            if (this.modalConfig.value.data && Object.keys(this.modalConfig.value.data).length > 0) {
+                const apiName = this.model.value.apiName;
+                const englishApiName = this.model.value.englishApiName;
+                const url = this.model.value.url;
+                const oldApiList = this.modalConfig.value.data.route.api;
+                content.api = oldApiList.concat([
+                    {
+                        label: apiName,
+                        name: englishApiName,
+                        url: url.padStart('/') ? url : '/' + url, 
+                    }
+                ]);
+            } else {
+                // 在根目录添加时，如果不批量添加，就添加一个查询的接口
+                content.api = [
+                    {
+                        label: label + '列表',
+                        name: 'get' + firstUpperName + 'List',
+                        url: '/' + englishName + '/list', 
+                    }
+                ];
+            }
         }
 
         const conditions: { [x: string]: any } = {

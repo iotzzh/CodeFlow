@@ -8,7 +8,7 @@
         <div v-if="id === '0'" style="display: flex; cursor: auto;" class="api-root">
           <div>API管理</div>
           <div class="action" style="width: 30px; text-align: right;">
-            <el-icon style="color: blue; cursor: pointer;" :size="12" @click="openAddFileModal">
+            <el-icon style="color: blue; cursor: pointer;" :size="12" @click="(e:any) => openAddFileModal(e,data)">
               <component is="Plus"></component>
             </el-icon>
           </div>
@@ -27,7 +27,7 @@
             {{ label }}
           </div>
           <div class="action" style="width: 30px; text-align: center;">
-            <el-icon style="color: blue; cursor: pointer;" :size="12" @click="openAddFileModal">
+            <el-icon style="color: blue; cursor: pointer;" :size="12" @click="(e:any) => openAddFileModal(e,data)">
               <component is="Plus"></component>
             </el-icon>
           </div>
@@ -187,8 +187,9 @@ watch(() => apiStore.needRefresh, (newVal: any) => {
 
 const iniData = () => {
   elements.value = [];
+  // 给根节点赋值
   const root = originData.value.find((x: any) => x.name === 'index.json');
-  elements.value.push({ id: '0', type: 'custom', data: { route: root.data, type: 'file', fileName: 'index.json' }, label: 'API管理', position: { x: 0, y: 0 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
+  elements.value.push({ id: '0', type: 'custom', data: { route: root.data, type: 'file', fileName: 'index.json', isRoot: true }, label: 'API管理', position: { x: 0, y: 0 }, class: 'light', sourcePosition: Position.Right, targetPosition: Position.Left });
 
   for (let i = 0; i < originData.value.length; i++) {
     if (originData.value[i].name === 'index.json') continue;
@@ -200,7 +201,7 @@ const iniData = () => {
     });
     elements.value.push({ id: 'edge-' + `${originData.value[i].name}`, source: '0', sourceHandle: '0-r', target: id, targetHandle: id + '-l', animated: true });
 
-    for (let j = 0; j < originData.value[i].data.api.length; j++) {
+    for (let j = 0; j < originData?.value[i]?.data?.api?.length; j++) {
       const subId = originData.value[i].data.api[j].name;
       const subLabel = originData.value[i].data.api[j].label || originData.value[i].data.api[j].name;
       elements.value.push({
@@ -286,7 +287,7 @@ const appendChild = (node: any) => {
 };
 
 const nodeClickHandler = (props: any) => {
-  // console.log('props: ', props);
+  console.log('props: ', props);
   if (selectedNode?.value?.id === props?.node?.id) return;
   selectedNode.value = props.node;
   apiStore.setSelectedRoute(props.node.data);
@@ -348,12 +349,23 @@ const sourceHandleStyleA = computed(() => ({
   // backgoundColor: 'transparent'
 }));
 
-const openAddFileModal = (e: any) => {
+const openAddFileModal = async (e: any, data: any) => {
   e.preventDefault();
   e.stopPropagation();
   e.stopImmediatePropagation();
-  console.log('天窗');
+  console.log('弹窗', e);
+  console.log('弹窗data', data);
+
+  apiStore.setSelectedRoute(data);
+
+  await nextTick();
+
   addAPIModal.modalConfig.value.show = true;
+  if (!data.isRoot) {
+    addAPIModal.model.value.englishName = data.fileName.split('.')[0];
+    addAPIModal.model.value.label = data.route.label;
+    addAPIModal.modalConfig.value.data = data;
+  }
 }; 
 
 const deleteAPI = async (e:any, data: any) => {

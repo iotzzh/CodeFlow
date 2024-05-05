@@ -63,11 +63,11 @@ const config = ref({
         { label: 'url', prop: 'url', type: 'input', style: {}, hide: (model:any) => apiStore?.selectedRoute?.type !== 'api' },
 
         { label: '', prop: 'title1', type: 'text-title', labelWidth: '0px', defaultValue: '本地配置', style: {} },
-        { label: 'Mock', prop: 'localUseMock', type: 'select', defaultOptions: [{ label: '继承', value: '' }, { label: '使用', value: true }, { label: '不使用', value: false }] },
+        { label: 'Mock（本地）', prop: 'localUseMock', type: 'select', defaultOptions: [{ label: '继承', value: '' }, { label: '使用', value: true }, { label: '不使用', value: false }] },
         { label: '前缀', prop: 'localPrefix', type: 'select' },
 
         { label: '', prop: 'title2', type: 'text-title', labelWidth: '0px', defaultValue: '部署配置', style: {} },
-        { label: 'Mock', prop: 'useMock', type: 'select', defaultOptions: [{ label: '继承', value: '' }, { label: '使用', value: true }, { label: '不使用', value: false }] },
+        { label: 'Mock（发布）', prop: 'useMock', type: 'select', defaultOptions: [{ label: '继承', value: '' }, { label: '使用', value: true }, { label: '不使用', value: false }] },
         { label: '前缀', prop: 'prefix', type: 'select' },
 
         { label: '', prop: 'title3', type: 'text-title', labelWidth: '0px', defaultValue: '本地代理配置', style: {} },
@@ -121,7 +121,7 @@ watch(() => proxyes.value, (newVal: any, oldVal: any) => {
 }, { deep: true });
 
 watch(() => apiStore.selectedRoute, (newVal: any) => {
-    // console.log('newVal: ', newVal);
+    console.log('newVal: ', newVal);
     model.value = { ...model.value, ...newVal.route };
     // model.value = newVal.route;
     // model.value.label = newVal.data.label;
