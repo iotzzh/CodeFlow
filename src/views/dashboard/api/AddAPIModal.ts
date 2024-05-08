@@ -94,7 +94,7 @@ export default class AddAPIModal {
                 const apiName = this.model.value.apiName;
                 const englishApiName = this.model.value.englishApiName;
                 const url = this.model.value.url;
-                const oldApiList = this.modalConfig.value.data.route.api;
+                const oldApiList = this.modalConfig.value.data.fileData.api;
                 content.api = oldApiList.concat([
                     {
                         label: apiName,

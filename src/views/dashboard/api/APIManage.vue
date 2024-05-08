@@ -375,7 +375,27 @@ const deleteAPI = async (e:any, data: any) => {
   const qRes = await isMessageConfirm('请确认是否删除该接口？', '提示');
   if(!qRes) return;
 
+  console.log('删除data: ', data);
+
   // TODO：删除API
+  const address = workspacePath.value;
+  const fileName = data.fileName;
+  const content = data.fileData;
+  content.api = content.api.filter((x:any) => x.name !== data.route.name);
+  const conditions: { [x: string]: any } = {
+            address,
+            fileName,
+            content,
+        };
+
+
+        const params: TZHRequestParams = { url: api.updateApi, conditions };
+        const res = await ZHRequest.post(params);
+        if (res.success) {
+            refresh();
+        } else {
+            popErrorMessage(res.error);
+        }
 }
 
 const deleteFile = async (e:any, data: any) => {
