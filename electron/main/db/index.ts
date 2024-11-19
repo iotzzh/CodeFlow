@@ -82,7 +82,7 @@ export default class DBHelper {
     // const dataPath = path.join(path.join(homedir(), pkg.name), "/data.db");
     // console.log('dataPath: ', dataPath);                                    
     // console.log('dataPath1: ', dataPath1);
-    const dataPath = path.join(homedir(), pkg.name, '/data.db')
+    const dataPath = path.join(homedir(), pkg.name, 'data.db')
     this.db = new sqlite3.Database(dataPath, (err) => {
         if (err) {
           console.error(err.message);

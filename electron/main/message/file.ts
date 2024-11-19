@@ -17,7 +17,7 @@ export const getPageSetting = async (event, params) => {
     const {address, folder} = JSON.parse(params);
     try {
         const res = new TReturn();
-        const filePath = path.join(address, '/src/views', folder, '/index.json');
+        const filePath = path.join(address, 'src', 'views', folder, 'index.json');
         if (!fs.existsSync(filePath)) {
             event.returnValue = { success: false, error: '该文件不存在' } as TReturn;
         }
@@ -33,8 +33,8 @@ export const updatePageSetting = async (event, params) => {
     const { address, folder, content } = JSON.parse(params);
     try {
         const res = new TReturn();
-        const folderPath = path.join(address, '/src/views', folder);
-        await createFile(folderPath, '/index.json', content);
+        const folderPath = path.join(address, 'src', 'views', folder);
+        await createFile(folderPath, 'index.json', content);
         event.returnValue = res;
     } catch(err) {
         event.returnValue = { success: false, error: err } as TReturn;
@@ -50,7 +50,7 @@ export const getApiList = async (event, address) => {
     try {
         const res = new TReturn();
         // const filePath = path.join(`E:\\tworspace\\zh-admin-vue\\src\\api`);
-        const filePath = path.join(address, `src\\api`);
+        const filePath = path.join(address, 'src', 'api');
         const files = fs.readdirSync(filePath);
         for (let i = 0; i < files.length; i++) {
             const filedir = path.join(filePath, files[i]);
@@ -70,7 +70,7 @@ export const updateApi = async (event, params = '{}') => {
     const res = new TReturn();
     if(!address || !fileName) return res;
     try {
-        const filePath = path.join(address, `src\\api`);
+        const filePath = path.join(address, 'src','api');
         await createFile(filePath, fileName, content);
         event.returnValue = res;
     } catch (err) {
@@ -87,7 +87,7 @@ export const deleteApiFile = async (event, params = '{}') => {
     const res = new TReturn();
     if(!address || !fileName) return res;
     try {
-        const filePath = path.join(address, `src\\api`);
+        const filePath = path.join(address, 'src', 'api');
         await delteFile(filePath, fileName);
         event.returnValue = res;
     } catch (err) {
@@ -106,7 +106,7 @@ export const getRouter = async (event, address) => {
     try {
         const res = new TReturn();
         // const filePath = path.join(`E:\\tworspace\\zh-admin-vue\\src\\router\\routes`);
-        const filePath = path.join(address, 'src\\router\\routes');
+        const filePath = path.join(address, 'src','router', 'routes');
         const files = fs.readdirSync(filePath);
         for (let i = 0; i < files.length; i++) {
             const filedir = path.join(filePath, files[i]);
@@ -131,8 +131,8 @@ export const AddRouter = async (event, params) => {
         const route = JSON.parse(params);
         const { address } = route;
         const res = new TReturn();
-        const routePath = path.join(address, 'src\\router\\routes');
-        const pagePath = path.join(address, 'src\\views');
+        const routePath = path.join(address, 'src', 'router', 'routes');
+        const pagePath = path.join(address, 'src','views');
         const id = uuidv4();
         const isFloder = route.menuType === 1; // 1是目录， 2是菜单
         route.id = id;
@@ -156,11 +156,11 @@ export const AddRouter = async (event, params) => {
         if (!isFloder) {
             await createFolder(pagePath, route.url);
             const target = path.join(pagePath, route.url);
-            const sourceVue = path.join(address, 'src\\templatePage\\basic\\index.vue');
-            const sourceJSON = path.join(address, 'src\\templatePage\\basic\\index.json');
+            const sourceVue = path.join(address, 'src', 'templatePage', 'basic', 'index.vue');
+            const sourceJSON = path.join(address, 'src', 'templatePage', 'basic', 'index.json');
 
-            copyFile(sourceVue, path.join(target, '/index.vue'));
-            copyFile(sourceJSON, path.join(target, '/index.json'));
+            copyFile(sourceVue, path.join(target, 'index.vue'));
+            copyFile(sourceJSON, path.join(target, 'index.json'));
         } else {
             await createFolder(pagePath, route.url);
         }
@@ -183,8 +183,8 @@ export const deleteRouter = async (event, params = '{}') => {
     const res = new TReturn();
     try {
         const { address, route } = JSON.parse(params);
-        const routePath = path.join(address, 'src\\router\\routes');
-        const pagePath = path.join(address, 'src\\views');
+        const routePath = path.join(address, 'src', 'router','routes');
+        const pagePath = path.join(address, 'src', 'views');
         
         const fileName = route.url.split('/')[1];
         
