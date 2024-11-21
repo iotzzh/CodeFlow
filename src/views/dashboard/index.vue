@@ -21,7 +21,7 @@
         </div>
         <div class="dashboard">
             <Splitpanes class="default-theme" style="height: calc(100vh - 32px)">
-                <Pane size="20" style="height: 100%; padding: 10px ; " class="left">
+                <Pane size="15" style="height: 100%; padding: 10px ; " class="left">
                     <el-scrollbar style="height: 100%;">
                         <el-tree default-expand-all :data="data" highlight-current :props="defaultProps"
                             @node-click="handleNodeClick" class="setting-module">
@@ -87,7 +87,7 @@
                     <Preview v-else :src="src"></Preview>
                 </Pane>
 
-                <Pane size="20" style="height: 100%; overflow-y: hidden;" class="right">
+                <Pane size="25" style="height: 100%; overflow-y: hidden;" class="right">
                     <APIConfig v-if="selectNode && selectNode.label?.toLowerCase() === 'api'"
                         :workspacePath="workspacePath"></APIConfig>
                     
@@ -268,6 +268,15 @@ const src = ref('http://localhost:8000');
 </script>
 
 <style lang="scss" scoped>
+.splitpanes__pane {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Helvetica, Arial, sans-serif;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 5em;
+}
+
 .box {
     height: 100%;
     widows: 100%;

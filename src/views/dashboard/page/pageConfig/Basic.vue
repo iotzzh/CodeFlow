@@ -12,7 +12,8 @@
             </el-collapse-item>
         </el-collapse> -->
 
-        <ZHMonacoEditor v-model="content" :language="language" height="100%" style="margin-top: 40px" @editor-mounted="editorMounted" @change="editorChage"></ZHMonacoEditor>
+        <ZHMonacoEditor v-model="content" :language="language" height="100%" @editor-mounted="editorMounted" @change="editorChage"></ZHMonacoEditor>
+        <!-- <ZHMonacoEditor v-model="content" :language="language" height="100%" style="margin-top: 40px" @editor-mounted="editorMounted" @change="editorChage"></ZHMonacoEditor> -->
 
     </div>
 </template>

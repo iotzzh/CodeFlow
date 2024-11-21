@@ -29,6 +29,7 @@ const { routeNode } = toRefs(props);
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
 }
 
 .page-config>div:first-child {
@@ -38,6 +39,10 @@ const { routeNode } = toRefs(props);
 
 .actions {
     height: 30px;
+    display: flex;
+    .el-button+.el-button {
+        margin-left: 0px;
+    }
 }
 
 </style>
