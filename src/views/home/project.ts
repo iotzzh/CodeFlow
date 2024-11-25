@@ -130,7 +130,7 @@ export default class Project {
                     buttons: !isManage ? [
                         { label: '进入', type: 'primary', onClick: (row:any) => {    ipcRenderer.send('window:create', {
                             name: 'dashboard',
-                            route: 'dashboard?address=' + row.address,
+                            route: 'dashboard?address=' + row.address + '&port=' + row.port,
                         });} },
                         { label: '部署', type: 'success' },
                     ] : [],

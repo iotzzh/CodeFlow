@@ -56,3 +56,7 @@
 
 #### 注意
 如果在vs code中初始化，可以在文件夹路径中，直接使用cmd进行初始化。
+
+## 其他
+### mac通过终端code 命令打开vscode
+地址：https://blog.csdn.net/logan_LG/article/details/106800904

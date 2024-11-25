@@ -131,7 +131,9 @@ import { useWorkspaceStore } from '@/stores/index';
 const router = useRouter();
 const workspaceStore = useWorkspaceStore();
 const workspacePath = ref((router?.currentRoute?.value?.query?.address || '') as string);
+const serverPort = ref((router?.currentRoute?.value?.query?.port || '') as string);
 workspaceStore.setAddress(router?.currentRoute?.value?.query?.address as string || '');
+workspaceStore.setPort(router?.currentRoute?.value?.query?.port as unknown as number || 8000);
 
 const setTreeData = async () => {
     const res = ipcRenderer.sendSync('file:getRouter', router?.currentRoute?.value?.query?.address || '');
@@ -181,7 +183,9 @@ const handleNodeClick = (data: Tree) => {
     console.log(data)
     selectNode.value = data;
     if (data.menuType === 2) {
-        src.value = 'http://localhost:8000' + data.url;
+        src.value = 'http://localhost' + ':' + serverPort.value + data.url;
+        // src.value = 'http://localhost:8000' + data.url;
+        // src.value = workspacePath.value + data.url;
     }
 }
 
@@ -211,12 +215,12 @@ const defaultProps = {
 
 const openVSCode = (e: any) => {
     e.preventDefault();
-    ipcRenderer.send('cmd:openCode');
+    ipcRenderer.send('cmd:openCode', workspacePath.value);
 };
 
 const startServer = (e: any) => {
     e.preventDefault();
-    ipcRenderer.send('cmd:startServer', workspacePath.value);
+    ipcRenderer.send('cmd:startServer', workspacePath.value, serverPort.value);
 };
 
 const stopServer = (e: any) => {
@@ -273,8 +277,8 @@ const src = ref('http://localhost:8000');
   justify-content: center;
   align-items: center;
   font-family: Helvetica, Arial, sans-serif;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 5em;
+//   color: rgba(255, 255, 255, 0.6);
+//   font-size: 5em;
 }
 
 .box {

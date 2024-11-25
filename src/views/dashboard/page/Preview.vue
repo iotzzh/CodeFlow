@@ -1,5 +1,5 @@
 <template>
-    <div class="frame-box" style="height: 100%;">
+    <div class="frame-box" style="height: 100%;width: 100%;">
         <div class="empty" v-if="!hasContent">前端服务未启动</div>
         <iframe v-else id="iframe" :src="src" frameborder="0" height="100%" width="100%">
         </iframe>
